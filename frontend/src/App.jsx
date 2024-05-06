@@ -1,7 +1,12 @@
+import { Container, CssBaseline } from "@mui/material";
+
 function App() {
   return (
     <>
-      <h1>SoundRentals</h1>
+      <CssBaseline />
+      <Container>
+        <h1>SoundRentals</h1>
+      </Container>
     </>
   );
 }
