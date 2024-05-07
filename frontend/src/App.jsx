@@ -1,25 +1,31 @@
-import { Container, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./components/pages/Home";
-import AddProduct from "./components/pages/AddProduct";
+import AddProduct from "./components/pages/AddService";
 import NotFound from "./components/pages/NotFound";
+import DJs from "./components/pages/DJs";
+import Contact from "./components/pages/Contact";
+import SignIn from "./components/pages/SignIn";
+import SignUp from "./components/pages/SignUp";
 
 function App() {
   return (
     <>
       <CssBaseline />
-      <Container>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/add-product" element={<AddProduct />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </Container>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/djs" element={<DJs />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
+          <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
