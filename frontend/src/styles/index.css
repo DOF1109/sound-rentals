@@ -2,10 +2,21 @@
 
 :root {
   --primary-color: #0007a7;
+  --primary-color-rgb: rgb(0, 7, 167);
   --secondary-color: #4c4592;
+  --secondary-color-rgb: rgb(76, 69, 146);
   --bg-color: #160526;
+  --bg-color-rgb: rgb(22, 5, 38);
   --paper-color: #07020d;
+  --paper-color-rgb: rgb(7, 2, 13);
   --text-color: #f4c9ff;
+  --text-color-rgb: rgb(244, 201, 255);
+
+  /* Embla */
+  --text-body: var(--text-color-rgb);
+  --text-high-contrast-rgb-value: 230, 230, 230;
+  --detail-medium-contrast: var(--paper-color-rgb);
+  --detail-high-contrast: rgb(101, 101, 101);
 }
 
 body {
