@@ -1,7 +1,13 @@
+import { Box } from "@mui/material";
+import SearchInput from "../common/SearchInput";
+
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <Box>
+      <SearchInput />
+      Home
+    </Box>
+  );
+};
 
-export default Home
+export default Home;

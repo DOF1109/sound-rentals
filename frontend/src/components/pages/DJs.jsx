@@ -1,6 +1,12 @@
+import { Box } from "@mui/material"
+import SearchInput from "../common/SearchInput"
+
 const DJs = () => {
   return (
-    <div>DJs</div>
+    <Box>
+      <SearchInput />
+      DJ's
+    </Box>
   )
 }
 
