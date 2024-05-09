@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
-import InputSearch from "../common/InputSearch";
+import SearchInput from "../common/SearchInput";
 
 const Home = () => {
   return (
     <Box>
+      <SearchInput />
       Home
-      {/* Ver https://mui.com/material-ui/react-autocomplete/#combo-box */}
-      <InputSearch />
     </Box>
   );
 };
