@@ -2,13 +2,11 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
@@ -25,8 +23,8 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="static" sx={{ py: 3 }}>
+      <Container>
         <Toolbar disableGutters>
           {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -73,36 +71,43 @@ const Header = () => {
             </Menu>
           </Box>
 
-          <Box flexGrow={1} component={Link} to="/">
-            <Box
-              component="img"
-              src={Logo}
-              alt="SountRentals"
-              sx={{ maxWidth: { xs: "160px", md: "200px" } }}
-            />
-          </Box>
+          <Box flexGrow={1} display="flex" alignItems="center">
+            <Box component={Link} to="/" display="flex">
+              <Box
+                component="img"
+                src={Logo}
+                alt="SountRentals"
+                sx={{ maxWidth: { xs: "130px", md: "160px" } }}
+              />
+            </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              <Link to="/djs">Nuestros DJs</Link>
-            </Button>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              <Link to="/contact">Contactanos</Link>
-            </Button>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ mx: 2, display: "block" }}
+              >
+                <Link className="clear-link" to="/djs">
+                  NUESTROS DJ'S
+                </Link>
+              </Button>
+              <Button onClick={handleCloseNavMenu} sx={{ display: "block" }}>
+                <Link className="clear-link" to="/contact">
+                  CONTÁCTANOS
+                </Link>
+              </Button>
+            </Box>
           </Box>
 
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            <Button color="success">
-              <Link to="/signin">Iniciar sesión</Link>
+            <Button sx={{ mx: 2 }}>
+              <Link className="clear-link" to="/signin">
+                INICIAR SESIÓN
+              </Link>
             </Button>
-            <Button color="success">
-              <Link to="/signup">Registrarse</Link>
+            <Button>
+              <Link className="clear-link" to="/signup">
+                REGISTRARSE
+              </Link>
             </Button>
           </Box>
         </Toolbar>

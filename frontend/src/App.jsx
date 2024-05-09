@@ -1,5 +1,6 @@
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import darkTheme from "./styles/themeConfig";
 import Layout from "./components/layout/Layout";
 import Home from "./components/pages/Home";
 import AddProduct from "./components/pages/AddService";
@@ -11,7 +12,7 @@ import SignUp from "./components/pages/SignUp";
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <BrowserRouter>
         <Routes>
@@ -26,7 +27,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </ThemeProvider>
   );
 }
 

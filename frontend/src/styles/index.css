@@ -1,0 +1,8 @@
+body {
+  min-height: 100vh;
+}
+
+.clear-link {
+    color: inherit;
+    text-decoration: none;
+  }
