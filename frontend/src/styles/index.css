@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap");
 
 :root {
-  --primary-color: #4c4592;
-  --secondary-color: #327ed1;
-  --bg-color: #0f172a;
-  --paper-color: #1d2537;
+  --primary-color: #0007a7;
+  --secondary-color: #4c4592;
+  --bg-color: #160526;
+  --paper-color: #07020d;
   --text-color: #f4c9ff;
 }
 
@@ -15,5 +15,12 @@ body {
 .clear-link {
   color: var(--text-color);
   text-decoration: none;
-  font-weight: 500;
+}
+
+.shiny-hover:hover {
+  color: #ffffff;
+  background: var(--primary-color);
+  text-shadow: 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #ffffff;
+  box-shadow: 0 0 5px var(--primary-color), 0 0 20px var(--primary-color),
+    0 0 50px var(--primary-color), 0 0 100px var(--primary-color);
 }

@@ -57,16 +57,24 @@ const Header = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/djs">Nuestros DJs</Link>
+                <Link className="clear-link" to="/djs">
+                  Nuestros DJs
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/contact">Contactanos</Link>
+                <Link className="clear-link" to="/contact">
+                  Contactanos
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/signin">Iniciar sesión</Link>
+                <Link className="clear-link" to="/signin">
+                  Iniciar sesión
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/signup">Registrarse</Link>
+                <Link className="clear-link" to="/signup">
+                  Registrarse
+                </Link>
               </MenuItem>
             </Menu>
           </Box>
@@ -77,21 +85,24 @@ const Header = () => {
                 component="img"
                 src={Logo}
                 alt="SountRentals"
-                sx={{ maxWidth: { xs: "130px", md: "160px" } }}
+                sx={{ maxWidth: { xs: "130px", md: "150px" } }}
               />
             </Box>
 
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <Button
                 onClick={handleCloseNavMenu}
-                sx={{ mx: 2, display: "block" }}
+                sx={{ mx: 2, display: "block", fontWeight: "500" }}
               >
-                <Link className="clear-link" to="/djs">
+                <Link className="clear-link shiny-hover" to="/djs">
                   NUESTROS DJ'S
                 </Link>
               </Button>
-              <Button onClick={handleCloseNavMenu} sx={{ display: "block" }}>
-                <Link className="clear-link" to="/contact">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ display: "block", fontWeight: "500" }}
+              >
+                <Link className="clear-link shiny-hover" to="/contact">
                   CONTÁCTANOS
                 </Link>
               </Button>
