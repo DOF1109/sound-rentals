@@ -4,21 +4,21 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#31d0be", // rgb(49,208,190)
+      main: "#0007A7",
     },
     secondary: {
-      main: "#327ed1",
+      main: "#4C4592",
     },
     background: {
-      default: "#0f172a",
-      paper: "#1d2537",
+      default: "#160526",
+      paper: "#07020d",
     },
     text: {
-      primary: "#f0fdfa",
+      primary: "#F4C9FF",
     },
   },
   typography: {
-    fontFamily: "Ubuntu, sans-serif",
+    fontFamily: "Orbitron, sans-serif",
   },
 });
 

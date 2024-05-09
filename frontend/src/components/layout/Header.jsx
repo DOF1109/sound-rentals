@@ -99,12 +99,12 @@ const Header = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            <Button sx={{ mx: 2 }}>
+            <Button variant="contained" sx={{ mx: 2 }}>
               <Link className="clear-link" to="/signin">
                 INICIAR SESIÓN
               </Link>
             </Button>
-            <Button>
+            <Button variant="contained">
               <Link className="clear-link" to="/signup">
                 REGISTRARSE
               </Link>
