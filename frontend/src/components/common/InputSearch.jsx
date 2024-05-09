@@ -48,7 +48,7 @@ const InputSearch = () => {
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
-        placeholder="Search…"
+        placeholder="Tipo de musica…"
         inputProps={{ "aria-label": "search" }}
       />
     </Search>
