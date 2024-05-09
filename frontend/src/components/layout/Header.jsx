@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ py: 3 }}>
+    <AppBar position="sticky" sx={{ py: 3 }}>
       <Container>
         <Toolbar disableGutters>
           {/* Mobile menu */}
