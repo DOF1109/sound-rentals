@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import {
   NextButton,
@@ -17,6 +17,7 @@ const EmblaCarousel = (props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const tweenFactor = useRef(0);
   const tweenNodes = useRef([]);
+  const [isHovered, setIsHovered] = useState(false);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emblaApi);
@@ -90,10 +91,26 @@ const EmblaCarousel = (props) => {
       .on("scroll", tweenScale);
   }, [emblaApi, tweenScale]);
 
+  useEffect(() => {
+    if (!emblaApi || isHovered) return;
+    const timer = setInterval(() => {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      } else {
+        emblaApi.scrollTo(0); // Vuelve al primer slide si ya no puede avanzar
+      }
+    }, 4000); // Cambia cada 4 segundos
+    return () => clearInterval(timer); // Limpia el intervalo cuando el componente se desmonta
+  }, [emblaApi, isHovered]);
+
   return (
     <div className="embla">
       <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+        <div
+          className="embla__container"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           {slides.map((slide, index) => (
             <div className="embla__slide" key={index}>
               <div className="embla__slide__number">{index + 1}</div>
