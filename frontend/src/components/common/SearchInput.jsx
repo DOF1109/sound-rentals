@@ -14,6 +14,7 @@ const SearchInput = () => {
 
   return (
     <Box
+      className="shiny-dark"
       sx={{
         background: theme.palette.background.paper,
         borderRadius: "50px",

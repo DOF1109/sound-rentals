@@ -11,6 +11,7 @@
   --paper-color-rgb: rgb(7, 2, 13);
   --text-color: #f4c9ff;
   --text-color-rgb: rgb(244, 201, 255);
+  --light-color: #f0fdfa;
 
   /* Embla */
   --text-body: var(--text-color-rgb);
@@ -28,10 +29,23 @@ body {
   text-decoration: none;
 }
 
+.light-text {
+  color: var(--light-color);
+}
+
+.shiny-dark {
+  box-shadow: 0 0 5px var(--paper-color), 0 0 10px var(--paper-color),
+    0 0 20px var(--paper-color), 0 0 20px var(--paper-color);
+}
+
+.shiny-hover {
+  transition: all 0.2s ease;
+}
+
 .shiny-hover:hover {
   color: #ffffff;
   background: var(--primary-color);
   text-shadow: 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #ffffff;
   box-shadow: 0 0 5px var(--primary-color), 0 0 20px var(--primary-color),
-    0 0 50px var(--primary-color), 0 0 100px var(--primary-color);
+    0 0 40px var(--primary-color), 0 0 80px var(--primary-color);
 }

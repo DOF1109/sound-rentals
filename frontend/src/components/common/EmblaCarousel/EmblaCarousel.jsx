@@ -31,7 +31,7 @@ const EmblaCarousel = (props) => {
 
   const setTweenNodes = useCallback((emblaApi) => {
     tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
-      return slideNode.querySelector(".embla__slide__number");
+      return slideNode.querySelector(".embla__slide__img");
     });
   }, []);
 
@@ -104,21 +104,16 @@ const EmblaCarousel = (props) => {
   }, [emblaApi, isHovered]);
 
   return (
-    <div className="embla">
+    <div
+      className="embla"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="embla__viewport" ref={emblaRef}>
-        <div
-          className="embla__container"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="embla__container">
           {slides.map((slide, index) => (
             <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">{index + 1}</div>
-              {/* <img
-                className="embla__slide__img"
-                src={slide}
-                alt="Your alt text"
-              /> */}
+              <img className="embla__slide__img" src={slide} alt="Imágen" />
             </div>
           ))}
         </div>
