@@ -12,10 +12,9 @@ const images = [Img1, Img2, Img3];
 
 const Home = () => {
   return (
-    <Box>
+    <Box className="gradientBox" pt={1} pb={4}>
       <SearchInput />
       <EmblaCarousel slides={images} options={OPTIONS} />
-      Home
     </Box>
   );
 };

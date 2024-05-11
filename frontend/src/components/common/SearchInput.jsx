@@ -21,7 +21,7 @@ const SearchInput = () => {
         border: 0,
         maxWidth: 600,
         mx: "auto",
-        my: 3,
+        my: 4,
         p: 1,
       }}
     >
