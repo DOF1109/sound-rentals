@@ -14,7 +14,7 @@
   --paper-color-rgb: rgb(7, 2, 13);
   --text-color: #f4c9ff;
   --text-color-rgb: rgb(244, 201, 255);
-  --light-color: #f0fdfa;
+  --light-color: #f9f0fd;
 
   /* Embla */
   --text-body: var(--text-color-rgb);
@@ -60,4 +60,19 @@ body {
       rgba(var(--bg-color-rgb-value), 0) 70%,
     #160526 100%
   );
+}
+
+.underline-text {
+  display: inline-block;
+  position: relative;
+}
+
+.underline-text::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 140%;
+  background-color: var(--bg-color);
 }
