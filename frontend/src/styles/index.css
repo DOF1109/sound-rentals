@@ -2,10 +2,25 @@
 
 :root {
   --primary-color: #0007a7;
+  --primary-color-rgb: rgb(0, 7, 167);
+  --primary-color-rgb-value: 0, 7, 167;
   --secondary-color: #4c4592;
+  --secondary-color-rgb: rgb(76, 69, 146);
+  --secondary-color-rgb-value: 76, 69, 146;
   --bg-color: #160526;
+  --bg-color-rgb: rgb(22, 5, 38);
+  --bg-color-rgb-value: 22, 5, 38;
   --paper-color: #07020d;
+  --paper-color-rgb: rgb(7, 2, 13);
   --text-color: #f4c9ff;
+  --text-color-rgb: rgb(244, 201, 255);
+  --light-color: #f0fdfa;
+
+  /* Embla */
+  --text-body: var(--text-color-rgb);
+  --text-high-contrast-rgb-value: 230, 230, 230;
+  --detail-medium-contrast: var(--paper-color-rgb);
+  --detail-high-contrast: rgb(101, 101, 101);
 }
 
 body {
@@ -17,10 +32,32 @@ body {
   text-decoration: none;
 }
 
+.light-text {
+  color: var(--light-color);
+}
+
+.shiny-dark {
+  box-shadow: 0 0 5px var(--paper-color), 0 0 10px var(--paper-color),
+    0 0 20px var(--paper-color), 0 0 20px var(--paper-color);
+}
+
+.shiny-hover {
+  transition: all 0.2s ease;
+}
 .shiny-hover:hover {
   color: #ffffff;
   background: var(--primary-color);
   text-shadow: 0 0 20px #ffffff, 0 0 30px #ffffff, 0 0 40px #ffffff;
   box-shadow: 0 0 5px var(--primary-color), 0 0 20px var(--primary-color),
-    0 0 50px var(--primary-color), 0 0 100px var(--primary-color);
+    0 0 40px var(--primary-color), 0 0 80px var(--primary-color);
+}
+
+.gradientBox {
+  background: radial-gradient(
+    circle at center,
+    rgba(var(--primary-color-rgb-value), 1) 0%,
+    /* rgba(var(--secondary-color-rgb-value), 1) 0%, */
+      rgba(var(--bg-color-rgb-value), 0) 70%,
+    #160526 100%
+  );
 }
