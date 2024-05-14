@@ -1,30 +1,7 @@
-.embla {
-  margin: auto;
-  --slide-height: 20rem;
-  --slide-spacing: 1rem;
-  --slide-size: 55%;
-}
 .embla__viewport {
   overflow: hidden;
 }
-.embla__container {
-  backface-visibility: hidden;
-  display: flex;
-  touch-action: pan-y pinch-zoom;
-  margin-left: calc(var(--slide-spacing) * -1);
-}
-.embla__slide {
-  flex: 0 0 var(--slide-size);
-  min-width: 0;
-  padding-left: var(--slide-spacing);
-}
-.embla__slide__img {
-  border-radius: 1.8rem;
-  display: block;
-  height: var(--slide-height);
-  width: 100%;
-  object-fit: cover;
-}
+
 .embla__controls {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -104,7 +81,4 @@
 }
 .embla__dot--selected:after {
   box-shadow: inset 0 0 0 0.2rem var(--text-body);
-}
-.embla__slide__img {
-  backface-visibility: hidden;
 }
