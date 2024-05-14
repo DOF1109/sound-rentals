@@ -14,7 +14,7 @@ const images = [Img1, Img2, Img3];
 const Home = () => {
   return (
     <>
-      <Box component="section" className="gradientBox" pt={1} pb={4}>
+      <Box component="section" className="gradientPrimaryBox" pt={1} pb={4}>
         <Container>
           <SearchInput />
           <EmblaCarousel slides={images} options={OPTIONS} />
@@ -22,16 +22,18 @@ const Home = () => {
       </Box>
       <Box
         component="section"
+        py={4}
         sx={{ background: theme.palette.light.main, py: 4 }}
       >
         <Container>
           <Typography
             component="h2"
-            variant="h4"
+            variant="h5"
+            fontWeight={600}
             color={theme.palette.background.default}
             className="underline-text"
           >
-            Recomendados
+            RECOMENDADOS
           </Typography>
         </Container>
       </Box>

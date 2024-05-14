@@ -52,12 +52,20 @@ body {
     0 0 40px var(--primary-color), 0 0 80px var(--primary-color);
 }
 
-.gradientBox {
+.gradientPrimaryBox {
   background: radial-gradient(
     circle at center,
     rgba(var(--primary-color-rgb-value), 1) 0%,
-    /* rgba(var(--secondary-color-rgb-value), 1) 0%, */
-      rgba(var(--bg-color-rgb-value), 0) 70%,
+    rgba(var(--bg-color-rgb-value), 0) 70%,
+    #160526 100%
+  );
+}
+
+.gradientSecondaryBox {
+  background: radial-gradient(
+    circle at center,
+    rgba(var(--secondary-color-rgb-value), 1) 0%,
+    rgba(var(--bg-color-rgb-value), 0) 70%,
     #160526 100%
   );
 }
@@ -72,7 +80,7 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 2px;
+  height: 3px;
   width: 140%;
   background-color: var(--bg-color);
 }
