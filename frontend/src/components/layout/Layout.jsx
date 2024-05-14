@@ -7,11 +7,9 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <Container>
-        <Box component="main">
-          <Outlet />
-        </Box>
-      </Container>
+      <Box component="main">
+        <Outlet />
+      </Box>
       {/* <Footer /> */}
     </>
   );

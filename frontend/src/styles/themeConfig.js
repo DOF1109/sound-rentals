@@ -16,6 +16,9 @@ const darkTheme = createTheme({
     text: {
       primary: "#F4C9FF",
     },
+    light: {
+      main: "#f0fdfa",
+    },
   },
   typography: {
     fontFamily: "Orbitron, sans-serif",

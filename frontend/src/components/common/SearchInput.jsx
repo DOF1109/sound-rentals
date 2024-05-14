@@ -14,13 +14,14 @@ const SearchInput = () => {
 
   return (
     <Box
+      className="shiny-dark"
       sx={{
         background: theme.palette.background.paper,
         borderRadius: "50px",
         border: 0,
         maxWidth: 600,
         mx: "auto",
-        my: 3,
+        my: 4,
         p: 1,
       }}
     >
