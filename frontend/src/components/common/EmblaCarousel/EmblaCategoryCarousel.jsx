@@ -6,6 +6,8 @@ import {
   usePrevNextButtons,
 } from "./EmblaCarouselArrowButtons";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
+import "../../../styles/emblaBase.css";
+import "../../../styles/emblaCategory.css";
 
 const TWEEN_FACTOR_BASE = 0.52;
 
@@ -31,7 +33,7 @@ const EmblaCarousel = (props) => {
 
   const setTweenNodes = useCallback((emblaApi) => {
     tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
-      return slideNode.querySelector(".embla__slide__img");
+      return slideNode.querySelector(".embla__slide__img-category");
     });
   }, []);
 
@@ -105,15 +107,19 @@ const EmblaCarousel = (props) => {
 
   return (
     <div
-      className="embla"
+      className="embla-category"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+        <div className="embla__container-category">
           {slides.map((slide, index) => (
-            <div className="embla__slide" key={index}>
-              <img className="embla__slide__img" src={slide} alt="Imágen" />
+            <div className="embla__slide-category" key={index}>
+              <img
+                className="embla__slide__img-category"
+                src={slide}
+                alt="Imágen"
+              />
             </div>
           ))}
         </div>
