@@ -2,24 +2,40 @@ import { Box, Container, Typography } from "@mui/material";
 import SearchInput from "../common/SearchInput";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
 import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCarousel";
-import Img1 from "../../assets/images/image-1-sr.webp";
-import Img2 from "../../assets/images/image-2.webp";
-import Img3 from "../../assets/images/image-3.webp";
 import theme from "../../styles/themeConfig";
+import { getCategories } from "../../api/categories.js";
+import { useEffect, useState } from "react";
 
 const OPTIONS = { loop: true };
 const SLIDE_COUNT = 6;
 const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
-const images = [Img1, Img2, Img3];
-
 const Home = () => {
+  const [categories, setCategories] = useState([]);
+
+  const loadCategories = async () => {
+    const data = await getCategories();
+    if (data) setCategories(data);
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
   return (
     <>
       <Box component="section" className="gradientPrimaryBox" pt={1} pb={4}>
         <Container>
-          <SearchInput />
-          <EmblaCategoryCarousel slides={images} options={OPTIONS} />
+          <SearchInput categories={categories.map((category) => {
+              return category.style;
+            })} />
+            
+          <EmblaCategoryCarousel
+            slides={categories.map((category) => {
+              return category.url;
+            })}
+            options={OPTIONS}
+          />
         </Container>
       </Box>
       <Box
