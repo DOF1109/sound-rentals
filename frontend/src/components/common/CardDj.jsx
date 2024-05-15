@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-const Card = ({ image, name, genre }) => {
+const CardDj = ({ image, name, genre }) => {
   return (
     <Box
       sx={{
@@ -28,4 +28,4 @@ const Card = ({ image, name, genre }) => {
   );
 };
 
-export default Card;
+export default CardDj;
