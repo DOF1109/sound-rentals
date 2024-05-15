@@ -1,7 +1,7 @@
 import axios from "axios";
 import { URL_BASE, errorAlert } from "./base.js";
 
-export const getCategories = async () => {
+export const getDjs = async () => {
   try {
     const response = await axios.get(URL_BASE + "/dj/listar");
     if (response.status === 200) {
