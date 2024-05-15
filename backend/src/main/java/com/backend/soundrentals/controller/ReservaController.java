@@ -1,10 +1,10 @@
 package com.backend.soundrentals.controller;
 
-import com.backend.soundrentals.dto.entrada.ReservasEntradaDto;
-import com.backend.soundrentals.dto.modificacion.ReservasModificacionDto;
-import com.backend.soundrentals.dto.salida.ReservasSalidaDto;
-import com.backend.soundrentals.exceptions.ReservasNotFoundException;
-import com.backend.soundrentals.service.impl.ReservasService;
+import com.backend.soundrentals.dto.entrada.ReservaEntradaDto;
+import com.backend.soundrentals.dto.modificacion.ReservaModificacionDto;
+import com.backend.soundrentals.dto.salida.ReservaSalidaDto;
+import com.backend.soundrentals.exceptions.ResourceNotFoundException;
+import com.backend.soundrentals.service.impl.ReservaService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,30 +21,30 @@ import java.util.List;
 public class ReservaController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ReservaController.class);
-    private final ReservasService reservasService;
+    private final ReservaService reservasService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ReservasSalidaDto> registrarReserva(@Valid @RequestBody ReservasEntradaDto reservasEntradaDto) {
+    public ResponseEntity<ReservaSalidaDto> registrarReserva(@Valid @RequestBody ReservaEntradaDto reservasEntradaDto) {
         return new ResponseEntity<>(reservasService.registrarReserva(reservasEntradaDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservasSalidaDto> obtenerReservaPorId(@PathVariable Long id) throws ReservasNotFoundException {
+    public ResponseEntity<ReservaSalidaDto> obtenerReservaPorId(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(reservasService.obtenerReservaPorId(id), HttpStatus.OK);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ReservasSalidaDto>> listarReservas() {
+    public ResponseEntity<List<ReservaSalidaDto>> listarReservas() {
         return new ResponseEntity<>(reservasService.listarReservas(), HttpStatus.OK);
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<ReservasSalidaDto> actualizarReserva(@Valid @RequestBody ReservasModificacionDto reservasModificacionDto) throws ReservasNotFoundException {
+    public ResponseEntity<ReservaSalidaDto> actualizarReserva(@Valid @RequestBody ReservaModificacionDto reservasModificacionDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(reservasService.actualizarReserva(reservasModificacionDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarReserva(@PathVariable Long id) throws ReservasNotFoundException {
+    public ResponseEntity<String> eliminarReserva(@PathVariable Long id) throws ResourceNotFoundException {
         reservasService.eliminarReserva(id);
         return new ResponseEntity<>("Reserva eliminada correctamente", HttpStatus.OK);
     }

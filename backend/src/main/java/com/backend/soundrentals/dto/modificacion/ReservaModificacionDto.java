@@ -1,4 +1,4 @@
 package com.backend.soundrentals.dto.modificacion;
 
-public class RecursoModificacionDto {
+public class ReservaModificacionDto {
 }
