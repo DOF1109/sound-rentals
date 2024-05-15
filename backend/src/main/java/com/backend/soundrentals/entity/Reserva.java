@@ -9,15 +9,11 @@ import java.util.Date;
 @Entity
 @Setter
 @Getter
-public class Recurso {
+public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private String dni;
     private Date fecha;
-
-    @ManyToOne
-    @JoinColumn(name = "categoria_id") // Nombre de la columna de clave foránea
-    private Categoria categoria;
 }

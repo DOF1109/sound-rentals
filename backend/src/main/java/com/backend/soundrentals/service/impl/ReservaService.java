@@ -1,12 +1,13 @@
 package com.backend.soundrentals.service.impl;
 
-import com.backend.soundrentals.dto.entrada.RecursoEntradaDto;
-import com.backend.soundrentals.dto.modificacion.RecursoModificacionDto;
-import com.backend.soundrentals.dto.salida.RecursoSalidaDto;
-import com.backend.soundrentals.entity.Recurso;
+import com.backend.soundrentals.dto.entrada.ReservaEntradaDto;
+import com.backend.soundrentals.dto.modificacion.ReservaModificacionDto;
+import com.backend.soundrentals.dto.salida.ReservaSalidaDto;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
-import com.backend.soundrentals.repository.RecursoRepository;
+import com.backend.soundrentals.repository.ReservaRepository;
 import com.backend.soundrentals.service.IRecursoService;
+import com.backend.soundrentals.service.IReservaService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,42 +24,44 @@ import java.util.List;
 @Getter
 @Setter
 @Service
-public class RecursoService implements IRecursoService {
+public class ReservaService implements IReservaService {
 
-    private final RecursoRepository recursoRepository;
-    private final Logger LOGGER = LoggerFactory.getLogger(Recurso.class);
+    private final ReservaRepository reservaRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(Reserva.class);
     private ModelMapper modelMapper;
 
-    @Override
-    public RecursoSalidaDto registrarRecurso(RecursoEntradaDto recurso) {
-        return null;
-    }
 
-    @Override
-    public List<RecursoSalidaDto> listarRecursos() {
-        return null;
-    }
-
-    @Override
-    public RecursoSalidaDto buscarRecursoPorId(Long id) {
-        return null;
-    }
-
-    @Override
-    public RecursoSalidaDto actualizarRecurso(RecursoModificacionDto recursoModificacionEntradaDto) throws ResourceNotFoundException {
-        return null;
-    }
-
-    @Override
-    public RecursoSalidaDto eliminarRecurso(Long id) throws ResourceNotFoundException {
-        return null;
-    }
 
     @PostConstruct
     private void configureMapping() {
-        modelMapper.typeMap(RecursoEntradaDto.class, Recurso.class);
-        modelMapper.typeMap(RecursoModificacionDto.class, Recurso.class);
-        modelMapper.typeMap(Recurso.class, RecursoSalidaDto.class);
-        modelMapper.typeMap(Recurso.class, RecursoModificacionDto.class);
+        modelMapper.typeMap(ReservaEntradaDto.class, Reserva.class);
+        modelMapper.typeMap(ReservaModificacionDto.class, Reserva.class);
+        modelMapper.typeMap(Reserva.class, ReservaSalidaDto.class);
+        modelMapper.typeMap(Reserva.class, ReservaModificacionDto.class);
+    }
+
+    @Override
+    public ReservaSalidaDto registrarReserva(ReservaEntradaDto reservasEntradaDto) {
+        return null;
+    }
+
+    @Override
+    public List<ReservaSalidaDto> listarReservas() {
+        return null;
+    }
+
+    @Override
+    public ReservaSalidaDto obtenerReservaPorId(Long id) throws ResourceNotFoundException {
+        return null;
+    }
+
+    @Override
+    public ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException {
+        return null;
+    }
+
+    @Override
+    public ReservaSalidaDto eliminarReserva(Long id) throws ResourceNotFoundException {
+        return null;
     }
 }

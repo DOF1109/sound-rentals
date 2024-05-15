@@ -23,10 +23,10 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Lista de estilos junto con sus URLs
         Map<String, String> estilos = new HashMap<>();
-        estilos.put("DJ de música electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-2.webp?alt=media&token=fddea6e6-b879-44c4-84ba-51b4cda4204a");
-        estilos.put("DJ de música pop y comercial", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-3.webp?alt=media&token=7a2a2517-6dd9-4e63-874d-61da174fb9bf");
-        estilos.put("DJ de música urbana (Hip-hop, Reggaetón)", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-2.webp?alt=media&token=fddea6e6-b879-44c4-84ba-51b4cda4204a");
-        estilos.put("DJ de música retro y clásica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-3.webp?alt=media&token=7a2a2517-6dd9-4e63-874d-61da174fb9bf");
+        estilos.put("DJ de música electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/electronica.webp?alt=media&token=cb5691cd-abf2-43ad-bb46-e4365385b267");
+        estilos.put("DJ de música pop y comercial", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/pop-comercial.webp?alt=media&token=9303f388-d50c-4a00-a8d6-da5e523c9fa5");
+        estilos.put("DJ de música urbana (Hip-hop, Reggaetón)", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/urbana.webp?alt=media&token=92e011f7-59dd-4662-ada6-f06b5cde74ea");
+        estilos.put("DJ de música retro y clásica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/retro-clasica.webp?alt=media&token=ef3f6a51-9f63-4c98-ad6c-077a615e4918");
 
         // Verificar si ya existen estilos registrados
         long countStyle = estiloRepository.count();
