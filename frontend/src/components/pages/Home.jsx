@@ -3,7 +3,7 @@ import SearchInput from "../common/SearchInput";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
 import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCarousel";
 import theme from "../../styles/themeConfig";
-import { getCategories } from "../../api/categories.js";
+import { getCategories } from "../../api/categoriesApi.js";
 import { useEffect, useState } from "react";
 
 const OPTIONS = { loop: true };
@@ -26,10 +26,12 @@ const Home = () => {
     <>
       <Box component="section" className="gradientPrimaryBox" pt={1} pb={4}>
         <Container>
-          <SearchInput categories={categories.map((category) => {
+          <SearchInput
+            categories={categories.map((category) => {
               return category.style;
-            })} />
-            
+            })}
+          />
+
           <EmblaCategoryCarousel
             slides={categories.map((category) => {
               return category.url;
