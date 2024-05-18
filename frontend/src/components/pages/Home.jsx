@@ -24,14 +24,18 @@ const Home = () => {
 
   return (
     <>
-      <Box component="section" className="gradientPrimaryBox" pt={1} pb={4}>
+      <Box 
+        component="section" 
+        className="gradientPrimaryBox" 
+        pt={1} 
+        pb={4}
+      >
         <Container>
           <SearchInput
             categories={categories.map((category) => {
               return category.style;
             })}
           />
-
           <EmblaCategoryCarousel
             slides={categories.map((category) => {
               return category.url;
@@ -40,6 +44,7 @@ const Home = () => {
           />
         </Container>
       </Box>
+
       <Box
         component="section"
         py={4}
