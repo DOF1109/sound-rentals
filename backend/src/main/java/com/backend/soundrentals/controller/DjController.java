@@ -3,7 +3,9 @@ package com.backend.soundrentals.controller;
 import com.backend.soundrentals.dto.entrada.DjEntradaDto;
 import com.backend.soundrentals.dto.modificacion.DjModificacionDto;
 import com.backend.soundrentals.dto.salida.DjSalidaDto;
+import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
+import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
 import com.backend.soundrentals.service.impl.DjService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -25,20 +27,23 @@ public class DjController {
 
 
     @PostMapping("/registrar")
-    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) {
+    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) throws UsernameAlreadyExistsException {
         return new ResponseEntity<>(djService.registrarDj(djEntradaDto), HttpStatus.CREATED);
     }
-
 
     @GetMapping("{id}")
     public ResponseEntity<DjSalidaDto> obtenerRecursoPorId(@PathVariable Long id) throws ResourceNotFoundException{
         return new ResponseEntity<>(djService.buscarDjPorId(id), HttpStatus.OK);
     }
 
-
     @GetMapping("/listar")
     public ResponseEntity<List<DjSalidaDto>> listarRecursos() {
         return new ResponseEntity<>(djService.listarDjs(), HttpStatus.OK);
+    }
+
+    @GetMapping("top10")
+    public ResponseEntity<List<DjSalidaDto>> obtenerTop10Djs(){
+        return new ResponseEntity<>(djService.listarTop10(), HttpStatus.OK);
     }
 
     @PutMapping("actualizar")

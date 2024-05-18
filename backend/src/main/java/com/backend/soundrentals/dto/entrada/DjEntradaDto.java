@@ -17,6 +17,7 @@ public class DjEntradaDto {
     private Long id;
     private String name;
     private String lastname;
-    private String dni;
-    private List<EstiloSalidaDto> estilos = new ArrayList<>();
+    private Integer dni;
+    private String email;
+    private List<Long> estilos = new ArrayList<>();
 }

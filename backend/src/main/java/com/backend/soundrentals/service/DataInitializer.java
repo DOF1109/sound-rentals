@@ -2,12 +2,15 @@ package com.backend.soundrentals.service;
 
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.EstiloRepository;
+import com.backend.soundrentals.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,6 +21,8 @@ public class DataInitializer implements CommandLineRunner {
     private EstiloRepository estiloRepository;
     @Autowired
     private DjRepository djRepository;
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -62,7 +67,7 @@ public class DataInitializer implements CommandLineRunner {
                 Dj dj = new Dj();
                 dj.setName(FIRST_NAMES[i % FIRST_NAMES.length]);
                 dj.setLastname(LAST_NAMES[i % LAST_NAMES.length]);
-                dj.setDni("1234567890");
+                dj.setDni(1234567890);
 
                 // Obtener estilos aleatorios y asegurarse de que estén en estado "managed"
                 List<Estilo> estilosParaASignar = estiloRepository.findAllById(styleIds);
@@ -70,6 +75,26 @@ public class DataInitializer implements CommandLineRunner {
 
                 // Guardar el DJ
                 djRepository.save(dj);
+            }
+        }
+
+        long countReserva = reservaRepository.count();
+        if (countReserva == 0) {
+            int cantidadReservas = 200;
+            for (int i=0;i<cantidadReservas;i++){
+                Random rand = new Random();
+                Long idRandomDj;
+                Dj djRandom;
+
+                do{
+                    idRandomDj = rand.nextLong(djRepository.count());
+                    djRandom = djRepository.findById(idRandomDj).orElse(null);
+                }while(djRandom==null);
+
+                Reserva reserva = new Reserva();
+                reserva.setFecha(LocalDate.now());
+                reserva.setDj(djRandom);
+                reservaRepository.save(reserva);
             }
         }
     }
