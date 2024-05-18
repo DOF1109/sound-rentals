@@ -1,39 +1,42 @@
 import {
-    Card,
-    CardActionArea,
-    CardContent,
-    CardMedia,
-    Typography,
-  } from "@mui/material";
-  import djImg1 from "../../assets/images/image-2.webp";
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 
 const CardDj = ({ image, name, lastname, styles }) => {
   return (
-    <Card 
-      sx={{ maxWidth: 345, border: 1, borderRadius: 2 }}
-      onClick={() => {console.log("Detalle del DJ");}}  
+    <Card
+      sx={{
+        maxWidth: 300,
+        border: 1,
+        borderRadius: 2,
+        mx: "auto",
+      }}
+      onClick={() => {
+        console.log("Detalle del DJ");
+      }}
     >
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          //   image={image}
-          image={djImg1}
-          alt="DJ image"
-        />
+        <CardMedia component="img" height="200" image={image} alt="DJ image" />
         <CardContent>
-          <Typography gutterBottom variant="h5">
-            {/* {`${name}  ${lastname}`} */}
-            Nombre Apellido
+          <Typography gutterBottom variant="h6">
+            {`${name}  ${lastname}`}
           </Typography>
-          {/* {styles.map( style => {
-            <Typography key={style} variant="body2" color="text.secondary">
-              {style.style}
-            </Typography>  
-          })} */}
-          <Typography variant="body2" color="text.secondary">
-            Electronica
-          </Typography>
+          {styles.map((estilo, index) => {
+            return (
+              <Typography
+                key={index}
+                variant="body2"
+                color="text.secondary"
+                component="div"
+              >
+                {estilo.style}
+              </Typography>
+            );
+          })}
         </CardContent>
       </CardActionArea>
     </Card>

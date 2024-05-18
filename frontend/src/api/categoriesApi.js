@@ -1,6 +1,7 @@
 import axios from "axios";
 import { URL_BASE, errorAlert } from "./base.js";
 
+// --------------- GET ---------------
 export const getCategories = async () => {
   try {
     const response = await axios.get(URL_BASE + "/style/listar");
@@ -17,3 +18,9 @@ export const getCategories = async () => {
     return null;
   }
 };
+
+// --------------- POST ---------------
+
+// --------------- PUT ---------------
+
+// --------------- DELETE ---------------
