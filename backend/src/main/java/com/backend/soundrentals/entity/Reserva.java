@@ -4,20 +4,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 @Setter
 @Getter
-public class Recurso {
+public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
-    private String dni;
-    private Date fecha;
+    private LocalDate fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id") // Nombre de la columna de clave foránea
-    private Categoria categoria;
+    @OneToOne
+    @JoinColumn(name = "dj_id", referencedColumnName = "id")
+    private Dj dj;
 }

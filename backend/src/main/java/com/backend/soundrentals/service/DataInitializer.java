@@ -2,12 +2,15 @@ package com.backend.soundrentals.service;
 
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.EstiloRepository;
+import com.backend.soundrentals.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,15 +21,17 @@ public class DataInitializer implements CommandLineRunner {
     private EstiloRepository estiloRepository;
     @Autowired
     private DjRepository djRepository;
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Override
     public void run(String... args) throws Exception {
         // Lista de estilos junto con sus URLs
         Map<String, String> estilos = new HashMap<>();
-        estilos.put("DJ de música electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-2.webp?alt=media&token=fddea6e6-b879-44c4-84ba-51b4cda4204a");
-        estilos.put("DJ de música pop y comercial", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-3.webp?alt=media&token=7a2a2517-6dd9-4e63-874d-61da174fb9bf");
-        estilos.put("DJ de música urbana (Hip-hop, Reggaetón)", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-2.webp?alt=media&token=fddea6e6-b879-44c4-84ba-51b4cda4204a");
-        estilos.put("DJ de música retro y clásica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/image-3.webp?alt=media&token=7a2a2517-6dd9-4e63-874d-61da174fb9bf");
+        estilos.put("DJ de música electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/electronica.webp?alt=media&token=cb5691cd-abf2-43ad-bb46-e4365385b267");
+        estilos.put("DJ de música pop y comercial", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/pop-comercial.webp?alt=media&token=9303f388-d50c-4a00-a8d6-da5e523c9fa5");
+        estilos.put("DJ de música urbana (Hip-hop, Reggaetón)", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/urbana.webp?alt=media&token=92e011f7-59dd-4662-ada6-f06b5cde74ea");
+        estilos.put("DJ de música retro y clásica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/retro-clasica.webp?alt=media&token=ef3f6a51-9f63-4c98-ad6c-077a615e4918");
 
         // Verificar si ya existen estilos registrados
         long countStyle = estiloRepository.count();
@@ -62,7 +67,7 @@ public class DataInitializer implements CommandLineRunner {
                 Dj dj = new Dj();
                 dj.setName(FIRST_NAMES[i % FIRST_NAMES.length]);
                 dj.setLastname(LAST_NAMES[i % LAST_NAMES.length]);
-                dj.setDni("1234567890");
+                dj.setDni(1234567890);
 
                 // Obtener estilos aleatorios y asegurarse de que estén en estado "managed"
                 List<Estilo> estilosParaASignar = estiloRepository.findAllById(styleIds);
@@ -70,6 +75,26 @@ public class DataInitializer implements CommandLineRunner {
 
                 // Guardar el DJ
                 djRepository.save(dj);
+            }
+        }
+
+        long countReserva = reservaRepository.count();
+        if (countReserva == 0) {
+            int cantidadReservas = 200;
+            for (int i=0;i<cantidadReservas;i++){
+                Random rand = new Random();
+                Long idRandomDj;
+                Dj djRandom;
+
+                do{
+                    idRandomDj = rand.nextLong(djRepository.count());
+                    djRandom = djRepository.findById(idRandomDj).orElse(null);
+                }while(djRandom==null);
+
+                Reserva reserva = new Reserva();
+                reserva.setFecha(LocalDate.now());
+                reserva.setDj(djRandom);
+                reservaRepository.save(reserva);
             }
         }
     }
