@@ -19,6 +19,7 @@ public class DjModificacionDto {
     private Long id;
     private String name;
     private String lastname;
-    private String dni;
+    private Integer dni;
+    private String email;
     private List<EstiloSalidaDto> estilos = new ArrayList<>();
 }

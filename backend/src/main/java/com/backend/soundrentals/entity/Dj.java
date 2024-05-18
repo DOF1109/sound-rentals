@@ -17,11 +17,12 @@ public class Dj {
     private Long id;
     private String name;
     private String lastname;
-    private String dni;
+    private Integer dni;
+    private String email;
 
     @ManyToMany
     @JoinTable(name = "dj_style",
-            joinColumns = @JoinColumn(name = "djs_id"),
+            joinColumns = @JoinColumn(name = "dj_id"),
             inverseJoinColumns = @JoinColumn(name = "style_id")
     )
     private List<Estilo> estilos = new ArrayList<>();
