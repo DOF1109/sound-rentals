@@ -1,30 +1,42 @@
-import { Box, Typography } from "@mui/material";
+import {
+    Card,
+    CardActionArea,
+    CardContent,
+    CardMedia,
+    Typography,
+  } from "@mui/material";
+  import djImg1 from "../../assets/images/image-2.webp";
 
-const CardDj = ({ image, name, genre }) => {
+const CardDj = ({ image, name, lastname, styles }) => {
   return (
-    <Box
-      sx={{
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        overflow: "hidden",
-        textAlign: "left",
-      }}
+    <Card 
+      sx={{ maxWidth: 345, border: 1, borderRadius: 2 }}
+      onClick={() => {console.log("Detalle del DJ");}}  
     >
-      <Box
-        component="img"
-        src={image}
-        alt={name}
-        sx={{ width: "100%", height: "auto" }}
-      />
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" component="div">
-          {name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {genre}
-        </Typography>
-      </Box>
-    </Box>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="200"
+          //   image={image}
+          image={djImg1}
+          alt="DJ image"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5">
+            {/* {`${name}  ${lastname}`} */}
+            Nombre Apellido
+          </Typography>
+          {/* {styles.map( style => {
+            <Typography key={style} variant="body2" color="text.secondary">
+              {style.style}
+            </Typography>  
+          })} */}
+          <Typography variant="body2" color="text.secondary">
+            Electronica
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
