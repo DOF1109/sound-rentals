@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import SearchInput from "../common/SearchInput";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
 import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCarousel";
 import theme from "../../styles/themeConfig";
 import { getCategories } from "../../api/categoriesApi.js";
-import { useEffect, useState } from "react";
+import { getTopDjs } from "../../api/djsApi.js";
 
 const OPTIONS = { loop: true };
 const SLIDE_COUNT = 6;
@@ -12,24 +13,26 @@ const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
+  const [topDjs, setTopDjs] = useState([]);
 
   const loadCategories = async () => {
     const data = await getCategories();
     if (data) setCategories(data);
   };
 
+  const loadTopDjs = async () => {
+    const data = await getTopDjs();
+    if (data) setTopDjs(data);
+  };
+
   useEffect(() => {
     loadCategories();
+    loadTopDjs();
   }, []);
 
   return (
     <>
-      <Box 
-        component="section" 
-        className="gradientPrimaryBox" 
-        pt={1} 
-        pb={4}
-      >
+      <Box component="section" className="gradientPrimaryBox" pt={1} pb={4}>
         <Container>
           <SearchInput
             categories={categories.map((category) => {
@@ -61,7 +64,7 @@ const Home = () => {
           >
             RECOMENDADOS
           </Typography>
-          <EmblaRecommendedCarousel slides={SLIDES} options={OPTIONS} />
+          <EmblaRecommendedCarousel slides={topDjs} options={OPTIONS} />
         </Container>
       </Box>
     </>

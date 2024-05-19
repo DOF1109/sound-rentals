@@ -12,7 +12,7 @@ const CardDj = ({ image, name, lastname, styles }) => {
       sx={{
         maxWidth: 300,
         border: 1,
-        borderRadius: 2,
+        borderRadius: 3,
         mx: "auto",
       }}
       onClick={() => {

@@ -17,7 +17,7 @@
   --light-color: #f9f0fd;
 
   /* Embla */
-  --text-body: var(--text-color-rgb);
+  --text-body: var(--light-color);
   --text-high-contrast-rgb-value: 230, 230, 230;
   --detail-medium-contrast: var(--paper-color-rgb);
   --detail-high-contrast: rgb(101, 101, 101);

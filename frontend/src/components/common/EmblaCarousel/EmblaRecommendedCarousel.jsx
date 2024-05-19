@@ -8,9 +8,9 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import "../../../styles/emblaBase.css";
 import "../../../styles/emblaRecommended.css";
+import CardDj from "../CardDj";
 
-const EmblaCarousel = (props) => {
-  const { slides, options } = props;
+const EmblaCarousel = ({ slides, options }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -27,9 +27,14 @@ const EmblaCarousel = (props) => {
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
+          {slides.map((dj, index) => (
             <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">{index + 1}</div>
+              <CardDj
+                image={dj.estilos[0].url}
+                name={dj.name}
+                lastname={dj.lastname}
+                styles={dj.estilos}
+              />
             </div>
           ))}
         </div>
