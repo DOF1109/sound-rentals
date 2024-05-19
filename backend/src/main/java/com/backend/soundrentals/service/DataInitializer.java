@@ -45,7 +45,7 @@ public class DataInitializer implements CommandLineRunner {
             });
         }
 
-        //Registrar 20 djs
+
         String[] FIRST_NAMES = {"Liam", "Olivia", "Noah", "Emma", "Oliver", "Ava", "William", "Sophia", "Elijah", "Isabella",
                 "James", "Mia", "Benjamin", "Charlotte", "Lucas", "Amelia", "Henry", "Harper", "Alexander", "Evelyn",
                 "Michael", "Abigail", "Ethan", "Emily", "Daniel", "Elizabeth", "Matthew", "Sofia", "Jackson", "Avery",
