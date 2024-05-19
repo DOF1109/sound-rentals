@@ -13,6 +13,7 @@ public interface IRecursoService{
     DjSalidaDto registrarDj(DjEntradaDto recurso) throws UsernameAlreadyExistsException;
     List<DjSalidaDto> listarDjs();
     List<DjSalidaDto> listarTop10();
+    List<DjSalidaDto> listarDjsPorEstilo(Long id);
     DjSalidaDto buscarDjPorId(Long id) throws ResourceNotFoundException;
     DjSalidaDto actualizarDj(DjModificacionDto djModificacionDto) throws ResourceNotFoundException;
     DjSalidaDto eliminarDj(Long id) throws ResourceNotFoundException;

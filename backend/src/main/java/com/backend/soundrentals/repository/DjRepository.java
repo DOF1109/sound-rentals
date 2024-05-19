@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DjRepository extends JpaRepository<Dj, Long> {
 
@@ -17,4 +19,6 @@ public interface DjRepository extends JpaRepository<Dj, Long> {
 
     @Query("SELECT dj FROM Dj dj WHERE dj.dni = :dni")
     Dj findByDni(@Param("dni") Integer dni);
+
+    List<Dj> findByEstilosId(Long styleId);
 }

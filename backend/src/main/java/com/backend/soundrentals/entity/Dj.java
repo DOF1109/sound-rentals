@@ -15,10 +15,22 @@ public class Dj {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer dni;
     private String name;
     private String lastname;
-    private Integer dni;
+    private String phone;
     private String email;
+    private String address;
+    private Integer charge;
+    private String comment;
+    private String sample1;
+    private String sample2;
+    private String urlPic;
+    private String urlImg1;
+    private String urlImg2;
+    private String urlImg3;
+    private String urlImg4;
+    private String urlImg5;
 
     @ManyToMany
     @JoinTable(name = "dj_style",

@@ -88,7 +88,7 @@ public class DjService implements IRecursoService {
                 .sorted((dj1, dj2) -> Double.compare(Math.random(), Math.random()))
                 .collect(Collectors.toList());
 
-        LOGGER.info("Listado de djs: "+ JsonPrinter.toString(randomDjs));
+        LOGGER.info("Listando todos los djs en orden aleatorio");
         return randomDjs;
     }
 
@@ -149,6 +149,15 @@ public class DjService implements IRecursoService {
 
             return listaDjSalida;
         }
+    }
+
+    @Override
+    public List<DjSalidaDto> listarDjsPorEstilo(Long id) {
+        List<DjSalidaDto> djs = djRepository.findByEstilosId(id).stream()
+                .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
+
+        LOGGER.info("Listando djs por estilo");
+        return djs;
     }
 
 
