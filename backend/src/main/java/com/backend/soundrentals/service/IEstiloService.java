@@ -2,6 +2,7 @@ package com.backend.soundrentals.service;
 
 import com.backend.soundrentals.dto.entrada.EstiloEntradaDto;
 import com.backend.soundrentals.dto.modificacion.EstiloModificacionDto;
+import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 
