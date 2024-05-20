@@ -23,7 +23,7 @@ public class EstadoUsuario {
 
     private String state;
 
-    @OneToMany(mappedBy = "userstate")
+    @OneToMany(mappedBy = "estadousuario")
     @JsonManagedReference
     private List<Usuario> usuarios;
 }

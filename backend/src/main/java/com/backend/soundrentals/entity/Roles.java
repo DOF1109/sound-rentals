@@ -23,7 +23,7 @@ public class Roles {
 
     private String rol;
 
-    @OneToMany(mappedBy = "reservationstate")
+    @OneToMany(mappedBy = "roles")
     @JsonManagedReference
     private List<Usuario> usuarios;
 }

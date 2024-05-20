@@ -64,13 +64,13 @@ public class UsuarioService implements IUsuarioService {
 
 
     @Override
-    public UsuarioSalidaDto actualizarUsuario(UsuarioModificacionDto UsuarioModificacionDto) throws ResourceNotFoundException {
-        Usuario buscarUsuario = usuarioRepository.findById(UsuarioModificacionDto.getId().orElse(null));
+    public UsuarioSalidaDto actualizarUsuario(UsuarioModificacionDto usuarioModificacionDto) throws ResourceNotFoundException {
+        Usuario buscarUsuario = usuarioRepository.findById(usuarioModificacionDto.getId()).orElse(null);
 
         UsuarioSalidaDto usuarioSalidaDto = null;
 
         if(buscarUsuario!=null){
-            Usuario usuarioGuardar = modelMapper.map(UsuarioModificacionDto,Usuario.class);
+            Usuario usuarioGuardar = modelMapper.map(usuarioModificacionDto,Usuario.class);
             usuarioSalidaDto = modelMapper.map(usuarioRepository.save(usuarioGuardar),UsuarioSalidaDto.class);
         }
         else {
