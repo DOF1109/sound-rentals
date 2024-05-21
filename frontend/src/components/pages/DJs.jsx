@@ -59,7 +59,7 @@ const DJs = () => {
         {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <CardDj
-              image={dj.estilos[0].url}
+              image={dj.urlPic}
               name={dj.name}
               lastname={dj.lastname}
               styles={dj.estilos}
