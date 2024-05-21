@@ -9,6 +9,7 @@ import DJs from "./components/pages/DJs";
 import Contact from "./components/pages/Contact";
 import SignIn from "./components/pages/SignIn";
 import SignUp from "./components/pages/SignUp";
+import DjDetail from "./components/pages/DjDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/djs" element={<DJs />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/dj-detail" element={<DjDetail />} />
           </Route>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />

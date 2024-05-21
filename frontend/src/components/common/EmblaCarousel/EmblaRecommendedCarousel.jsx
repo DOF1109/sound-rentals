@@ -6,8 +6,8 @@ import {
   usePrevNextButtons,
 } from "./EmblaCarouselArrowButtons";
 import useEmblaCarousel from "embla-carousel-react";
-import "../../../styles/emblaBase.css";
-import "../../../styles/emblaRecommended.css";
+import "../../../styles/emblaStyles/emblaBase.css";
+import "../../../styles/emblaStyles/emblaRecommended.css";
 import CardDj from "../CardDj";
 
 const EmblaCarousel = ({ slides, options }) => {

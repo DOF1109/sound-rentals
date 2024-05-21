@@ -6,8 +6,8 @@ import {
   usePrevNextButtons,
 } from "./EmblaCarouselArrowButtons";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
-import "../../../styles/emblaBase.css";
-import "../../../styles/emblaCategory.css";
+import "../../../styles/emblaStyles/emblaBase.css";
+import "../../../styles/emblaStyles/emblaCategory.css";
 
 const TWEEN_FACTOR_BASE = 0.52;
 
