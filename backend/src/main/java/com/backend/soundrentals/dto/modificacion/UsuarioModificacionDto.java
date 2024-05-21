@@ -16,7 +16,7 @@ import java.util.Optional;
 @Getter
 @Setter
 public class UsuarioModificacionDto {
-    private Long id;
+    private Long Id;
     private Integer dni;
     private String nombre;
     private String apellido;
@@ -32,6 +32,4 @@ public class UsuarioModificacionDto {
 
     private EstadoUsuario estadoUsuario;
     private Roles rol;
-
-
 }

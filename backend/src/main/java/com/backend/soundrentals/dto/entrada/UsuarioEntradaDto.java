@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UsuarioEntradaDto {
+    private Long Id;
     private Integer dni;
     private String nombre;
     private String apellido;
