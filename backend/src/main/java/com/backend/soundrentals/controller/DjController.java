@@ -46,6 +46,11 @@ public class DjController {
         return new ResponseEntity<>(djService.listarTop10(), HttpStatus.OK);
     }
 
+    @GetMapping("/style/{id}")
+    public ResponseEntity<List<DjSalidaDto>> obtenerDjsPorEStilo(@PathVariable Long id)  {
+        return new ResponseEntity<>(djService.listarDjsPorEstilo(id), HttpStatus.OK);
+    }
+
     @PutMapping("actualizar")
     public ResponseEntity<DjSalidaDto> actualizarRecurso(@Valid @RequestBody DjModificacionDto djModificacionDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(djService.actualizarDj(djModificacionDto), HttpStatus.OK);

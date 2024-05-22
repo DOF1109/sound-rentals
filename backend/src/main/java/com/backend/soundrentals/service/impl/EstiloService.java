@@ -106,5 +106,6 @@ public class EstiloService implements IEstiloService {
         modelMapper.typeMap(EstiloModificacionDto.class, Estilo.class);
         modelMapper.typeMap(Estilo.class, EstiloSalidaDto.class);
         modelMapper.typeMap(Estilo.class, EstiloModificacionDto.class);
+        modelMapper.typeMap(Dj.class, DjSalidaDto.class);
     }
 }

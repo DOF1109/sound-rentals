@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -79,8 +81,15 @@ public class DjService implements IRecursoService {
     public List<DjSalidaDto> listarDjs() {
         List<DjSalidaDto> djs = djRepository.findAll().stream()
                 .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
-        LOGGER.info("Listado de djs: "+ JsonPrinter.toString(djs));
-        return djs;
+
+        Stream<DjSalidaDto> djStream = djs.stream();
+
+        List<DjSalidaDto> randomDjs = djStream
+                .sorted((dj1, dj2) -> Double.compare(Math.random(), Math.random()))
+                .collect(Collectors.toList());
+
+        LOGGER.info("Listando todos los djs en orden aleatorio");
+        return randomDjs;
     }
 
     @Override
@@ -140,6 +149,15 @@ public class DjService implements IRecursoService {
 
             return listaDjSalida;
         }
+    }
+
+    @Override
+    public List<DjSalidaDto> listarDjsPorEstilo(Long id) {
+        List<DjSalidaDto> djs = djRepository.findByEstilosId(id).stream()
+                .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
+
+        LOGGER.info("Listando djs por estilo");
+        return djs;
     }
 
 

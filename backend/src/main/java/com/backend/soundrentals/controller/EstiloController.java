@@ -2,6 +2,7 @@ package com.backend.soundrentals.controller;
 
 import com.backend.soundrentals.dto.entrada.EstiloEntradaDto;
 import com.backend.soundrentals.dto.modificacion.EstiloModificacionDto;
+import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.service.impl.EstiloService;
@@ -35,7 +36,6 @@ public class EstiloController {
     public ResponseEntity<EstiloSalidaDto> obtenerEstiloPorId(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(estiloService.buscarEstiloPorId(id), HttpStatus.OK);
     }
-
 
     @GetMapping("/listar")
     public ResponseEntity<List<EstiloSalidaDto>> listarEstilos() {
