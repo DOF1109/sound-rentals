@@ -9,25 +9,32 @@ import DJs from "./components/pages/DJs";
 import Contact from "./components/pages/Contact";
 import SignIn from "./components/pages/SignIn";
 import SignUp from "./components/pages/SignUp";
+import Register from "./components/pages/Register";
+import ForgotPassword from "./components/pages/ForgotPassword";
+import AuthContextComponent from "./components/context/AuthContext";
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/djs" element={<DJs />} />
-            <Route path="/contact" element={<Contact />} />
-          </Route>
-          <Route path="signin" element={<SignIn />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <AuthContextComponent>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/add-product" element={<AddProduct />} />
+              <Route path="/djs" element={<DJs />} />
+              <Route path="/contact" element={<Contact />} />
+            </Route>
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="register" element={<Register />} />
+            <Route path="forgotPass" element={<ForgotPassword />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthContextComponent>
   );
 }
 
