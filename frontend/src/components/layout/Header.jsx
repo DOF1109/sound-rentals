@@ -7,12 +7,20 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
+import { logOut } from '../../firebaseConfig'
+import { AuthContext } from "../context/AuthContext";
+
 
 const Header = () => {
+
+  const { handleLogout, userName } = useContext(AuthContext)
+
   const [anchorElNav, setAnchorElNav] = useState(null);
+
+  const navigate = useNavigate()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -21,6 +29,12 @@ const Header = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const handleClouse = ()=>{
+    handleLogout()
+    logOut()
+    navigate('/signin')
+  }
 
   return (
     <AppBar position="sticky" sx={{ py: 3 }}>
@@ -61,16 +75,19 @@ const Header = () => {
                   Nuestros DJs
                 </Link>
               </MenuItem>
+
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/contact">
                   Contactanos
                 </Link>
               </MenuItem>
+              
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/signin">
                   Iniciar sesión
                 </Link>
               </MenuItem>
+
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/signup">
                   Registrarse
@@ -115,9 +132,10 @@ const Header = () => {
                 INICIAR SESIÓN
               </Link>
             </Button>
-            <Button variant="contained">
-              <Link className="clear-link light-text" to="/signup">
-                REGISTRARSE
+            <Button variant="contained"
+              onClick={handleClouse}>
+              <Link className="clear-link light-text" to="">
+              CERRAR SESIÓN
               </Link>
             </Button>
           </Box>

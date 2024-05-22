@@ -16,7 +16,11 @@
     "@mui/material": "^5.15.18",
     "axios": "^1.7.1",
     "embla-carousel-react": "^8.0.4",
+<<<<<<< HEAD
+    "firebase": "^10.12.0",
+=======
     "formik": "^2.4.6",
+>>>>>>> 6922be547a3cbdf740300fc09673c336b6d14e46
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0",
