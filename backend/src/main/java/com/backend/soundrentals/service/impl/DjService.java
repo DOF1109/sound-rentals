@@ -97,6 +97,11 @@ public class DjService implements IRecursoService {
         List<Dj> listaDjTop10 = reservaRepository.findTop10IdDjMasReservados();
         List<DjSalidaDto> listaDjSalida = new ArrayList<>();
 
+        //Si no hay 10 Dj, retorna los que existan.
+        if(djRepository.count()<10){
+            return listarDjs();
+        }
+
         if(listaDjTop10.isEmpty()){
             //Si no hay top 10 se retorna los primeros 10 dj
             List<DjSalidaDto> djs = djRepository.findAll().stream()

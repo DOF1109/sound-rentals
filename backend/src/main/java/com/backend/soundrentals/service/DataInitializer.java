@@ -26,6 +26,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        reservaRepository.deleteAll();
+        djRepository.deleteAll();
+        estiloRepository.deleteAll();
+
+
         // Lista de estilos junto con sus URLs
         Map<String, String> estilos = new HashMap<>();
         estilos.put("Electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/electronica.webp?alt=media&token=cb5691cd-abf2-43ad-bb46-e4365385b267");
@@ -85,7 +91,7 @@ public class DataInitializer implements CommandLineRunner {
 
         long countDj = djRepository.count();
         if (countDj == 0) {
-            for (int i = 0; i < FIRST_NAMES.length; i++) {
+            for (int i = 0; i < 13; i++) {
                 Dj dj = new Dj();
                 dj.setDni(1234567890);
                 dj.setName(FIRST_NAMES[i % FIRST_NAMES.length]);
