@@ -14,8 +14,10 @@ import {
   import { useContext, useState } from "react";
   import { useNavigate } from "react-router-dom";
   import { signUp, db } from "../../firebaseConfig";
-import { AuthContext } from "../context/AuthContext";
-import { setDoc, doc } from "firebase/firestore";
+  import { AuthContext } from "../context/AuthContext";
+  import { setDoc, doc } from "firebase/firestore";
+  import swal from 'sweetalert'
+
   
   const Register = () => {
     //const { handleName } = useContext(AuthContext)
@@ -40,19 +42,48 @@ import { setDoc, doc } from "firebase/firestore";
 
     const handleSubmit = async (e)=> {
         e.preventDefault()
-        const res = await signUp(userCredentials)
-        //Aqui tambien voy a usar uid que viene el la raspuesta (res) para crear un documento en la colleccion user
-        //con el rol del usuario
-        if(res.user.uid) {
+
+        //Validaciones de email y password
+        console.log(userCredentials.email)
+        console.log(userCredentials.password)
+        console.log(userCredentials.confirmPassword)
+
+        const eRegexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+        const eRegexPass =  /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+
+        if(userCredentials.email.length > 5 && eRegexEmail.test(userCredentials.email) && eRegexPass.test(userCredentials.password)) {
+
+          const res = await signUp(userCredentials)
+          //Aqui tambien voy a usar uid que viene el la raspuesta (res) para crear un documento en la colleccion user
+          //con el rol del usuario
+          if(res.user.uid) {
             //Con el metodo setDoc (me permite agrgar un documento(registro) y setear yo el id) distinto al metodo addDoc
             //que lo agrega sin yo poder modificar
             await setDoc(doc(db, "users", res.user.uid), {rol: 'commonusr'})
-            alert('Usuario creado exitosamente!...')
-        }else {
-            alert('hubo un problema!...')
+            swal({
+              title: 'SoundRentals',
+              text: 'Usuario creado exitosamente!...',
+              //icon: successs - error - warning - info
+              icon: 'successs',
+              button: 'Ingresar',
+              //timer: '2000'
+            })
+          }else {
+              alert('hubo un problema al intentar registrar, vuelva a intentarlo!...')
+          }
+          navigate('/signin')
+
+        } else {
+          swal({
+            title: 'SoundRentals',
+            text: 'Los datos de email o contraseña no cumplen con los requisitos de validacion, vuelva a intentarlo!...',
+            //icon: successs - error - warning - info
+            icon: 'warning',
+            button: 'Aceptar',
+            //timer: '2000'
+          })
         }
-        
-        navigate('/signin')
+
     } 
   
     return (
@@ -85,8 +116,9 @@ import { setDoc, doc } from "firebase/firestore";
             <Grid item xs={10} md={12}>
               <FormControl variant="outlined" fullWidth>
                 <InputLabel htmlFor="outlined-adornment-password">
-                  Contraseña
+                  Contraseña - Mínima de 8 letras, con al menos un símbolo, letras mayúsculas y minúsculas y un número.
                 </InputLabel>
+                
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}

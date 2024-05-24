@@ -68,7 +68,14 @@ const SignIn = () => {
       }
 
     } catch (error) {
-        console.log(error)
+        swal({
+          title: 'SoundRentals',
+          text: 'Usted no es un usuario registrado o sus datos de acceso son incorrectos, vuelva a intentar...',
+          //icon: successs - error - warning - info
+          icon: 'warning',
+          button: 'Aceptar',
+          //timer: '2000'
+        })
     }
     
   }
