@@ -20,10 +20,5 @@ public class EstadoUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String state;
-
-    @OneToMany(mappedBy = "estadousuario")
-    @JsonManagedReference
-    private List<Usuario> usuarios;
 }

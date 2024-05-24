@@ -32,7 +32,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<UsuarioSalidaDto>> listarReservas() {
+    public ResponseEntity<List<UsuarioSalidaDto>> listarUsuarios() {
         return new ResponseEntity<>(usuarioService.listarUsuarios(), HttpStatus.OK);
     }
 

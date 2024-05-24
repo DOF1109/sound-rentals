@@ -33,27 +33,22 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn (name = "city_id")
-    @JsonBackReference
     private Ciudad ciudad;
 
     @ManyToOne
     @JoinColumn (name = "country_id")
-    @JsonBackReference
     private Pais pais;
 
     @ManyToOne
     @JoinColumn (name = "province_id")
-    @JsonBackReference
     private Provincia provincia;
 
     @ManyToOne
     @JoinColumn (name = "roles_id")
-    @JsonBackReference
-    private Roles roles;
+    private Roles rol;
 
     @ManyToOne
     @JoinColumn (name = "user_state_id")
-    @JsonBackReference
     private EstadoUsuario estadousuario;
 
 

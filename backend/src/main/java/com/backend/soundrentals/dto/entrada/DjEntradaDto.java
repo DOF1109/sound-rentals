@@ -13,6 +13,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DjEntradaDto {
     private Long id;
     private String name;

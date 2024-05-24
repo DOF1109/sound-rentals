@@ -20,10 +20,5 @@ public class Provincia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String provincia;
-
-    @OneToMany(mappedBy = "provincia")
-    @JsonManagedReference
-    private List<Usuario> usuarios;
 }

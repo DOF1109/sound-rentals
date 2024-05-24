@@ -7,6 +7,9 @@ import com.backend.soundrentals.entity.Usuario;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.repository.UsuarioRepository;
 import com.backend.soundrentals.service.IUsuarioService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@Getter
+@Setter
 public class UsuarioService implements IUsuarioService {
 
     private ModelMapper modelMapper;

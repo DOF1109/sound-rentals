@@ -20,10 +20,5 @@ public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String rol;
-
-    @OneToMany(mappedBy = "roles")
-    @JsonManagedReference
-    private List<Usuario> usuarios;
 }

@@ -20,10 +20,5 @@ public class Ciudad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String ciudad;
-
-    @OneToMany(mappedBy = "ciudad")
-    @JsonManagedReference
-    private List<Usuario> usuarios;
 }
