@@ -13,7 +13,14 @@ const ForgotPassword = () => {
     e.preventDefault()
     let res = await forgotPassword(email)
     console.log(res)
-    alert('Te enviamos a tu correo los pasos para la recuperacion... ')
+    swal({
+      title: 'SoundRentals',
+      text: 'Te enviamos a tu correo los pasos para la recuperacion de contraseña...',
+      //icon: successs - error - warning - info
+      icon: 'info',
+      button: 'Aceptar',
+      //timer: '2000'
+    })
     navigate('/signin')
   }
 
