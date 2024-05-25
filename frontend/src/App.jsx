@@ -8,10 +8,9 @@ import NotFound from "./components/pages/NotFound";
 import DJs from "./components/pages/DJs";
 import Contact from "./components/pages/Contact";
 import SignIn from "./components/pages/SignIn";
-import SignUp from "./components/pages/SignUp";
 import Register from "./components/pages/Register";
 import ForgotPassword from "./components/pages/ForgotPassword";
-import AuthContextComponent from "./components/context/AuthContext";
+import AuthContextComponent from "./context/AuthContext";
 
 function App() {
   return (
@@ -27,7 +26,6 @@ function App() {
               <Route path="/contact" element={<Contact />} />
             </Route>
             <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
             <Route path="register" element={<Register />} />
             <Route path="forgotPass" element={<ForgotPassword />} />
             <Route path="*" element={<NotFound />} />

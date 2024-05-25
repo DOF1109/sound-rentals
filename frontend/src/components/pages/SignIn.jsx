@@ -16,11 +16,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { Link, useNavigate } from "react-router-dom";
 import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useContext, useState } from "react";
-import Register from "./Register";
 
 import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
 import { collection, doc, getDoc } from 'firebase/firestore'
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
  
 
 const SignIn = () => {

@@ -11,7 +11,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 import { logOut } from '../../firebaseConfig'
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 
 const Header = () => {
@@ -89,8 +89,8 @@ const Header = () => {
               </MenuItem>
 
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="/signup">
-                  Registrarse
+                <Link className="clear-link" to="">
+                  Cerrar sesión
                 </Link>
               </MenuItem>
             </Menu>
@@ -135,7 +135,7 @@ const Header = () => {
             <Button variant="contained"
               onClick={handleClouse}>
               <Link className="clear-link light-text" to="">
-              CERRAR SESIÓN
+                CERRAR SESIÓN
               </Link>
             </Button>
           </Box>
