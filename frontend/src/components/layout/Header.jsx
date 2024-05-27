@@ -89,8 +89,8 @@ const Header = () => {
               </MenuItem>
 
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="/signup">
-                  Registrarse
+                <Link className="clear-link" to="/signin" onClick={handleClouse}>
+                Cerrar seción
                 </Link>
               </MenuItem>
             </Menu>
