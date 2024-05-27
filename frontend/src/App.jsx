@@ -11,6 +11,7 @@ import SignIn from "./components/pages/SignIn";
 import Register from "./components/pages/Register";
 import ForgotPassword from "./components/pages/ForgotPassword";
 import AuthContextComponent from "./context/AuthContext";
+import DjDetail from "./components/pages/DjDetail";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/add-product" element={<AddProduct />} />
               <Route path="/djs" element={<DJs />} />
+              <Route path="/dj-detail" element={<DjDetail />} />
               <Route path="/contact" element={<Contact />} />
             </Route>
             <Route path="signin" element={<SignIn />} />

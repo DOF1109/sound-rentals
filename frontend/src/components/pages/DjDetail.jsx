@@ -17,29 +17,25 @@ const DjDetail = () => {
         <Grid item xs={12} md={6}>
           <Box>Imagen de perfil</Box>
           <Box>
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{ borderRadius: 3, p: 1 }}>
               <CardContent>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="div">
-                  benevolent
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  adjective
+                <Typography variant="h5">NOMBRE DEL DJ</Typography>
+                <Typography py={3}>PRECIO: $</Typography>
+                <Typography>CATEGORIA:</Typography>
+                <Typography variant="body2" pt={3} pb={1}>
+                  Sobre el DJ
                 </Typography>
                 <Typography variant="body2">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Exercitationem dolores culpa illum doloribus vitae debitis
+                  veniam voluptatem, ex ipsam ipsum earum nihil praesentium
+                  repudiandae minima tenetur officiis distinctio labore id.
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button variant="contained" sx={{ mx: "auto", mb: 1 }}>
+                  RESERVAR
+                </Button>
               </CardActions>
             </Card>
           </Box>
