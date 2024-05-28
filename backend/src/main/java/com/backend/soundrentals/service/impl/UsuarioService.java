@@ -6,6 +6,7 @@ import com.backend.soundrentals.dto.salida.UsuarioSalidaDto;
 import com.backend.soundrentals.entity.Usuario;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.repository.UsuarioRepository;
+import com.backend.soundrentals.service.EmailService;
 import com.backend.soundrentals.service.IUsuarioService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.validation.constraints.Email;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +34,9 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostConstruct
     private void configureMapping() {
         modelMapper.typeMap(UsuarioEntradaDto.class, Usuario.class);
@@ -37,10 +46,14 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuarioEntradaDto) {
+    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException {
         Usuario usuario = modelMapper.map(usuarioEntradaDto, Usuario.class);
 
         UsuarioSalidaDto usuarioSalidaDto = modelMapper.map(usuarioRepository.save(usuario), UsuarioSalidaDto.class);
+
+        if(usuarioSalidaDto!=null){
+            enviarEmailConfirmacion(usuarioSalidaDto);
+        }
 
         return usuarioSalidaDto;
     }
@@ -98,6 +111,19 @@ public class UsuarioService implements IUsuarioService {
             }
             return modelMapper.map(usuarioEliminar,UsuarioSalidaDto.class);
     }
+
+    public void enviarEmailConfirmacion(UsuarioSalidaDto usuarioSalidaDto) throws MessagingException, IOException {
+        String recipient = usuarioSalidaDto.getEmail();
+        String subject = "Bienvenida";
+        String template = "Hola, "+ usuarioSalidaDto.getNombre() +" "+usuarioSalidaDto.getApellido() +"\n\n"
+                + "Bienvenido a Soundrentals!!";
+
+
+        //emailService.sendEmail(recipient, subject, template);
+        emailService.sendHtmlEmail(recipient, subject, template);
+    }
+
+    //public String readFile
 
 
 }
