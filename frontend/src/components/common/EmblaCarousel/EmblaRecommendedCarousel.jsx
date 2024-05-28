@@ -30,6 +30,7 @@ const EmblaCarousel = ({ slides, options }) => {
           {slides.map((dj, index) => (
             <div className="embla__slide" key={index}>
               <CardDj
+                id={dj.id}
                 image={dj.urlPic}
                 name={dj.name}
                 lastname={dj.lastname}

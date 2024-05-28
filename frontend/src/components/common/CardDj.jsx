@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const CardDj = ({ image, name, lastname, styles }) => {
+const CardDj = ({ id, image, name, lastname, styles }) => {
   return (
     <Card
       sx={{
@@ -17,7 +17,7 @@ const CardDj = ({ image, name, lastname, styles }) => {
         mx: "auto",
       }}
     >
-      <Link to="/dj-detail" style={{textDecoration: "none"}}>
+      <Link to={`/dj-detail/${id}`} style={{textDecoration: "none"}}>
         <CardActionArea>
           <CardMedia
             component="img"
