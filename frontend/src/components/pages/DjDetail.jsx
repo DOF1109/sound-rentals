@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-// import ImageMasonry from "../common/ImageMasonry";
+import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
 import { useEffect, useState } from "react";
 
@@ -37,13 +37,15 @@ const DjDetail = () => {
             display="flex"
             flexDirection="column"
             alignItems="center"
+            justifyContent="center"
             gap={2}
           >
             <Box
               component="img"
               src={dj.urlPic}
               alt="Foto de perfil del Dj"
-              sx={{ maxWidth: { xs: "200px", md: "300px" } }}
+              borderRadius={3}
+              sx={{ maxWidth: "200px" }}
             />
             <Box>
               <Card
@@ -65,23 +67,47 @@ const DjDetail = () => {
                   </Typography>
                   <Typography variant="body2">{dj.comment}</Typography>
                 </CardContent>
-                <CardActions>
-                  <Button variant="contained" sx={{ mx: "auto", mb: 1 }}>
-                    <Link className="clear-link light-text" to="/signin">
-                      RESERVAR
-                    </Link>
-                  </Button>
-                </CardActions>
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
-            {/* <ImageMasonry /> */}
-            Masonry
+          <Grid
+            item
+            xs={12}
+            md={6}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            gap={2}
+          >
+            <Card
+              variant="outlined"
+              sx={{ borderRadius: 3, p: 2, minWidth: "200px" }}
+            >
+              <CardContent sx={{ pb: 0 }}>
+                <ImageMasonry />
+              </CardContent>
+              <CardActions>
+                <Button variant="contained" sx={{ width: "100%", mb: 1 }}>
+                  <Link className="clear-link light-text" to="/signin">
+                    Ver más
+                  </Link>
+                </Button>
+              </CardActions>
+            </Card>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ width: "100%", my: 2 }}
+            >
+              <Link className="clear-link light-text" to="/signin">
+                RESERVAR
+              </Link>
+            </Button>
           </Grid>
         </Grid>
       ) : (
-        <Typography>Cargando...</Typography>
+        <Typography variant="h5">Cargando...</Typography>
       )}
     </Container>
   );
