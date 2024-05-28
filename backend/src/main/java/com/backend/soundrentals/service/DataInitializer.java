@@ -8,6 +8,7 @@ import com.backend.soundrentals.repository.EstiloRepository;
 import com.backend.soundrentals.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ public class DataInitializer implements CommandLineRunner {
     private DjRepository djRepository;
     @Autowired
     private ReservaRepository reservaRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void run(String... args) throws Exception {
@@ -30,6 +33,10 @@ public class DataInitializer implements CommandLineRunner {
         reservaRepository.deleteAll();
         djRepository.deleteAll();
         estiloRepository.deleteAll();
+
+        jdbcTemplate.execute("ALTER TABLE djs AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE mstyle AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
 
 
         // Lista de estilos junto con sus URLs
@@ -107,7 +114,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 // Asignar los estilos por defecto
                 List<Estilo> estilosParaASignar = estiloRepository.findAllById(styleIds);
-                dj.getEstilos().addAll(estilosParaASignar);
+                dj.setEstilos(estilosParaASignar);
 
                 // Guardar el DJ
                 djRepository.save(dj);
