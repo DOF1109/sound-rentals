@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,9 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UsuarioSalidaDto {
     private Long id;
-    private String dni;
     private String nombre;
-    private String apellido;
-    private String celular;
     private String email;
+
 }
