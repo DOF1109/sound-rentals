@@ -12,7 +12,6 @@ export default function ImageMasonry(images) {
             loading="lazy"
             style={{
               borderRadius: 4,
-              borderRadius: 4,
               display: "block",
               width: "100%",
             }}

@@ -22,6 +22,15 @@ const DjDetail = () => {
     if (data) setDj(data);
   };
 
+  const imagesDj = () => {
+    const arrayImg = []
+    for (let i = 1; i <= 5; i++) {
+        const imgKey = `urlImg${i}`;
+        arrayImg.push(dj[imgKey]);
+    }
+    return arrayImg;
+  }
+
   useEffect(() => {
     loadDj();
   }, []);
@@ -89,9 +98,7 @@ const DjDetail = () => {
               </CardContent>
               <CardActions>
                 <Button variant="contained" sx={{ width: "100%", mb: 1 }}>
-                  <Link className="clear-link light-text" to="/signin">
-                    Ver más
-                  </Link>
+                  Ver más
                 </Button>
               </CardActions>
             </Card>

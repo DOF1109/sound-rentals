@@ -5,7 +5,7 @@ export const AuthContext = createContext()
 
 const AuthContextComponent = ({children}) => {
 
-    //const [userName, setUserName] = useState("")
+    const [userName, setUserName] = useState("")
     const [user, setUser] = useState({})
     const [isLogged, setIsLogged] = useState(false)
 
@@ -27,18 +27,18 @@ const AuthContextComponent = ({children}) => {
         //localStorage.removeItem("userName")
     }
 
-    //const handleName = ( dataName )=> {
-    //    setUserName(dataName)
-    //    localStorage.setItem("userName", JSON.stringify(dataName))
-        //console.log(dataName)
-    //}
+    const handleName = ( dataName )=> {
+       setUserName(dataName)
+       localStorage.setItem("userName", JSON.stringify(dataName))
+        console.log(dataName)
+    }
 
 
     let data = {
         user,
         isLogged,
-        //userName,
-        //handleName,
+        userName,
+        handleName,
         handleLogin,
         handleLogout
     }
