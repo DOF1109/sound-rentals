@@ -1,45 +1,68 @@
+import { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, InputLabel, MenuItem, Select, FormControl } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getCategories } from "../../api/categoriesApi.js";
+import { addDj } from "../../api/djsApi.js";
 
 const AddService = () => {
+  const [categories, setCategories] = useState([]);
   const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
+      lastname: "",
       email: "",
+      phone: "",
+      address: "",
       password: "",
+      dni: "",
       charge: "",
       comment: "",
       profileImage: null,
       images: [],
-      musicStyle: "",
+      estilos: [],
+      sample1: "",
+      sample2: ""
     },
     onSubmit: (data) => {
-      addDj(data);
+      add(data);
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required("Complete este campo"),
-      lastName: Yup.string().required("Complete este campo"),
+      name: Yup.string().required("Complete este campo"),
+      lastname: Yup.string().required("Complete este campo"),
       email: Yup.string().email("Ingrese un email válido").required("Complete este campo"),
       password: Yup.string().required("Complete este campo"),
+      dni: Yup.string().required("Complete este campo"),
       charge: Yup.number().required("Complete este campo"),
       comment: Yup.string().required("Complete este campo"),
-      musicStyle: Yup.string().required("Complete este campo"),
+      estilos: Yup.array().min(1, "Seleccione al menos un estilo de música").required("Complete este campo"),
     }),
     validateOnChange: false,
   });
 
-  const addDj = (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-
-    console.log(data)
+  const add = async (data) => {
+    try {
+      const response = await addDj(data);
+      if (response.status==201) {
+        toast.success("¡DJ agregado exitosamente!");
+      }else{
+        toast.error(`Error: ${response.message}`);
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
   };
+
+  const loadCategories = async () => {
+    const data = await getCategories();
+    if (data) setCategories(data);
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   return (
     <Box component="section">
@@ -52,23 +75,23 @@ const AddService = () => {
       >
         <Grid item xs={12} sm={9} lg={8} mt={3}>
           <TextField
-            name="firstName"
+            name="name"
             label="Nombre"
             variant="outlined"
             onChange={handleChange}
-            error={!!errors.firstName}
-            helperText={errors.firstName}
+            error={!!errors.name}
+            helperText={errors.name}
             fullWidth
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
           <TextField
-            name="lastName"
+            name="lastname"
             label="Apellido"
             variant="outlined"
             onChange={handleChange}
-            error={!!errors.lastName}
-            helperText={errors.lastName}
+            error={!!errors.lastname}
+            helperText={errors.lastname}
             fullWidth
           />
         </Grid>
@@ -92,6 +115,39 @@ const AddService = () => {
             onChange={handleChange}
             error={!!errors.password}
             helperText={errors.password}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <TextField
+            name="dni"
+            label="DNI"
+            variant="outlined"
+            onChange={handleChange}
+            error={!!errors.dni}
+            helperText={errors.dni}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <TextField
+            name="phone"
+            label="Teléfono"
+            variant="outlined"
+            onChange={handleChange}
+            error={!!errors.phone}
+            helperText={errors.phone}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <TextField
+            name="address"
+            label="Dirección"
+            variant="outlined"
+            onChange={handleChange}
+            error={!!errors.address}
+            helperText={errors.address}
             fullWidth
           />
         </Grid>
@@ -121,12 +177,33 @@ const AddService = () => {
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
+          <TextField
+            name="sample1"
+            label="Muestra 1"
+            variant="outlined"
+            onChange={handleChange}
+            error={!!errors.sample1}
+            helperText={errors.sample1}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <TextField
+            name="sample2"
+            label="Muestra 2"
+            variant="outlined"
+            onChange={handleChange}
+            error={!!errors.sample2}
+            helperText={errors.sample2}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
           <InputLabel>Imagen de Perfil</InputLabel>
           <input
             name="profileImage"
             type="file"
             onChange={(e) => setFieldValue('profileImage', e.target.files[0])}
-            required
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
@@ -136,22 +213,23 @@ const AddService = () => {
             type="file"
             multiple
             onChange={(e) => setFieldValue('images', e.target.files)}
-            required
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
           <FormControl fullWidth>
             <InputLabel>Estilo/Categoría de Música</InputLabel>
             <Select
-              name="musicStyle"
-              value={values.musicStyle}
-              onChange={handleChange}
-              error={!!errors.musicStyle}
+              name="estilos"
+              value={values.estilos}
+              onChange={(event) => setFieldValue('estilos', event.target.value)}
+              error={!!errors.estilos}
+              multiple
             >
-              <MenuItem value={"electronic"}>Electronic</MenuItem>
-              <MenuItem value={"hip-hop"}>Hip-Hop</MenuItem>
-              <MenuItem value={"rock"}>Rock</MenuItem>
-              <MenuItem value={"pop"}>Pop</MenuItem>
+              {categories.map((category, index) => (
+                <MenuItem key={index} value={category.id}>
+                  {category.style}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>

@@ -37,6 +37,21 @@ export const getTopDjs = async () => {
 };
 
 // --------------- POST ---------------
+export const addDj = async (dj) => {
+  try {
+    const response = await axios.post(`${URL_BASE}/dj/registrar`, dj);
+    if (response.status === 201) {
+      return response;
+    } else {
+      errorAlert();
+      return response;
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+    errorAlert();
+    return error;
+  }
+};
 
 // --------------- PUT ---------------
 
