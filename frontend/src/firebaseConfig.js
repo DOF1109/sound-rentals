@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-
+import {  initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
      getAuth,
      signInWithEmailAndPassword,
@@ -72,4 +72,17 @@ export const forgotPassword = async (email)=>{
     return res
 }
  
- 
+// Subir imagen
+const storage = getStorage(app);
+
+export const uploadToFirebase = async (file, path) => {
+    try {
+        const storageRef = ref(storage, path);
+        const snapshot = await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        return downloadURL;
+    } catch (error) {
+        console.error('Error al subir el archivo:', error);
+        throw error;
+    }
+}

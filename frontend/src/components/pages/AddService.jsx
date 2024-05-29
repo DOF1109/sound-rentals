@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, Grid, TextField, InputLabel, MenuItem, Select, FormControl } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
+import { Flip, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCategories } from "../../api/categoriesApi.js";
 import { addDj } from "../../api/djsApi.js";
+import { uploadToFirebase } from "../../firebaseConfig";
 
 const AddService = () => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
+
+    // Refs para los inputs de archivos
+    const profileImageRef = useRef(null);
+    const imagesRef = useRef(null);
+
+  const formik = useFormik({
     initialValues: {
       name: "",
       lastname: "",
@@ -20,20 +28,24 @@ const AddService = () => {
       dni: "",
       charge: "",
       comment: "",
-      profileImage: null,
+      profileImage: "",
       images: [],
       estilos: [],
       sample1: "",
       sample2: ""
     },
-    onSubmit: (data) => {
-      add(data);
+    onSubmit: async (data) => {
+      await add(data);
+      formik.resetForm();
+      setProfileImage(null);
+      setImages([]);
+      if (profileImageRef.current) profileImageRef.current.value = "";
+      if (imagesRef.current) imagesRef.current.value = "";
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Complete este campo"),
       lastname: Yup.string().required("Complete este campo"),
       email: Yup.string().email("Ingrese un email válido").required("Complete este campo"),
-      password: Yup.string().required("Complete este campo"),
       dni: Yup.string().required("Complete este campo"),
       charge: Yup.number().required("Complete este campo"),
       comment: Yup.string().required("Complete este campo"),
@@ -42,12 +54,32 @@ const AddService = () => {
     validateOnChange: false,
   });
 
+  const { handleChange, handleSubmit, errors, values, setFieldValue, resetForm } = formik;
+
+
+  const handleProfileImageChange = async (e) => {
+    const file = e.target.files[0];
+    const downloadURL = await uploadToFirebase(file, `profiles/${file.name}`);
+    setProfileImage(downloadURL);
+  };
+
+  const handleImagesChange = async (e) => {
+    const files = Array.from(e.target.files);
+    const downloadURLs = await Promise.all(
+      files.map((file) => uploadToFirebase(file, `images/${file.name}`))
+    );
+    setImages(downloadURLs);
+  };
+
+
   const add = async (data) => {
     try {
-      const response = await addDj(data);
-      if (response.status==201) {
+      const response = await addDj({ ...data, urlPic:profileImage,urlImg1:images[0],urlImg2:images[1],urlImg3:images[2],urlImg4:images[3],urlImg5:images[4]});
+      if (response.status === 201) {
         toast.success("¡DJ agregado exitosamente!");
-      }else{
+        setProfileImage(null);
+        setImages([]);
+      } else {
         toast.error(`Error: ${response.message}`);
       }
     } catch (error) {
@@ -79,6 +111,7 @@ const AddService = () => {
             label="Nombre"
             variant="outlined"
             onChange={handleChange}
+            value={values.name}
             error={!!errors.name}
             helperText={errors.name}
             fullWidth
@@ -90,6 +123,7 @@ const AddService = () => {
             label="Apellido"
             variant="outlined"
             onChange={handleChange}
+            value={values.lastname}
             error={!!errors.lastname}
             helperText={errors.lastname}
             fullWidth
@@ -101,6 +135,7 @@ const AddService = () => {
             label="Email"
             variant="outlined"
             onChange={handleChange}
+            value={values.email}
             error={!!errors.email}
             helperText={errors.email}
             fullWidth
@@ -108,22 +143,12 @@ const AddService = () => {
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
           <TextField
-            name="password"
-            label="Contraseña"
-            variant="outlined"
-            type="password"
-            onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={9} lg={8}>
-          <TextField
             name="dni"
             label="DNI"
+            type="number"
             variant="outlined"
             onChange={handleChange}
+            value={values.dni}
             error={!!errors.dni}
             helperText={errors.dni}
             fullWidth
@@ -135,6 +160,7 @@ const AddService = () => {
             label="Teléfono"
             variant="outlined"
             onChange={handleChange}
+            value={values.phone}
             error={!!errors.phone}
             helperText={errors.phone}
             fullWidth
@@ -146,6 +172,7 @@ const AddService = () => {
             label="Dirección"
             variant="outlined"
             onChange={handleChange}
+            value={values.address}
             error={!!errors.address}
             helperText={errors.address}
             fullWidth
@@ -158,6 +185,7 @@ const AddService = () => {
             variant="outlined"
             type="number"
             onChange={handleChange}
+            value={values.charge}
             error={!!errors.charge}
             helperText={errors.charge}
             fullWidth
@@ -169,6 +197,7 @@ const AddService = () => {
             label="Comentario"
             variant="outlined"
             onChange={handleChange}
+            value={values.comment}
             error={!!errors.comment}
             helperText={errors.comment}
             multiline
@@ -182,6 +211,7 @@ const AddService = () => {
             label="Muestra 1"
             variant="outlined"
             onChange={handleChange}
+            value={values.sample1}
             error={!!errors.sample1}
             helperText={errors.sample1}
             fullWidth
@@ -193,6 +223,7 @@ const AddService = () => {
             label="Muestra 2"
             variant="outlined"
             onChange={handleChange}
+            value={values.sample2}
             error={!!errors.sample2}
             helperText={errors.sample2}
             fullWidth
@@ -203,16 +234,16 @@ const AddService = () => {
           <input
             name="profileImage"
             type="file"
-            onChange={(e) => setFieldValue('profileImage', e.target.files[0])}
+            onChange={handleProfileImageChange}
+            ref={profileImageRef}
           />
-        </Grid>
-        <Grid item xs={12} sm={9} lg={8}>
           <InputLabel>Imágenes (Hasta 5)</InputLabel>
           <input
             name="images"
             type="file"
             multiple
-            onChange={(e) => setFieldValue('images', e.target.files)}
+            onChange={handleImagesChange}
+            ref={imagesRef}
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
@@ -254,7 +285,6 @@ const AddService = () => {
         draggable
         pauseOnHover
         theme="dark"
-        transition="Flip"
       />
     </Box>
   );
