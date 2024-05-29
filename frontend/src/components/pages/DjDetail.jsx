@@ -60,13 +60,13 @@ const DjDetail = () => {
   const loadDj = async () => {
     const data = await getDj(id);
     if (data) {
-      console.log(data);
       setDj(data);
-      console.log(dj);
-      //   setDjImages(imagesDj());
-      setDjImages(arrayImagenesHard);
     }
   };
+
+  useEffect(() => {
+    if (dj) setDjImages(imagesDj());
+  }, [dj]);
 
   useEffect(() => {
     loadDj();
@@ -145,7 +145,9 @@ const DjDetail = () => {
               sx={{ borderRadius: 3, p: 2, minWidth: "200px" }}
             >
               <CardContent sx={{ pb: 0 }}>
-                <ImageMasonry key={"djDetail"} images={djImages} />
+                {djImages && (
+                  <ImageMasonry key={"djDetail"} images={djImages} />
+                )}
               </CardContent>
               <CardActions>
                 <Button
