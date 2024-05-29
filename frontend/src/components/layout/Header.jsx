@@ -10,17 +10,15 @@ import MenuItem from "@mui/material/MenuItem";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
-import { logOut } from '../../firebaseConfig'
+import { logOut } from "../../firebaseConfig";
 import { AuthContext } from "../../context/AuthContext";
 
-
 const Header = () => {
-
-  const { handleLogout, userName } = useContext(AuthContext)
+  const { handleLogout, userName } = useContext(AuthContext);
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -30,11 +28,11 @@ const Header = () => {
     setAnchorElNav(null);
   };
 
-  const handleClouse = ()=>{
-    handleLogout()
-    logOut()
-    navigate('/signin')
-  }
+  const handleClouse = () => {
+    handleLogout();
+    logOut();
+    navigate("/signin");
+  };
 
   return (
     <AppBar position="sticky" sx={{ py: 3 }}>
@@ -77,11 +75,11 @@ const Header = () => {
               </MenuItem>
 
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="/contact">
-                  Contactanos
+                <Link className="clear-link" to="/add-product">
+                  Registrar DJ
                 </Link>
               </MenuItem>
-              
+
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/signin">
                   Iniciar sesión
@@ -119,8 +117,8 @@ const Header = () => {
                 onClick={handleCloseNavMenu}
                 sx={{ display: "block", fontWeight: "500" }}
               >
-                <Link className="clear-link shiny-hover" to="/contact">
-                  CONTÁCTANOS
+                <Link className="clear-link shiny-hover" to="/add-product">
+                  REGISTRAR DJ
                 </Link>
               </Button>
             </Box>
@@ -132,8 +130,7 @@ const Header = () => {
                 INICIAR SESIÓN
               </Link>
             </Button>
-            <Button variant="contained"
-              onClick={handleClouse}>
+            <Button variant="contained" onClick={handleClouse}>
               <Link className="clear-link light-text" to="">
                 CERRAR SESIÓN
               </Link>
