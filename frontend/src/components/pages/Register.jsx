@@ -103,8 +103,6 @@ const Register = () => {
         //timer: '2000'
       });
     }
-
-    console.log(data);
   };
 
   return (
