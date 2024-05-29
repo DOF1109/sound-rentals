@@ -14,6 +14,7 @@ public interface IUsuarioService {
     UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException, BadRequestException;
     List<UsuarioSalidaDto> listarUsuarios();
     UsuarioSalidaDto buscarUsuarioPorId(Long id) throws ResourceNotFoundException;
+    UsuarioSalidaDto buscarUsuarioPorEmail(String email) throws ResourceNotFoundException;
     UsuarioSalidaDto actualizarUsuario(UsuarioModificacionDto UsuarioModificacionDto) throws ResourceNotFoundException;
     UsuarioSalidaDto eliminarUsuario(Long id) throws ResourceNotFoundException;
 }
