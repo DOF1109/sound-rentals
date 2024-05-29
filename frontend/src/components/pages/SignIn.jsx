@@ -50,14 +50,11 @@ const SignIn = () => {
         const userRef = doc(userCollection, res.user.uid)
         //En userDoc guardo el usuario de la base de datos
         const userDoc = await getDoc(userRef)
-        console.log(res.user)
-        console.log(userDoc.data())
 
         let finalyUser = {
           email: res.user.email,
           rol: userDoc.data().rol
         }
-        console.log(finalyUser)
         //Aqui paso al context AuthContext los datos del usuario 'finalyUser'
         handleLogin(finalyUser)
         navigate('/')
@@ -81,12 +78,10 @@ const SignIn = () => {
 
   const loginWithGoogle = async ()=>{
     let res = await loginGoogle()
-    console.log(res)
     let finalyUser = {
       email: res.user.email,
       rol: "commonusr"
     }
-    console.log(finalyUser)
     handleLogin(finalyUser)
     navigate('/')
   }
