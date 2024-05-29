@@ -132,9 +132,7 @@ const DjDetail = () => {
               sx={{ borderRadius: 3, p: 2, minWidth: "200px" }}
             >
               <CardContent sx={{ pb: 0 }}>
-                {djImages && (
-                  <ImageMasonry />
-                )}
+                {djImages && <ImageMasonry images={djImages} />}
               </CardContent>
               <CardActions>
                 <Button
