@@ -14,7 +14,7 @@ import { logOut } from "../../firebaseConfig";
 import { AuthContext } from "../../context/AuthContext";
 
 const Header = () => {
-  const { handleLogout, userName } = useContext(AuthContext);
+  const { handleLogout, user, isLogged } = useContext(AuthContext);
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -38,7 +38,7 @@ const Header = () => {
     <AppBar position="sticky" sx={{ py: 3 }}>
       <Container>
         <Toolbar disableGutters>
-          {/* Mobile menu */}
+          {/* ---------- Mobile menu ---------- */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -74,26 +74,46 @@ const Header = () => {
                 </Link>
               </MenuItem>
 
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="/add-product">
-                  Registrar DJ
-                </Link>
-              </MenuItem>
+              {user.rol === "sradmin95" && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link className="clear-link" to="/add-product">
+                    Registrar DJ
+                  </Link>
+                </MenuItem>
+              )}
 
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="/signin">
-                  Iniciar sesión
-                </Link>
-              </MenuItem>
+              {!isLogged && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link className="clear-link" to="/signin">
+                    Iniciar sesión
+                  </Link>
+                </MenuItem>
+              )}
 
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Link className="clear-link" to="">
-                  Cerrar sesión
-                </Link>
-              </MenuItem>
+              {!isLogged && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link className="clear-link" to="/register">
+                    Registrarse
+                  </Link>
+                </MenuItem>
+              )}
+
+              {isLogged && (
+                <MenuItem
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    handleClouse();
+                  }}
+                >
+                  <Link className="clear-link" to="">
+                    Cerrar sesión
+                  </Link>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
 
+          {/* ---------- Header principal ---------- */}
           <Box flexGrow={1} display="flex" alignItems="center">
             <Box component={Link} to="/" display="flex">
               <Box
@@ -113,28 +133,43 @@ const Header = () => {
                   NUESTROS DJ'S
                 </Link>
               </Button>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ display: "block", fontWeight: "500" }}
-              >
-                <Link className="clear-link shiny-hover" to="/add-product">
-                  REGISTRAR DJ
-                </Link>
-              </Button>
+              {user.rol === "sradmin95" && (
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ display: "block", fontWeight: "500" }}
+                >
+                  <Link className="clear-link shiny-hover" to="/add-product">
+                    REGISTRAR DJ
+                  </Link>
+                </Button>
+              )}
             </Box>
           </Box>
 
+          {/* ---------- Botones de la derecha ---------- */}
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            <Button variant="contained" sx={{ mx: 2 }}>
-              <Link className="clear-link light-text" to="/signin">
-                INICIAR SESIÓN
-              </Link>
-            </Button>
-            <Button variant="contained" onClick={handleClouse}>
-              <Link className="clear-link light-text" to="">
-                CERRAR SESIÓN
-              </Link>
-            </Button>
+            {!isLogged && (
+              <>
+                <Button variant="contained" sx={{ mx: 2 }}>
+                  <Link className="clear-link light-text" to="/signin">
+                    INICIAR SESIÓN
+                  </Link>
+                </Button>
+                <Button variant="contained" sx={{ mx: 2 }}>
+                  <Link className="clear-link light-text" to="/register">
+                    REGISTRARSE
+                  </Link>
+                </Button>
+              </>
+            )}
+
+            {isLogged && (
+              <Button variant="contained" onClick={handleClouse}>
+                <Link className="clear-link light-text" to="">
+                  CERRAR SESIÓN
+                </Link>
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
