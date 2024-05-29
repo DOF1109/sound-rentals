@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Grid, TextField, InputLabel, MenuItem, Select, FormControl } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl,
+} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Flip, ToastContainer, toast } from "react-toastify";
@@ -13,9 +22,9 @@ const AddService = () => {
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
 
-    // Refs para los inputs de archivos
-    const profileImageRef = useRef(null);
-    const imagesRef = useRef(null);
+  // Refs para los inputs de archivos
+  const profileImageRef = useRef(null);
+  const imagesRef = useRef(null);
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +41,7 @@ const AddService = () => {
       images: [],
       estilos: [],
       sample1: "",
-      sample2: ""
+      sample2: "",
     },
     onSubmit: async (data) => {
       await add(data);
@@ -45,17 +54,27 @@ const AddService = () => {
     validationSchema: Yup.object({
       name: Yup.string().required("Complete este campo"),
       lastname: Yup.string().required("Complete este campo"),
-      email: Yup.string().email("Ingrese un email válido").required("Complete este campo"),
+      email: Yup.string()
+        .email("Ingrese un email válido")
+        .required("Complete este campo"),
       dni: Yup.string().required("Complete este campo"),
       charge: Yup.number().required("Complete este campo"),
       comment: Yup.string().required("Complete este campo"),
-      estilos: Yup.array().min(1, "Seleccione al menos un estilo de música").required("Complete este campo"),
+      estilos: Yup.array()
+        .min(1, "Seleccione al menos un estilo de música")
+        .required("Complete este campo"),
     }),
     validateOnChange: false,
   });
 
-  const { handleChange, handleSubmit, errors, values, setFieldValue, resetForm } = formik;
-
+  const {
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    setFieldValue,
+    resetForm,
+  } = formik;
 
   const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
@@ -71,10 +90,17 @@ const AddService = () => {
     setImages(downloadURLs);
   };
 
-
   const add = async (data) => {
     try {
-      const response = await addDj({ ...data, urlPic:profileImage,urlImg1:images[0],urlImg2:images[1],urlImg3:images[2],urlImg4:images[3],urlImg5:images[4]});
+      const response = await addDj({
+        ...data,
+        urlPic: profileImage,
+        urlImg1: images[0],
+        urlImg2: images[1],
+        urlImg3: images[2],
+        urlImg4: images[3],
+        urlImg5: images[4],
+      });
       if (response.status === 201) {
         toast.success("¡DJ agregado exitosamente!");
         setProfileImage(null);
@@ -104,6 +130,10 @@ const AddService = () => {
         justifyContent="center"
         component="form"
         onSubmit={handleSubmit}
+        maxWidth="md"
+        mx="auto"
+        pt={2}
+        pb={5}
       >
         <Grid item xs={12} sm={9} lg={8} mt={3}>
           <TextField
@@ -230,14 +260,14 @@ const AddService = () => {
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
-          <InputLabel>Imagen de Perfil</InputLabel>
+          <InputLabel sx={{ pb: 1 }}>Imagen de Perfil</InputLabel>
           <input
             name="profileImage"
             type="file"
             onChange={handleProfileImageChange}
             ref={profileImageRef}
           />
-          <InputLabel>Imágenes (Hasta 5)</InputLabel>
+          <InputLabel sx={{ pt: 4, pb: 1 }}>Imágenes (Hasta 5)</InputLabel>
           <input
             name="images"
             type="file"
@@ -252,7 +282,7 @@ const AddService = () => {
             <Select
               name="estilos"
               value={values.estilos}
-              onChange={(event) => setFieldValue('estilos', event.target.value)}
+              onChange={(event) => setFieldValue("estilos", event.target.value)}
               error={!!errors.estilos}
               multiple
             >
@@ -268,9 +298,9 @@ const AddService = () => {
           <Button
             type="submit"
             variant="contained"
-            sx={{ textTransform: "none", borderRadius: "50px" }}
+            sx={{ textTransform: "none" }}
           >
-            Agregar DJ
+            Registrar DJ
           </Button>
         </Grid>
       </Grid>

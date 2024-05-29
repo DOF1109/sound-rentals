@@ -213,7 +213,7 @@ const SignIn = () => {
             </Grid>
 
             <Grid item xs={10} md={5}>
-              <Tooltip title="volver al inicio">
+              <Tooltip title="Volver al inicio">
                 <Button
                   variant="contained"
                   fullWidth
