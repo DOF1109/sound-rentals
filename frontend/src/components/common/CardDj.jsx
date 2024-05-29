@@ -15,17 +15,26 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
         border: 1,
         borderRadius: 3,
         mx: "auto",
+        height: "330px",
       }}
     >
-      <Link to={`/dj-detail/${id}`} style={{textDecoration: "none"}}>
-        <CardActionArea>
+      <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
+        <CardActionArea
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems:"self-start"
+          }}
+        >
           <CardMedia
             component="img"
             height="200"
             image={image}
             alt="DJ image"
           />
-          <CardContent>
+          <CardContent sx={{width: "100%", height:"100%"}}>
             <Typography gutterBottom variant="h6">
               {`${name}  ${lastname}`}
             </Typography>
