@@ -14,19 +14,6 @@ import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
 import { useEffect, useState } from "react";
 
-let arrayImagenesHard = [
-  "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-  ,
-  "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f",
-  ,
-  "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-  ,
-  "https://images.unsplash.com/photo-1529655683826-aba9b3e77383",
-  ,
-  "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-  ,
-];
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -146,7 +133,7 @@ const DjDetail = () => {
             >
               <CardContent sx={{ pb: 0 }}>
                 {djImages && (
-                  <ImageMasonry key={"djDetail"} images={djImages} />
+                  <ImageMasonry />
                 )}
               </CardContent>
               <CardActions>
@@ -186,7 +173,7 @@ const DjDetail = () => {
               >
                 {`${dj.name} ${dj.lastname}`}
               </Typography>
-              <ImageMasonry key={"djGallery"} images={djImages} />
+              <ImageMasonry images={djImages} />
             </Box>
           </Modal>
         </Grid>

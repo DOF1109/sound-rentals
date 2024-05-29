@@ -2,7 +2,7 @@ import Masonry from "@mui/lab/Masonry";
 
 export default function ImageMasonry({ images }) {
   return (
-    <Masonry columns={3} spacing={2} sx={{ m: "auto" }}>
+    <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={2} sx={{ m: "auto" }}>
       {images.map((image, index) => (
         <div key={index}>
           <img
