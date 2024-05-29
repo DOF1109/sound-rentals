@@ -6,6 +6,7 @@ import {
   CardContent,
   Container,
   Grid,
+  Modal,
   Typography,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
@@ -13,7 +14,7 @@ import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
 import { useEffect, useState } from "react";
 
-const arrayImagenesHard = [
+let arrayImagenesHard = [
   "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
   ,
   "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f",
@@ -26,10 +27,25 @@ const arrayImagenesHard = [
   ,
 ];
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.default",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const DjDetail = () => {
   const { id } = useParams();
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const imagesDj = () => {
     const arrayImg = [];
@@ -118,11 +134,15 @@ const DjDetail = () => {
               sx={{ borderRadius: 3, p: 2, minWidth: "200px" }}
             >
               <CardContent sx={{ pb: 0 }}>
-                <ImageMasonry images={djImages} />
+                <ImageMasonry key={"djDetail"} images={djImages} />
               </CardContent>
               <CardActions>
-                <Button variant="contained" sx={{ width: "100%", mb: 1 }}>
-                  Ver más
+                <Button
+                  variant="contained"
+                  sx={{ width: "100%", mb: 1 }}
+                  onClick={handleOpen}
+                >
+                  Ver todas
                 </Button>
               </CardActions>
             </Card>
@@ -136,6 +156,29 @@ const DjDetail = () => {
               </Link>
             </Button>
           </Grid>
+
+          {/* ---------- Modal de galeria de imagenes ---------- */}
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
+                mb={2}
+              >
+                {`${dj.name} ${dj.lastname}`}
+              </Typography>
+              <ImageMasonry
+                key={"djGallery"}
+                images={[...djImages, dj.urlPic]}
+              />
+            </Box>
+          </Modal>
         </Grid>
       ) : (
         <Typography variant="h5">Cargando...</Typography>
