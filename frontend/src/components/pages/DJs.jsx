@@ -5,9 +5,8 @@ import {
   Pagination,
   useMediaQuery,
   useTheme,
-  Button
+  Button,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import SearchInput from "../common/SearchInput";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
@@ -50,12 +49,6 @@ const DJs = () => {
     loadDjs();
   }, []);
 
-  const navigate = useNavigate();
-
-  const handleAddClick = () => {
-    navigate("/add-product");
-  };
-
   return (
     <Container component="section">
       <SearchInput
@@ -63,11 +56,6 @@ const DJs = () => {
           return category.style;
         })}
       />
-      <Grid container spacing={4} pb={2} justifyContent="right">
-        <Button variant="contained" color="primary" onClick={handleAddClick}>
-          Agregar
-        </Button>
-      </Grid>
       <Grid container spacing={6} pb={1} justifyContent="center">
         {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
