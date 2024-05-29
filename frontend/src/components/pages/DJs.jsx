@@ -56,7 +56,7 @@ const DJs = () => {
           return category.style;
         })}
       />
-      <Grid container spacing={6} pb={1} justifyContent="center">
+      <Grid container spacing={6} pb={1} justifyContent="center"> 
         {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <CardDj
@@ -75,7 +75,6 @@ const DJs = () => {
           color="primary"
           page={page}
           onChange={handlePageChange}
-          size="large"
         />
       </Box>
     </Container>

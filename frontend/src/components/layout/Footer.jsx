@@ -13,11 +13,12 @@ const Footer = () => {
       component="footer" 
       sx={{ 
         width: '100%', 
-        position: 'fixed', 
+        position: 'absolute',
         bottom: 0, 
         py: 3, 
         backgroundColor: 'background.paper',
-        color: 'white'
+        color: 'white',
+        zIndex: 9999
       }}
     >
       <Container>

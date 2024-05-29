@@ -132,8 +132,8 @@ const AddService = () => {
         onSubmit={handleSubmit}
         maxWidth="md"
         mx="auto"
-        pt={2}
-        pb={5}
+        pt={5}
+        pb={15}
       >
         <Grid item xs={12} sm={9} lg={8} mt={3}>
           <TextField
