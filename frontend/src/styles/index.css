@@ -29,6 +29,12 @@ body,#root{
 
 #root{
   position: relative;
+  /* padding-bottom: 200px; */
+}
+
+main{
+  max-height: 83vh;
+  overflow-y: auto;
 }
 
 .clear-link {
