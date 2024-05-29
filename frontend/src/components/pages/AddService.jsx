@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, InputLabel, MenuItem, Select, FormControl } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
+import { Flip, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCategories } from "../../api/categoriesApi.js";
 import { addDj } from "../../api/djsApi.js";
+import { uploadToFirebase } from "../../firebaseConfig";
 
 const AddService = () => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
   const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
     initialValues: {
@@ -20,7 +23,7 @@ const AddService = () => {
       dni: "",
       charge: "",
       comment: "",
-      profileImage: null,
+      profileImage: "",
       images: [],
       estilos: [],
       sample1: "",
@@ -33,7 +36,6 @@ const AddService = () => {
       name: Yup.string().required("Complete este campo"),
       lastname: Yup.string().required("Complete este campo"),
       email: Yup.string().email("Ingrese un email válido").required("Complete este campo"),
-      password: Yup.string().required("Complete este campo"),
       dni: Yup.string().required("Complete este campo"),
       charge: Yup.number().required("Complete este campo"),
       comment: Yup.string().required("Complete este campo"),
@@ -42,12 +44,33 @@ const AddService = () => {
     validateOnChange: false,
   });
 
+  
+
+  const handleProfileImageChange = async (e) => {
+    const file = e.target.files[0];
+    const downloadURL = await uploadToFirebase(file, `profiles/${file.name}`);
+    setProfileImage(downloadURL);
+  };
+
+  const handleImagesChange = async (e) => {
+    const files = Array.from(e.target.files);
+    const downloadURLs = await Promise.all(
+      files.map((file) => uploadToFirebase(file, `images/${file.name}`))
+    );
+    setImages(downloadURLs);
+  };
+
+
   const add = async (data) => {
+    console.log(profileImage)
+    console.log(images)
     try {
-      const response = await addDj(data);
-      if (response.status==201) {
+      // const profileImageUrl = await uploadToFirebase(data.profileImage, `images/${data.profileImage.name}`);
+  
+      const response = await addDj({ ...data, urlPic:profileImage,urlImg1:images[0],urlImg2:images[1],urlImg3:images[2],urlImg4:images[3],urlImg5:images[4]});
+      if (response.status === 201) {
         toast.success("¡DJ agregado exitosamente!");
-      }else{
+      } else {
         toast.error(`Error: ${response.message}`);
       }
     } catch (error) {
@@ -108,20 +131,9 @@ const AddService = () => {
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
           <TextField
-            name="password"
-            label="Contraseña"
-            variant="outlined"
-            type="password"
-            onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={9} lg={8}>
-          <TextField
             name="dni"
             label="DNI"
+            type="number"
             variant="outlined"
             onChange={handleChange}
             error={!!errors.dni}
@@ -203,16 +215,14 @@ const AddService = () => {
           <input
             name="profileImage"
             type="file"
-            onChange={(e) => setFieldValue('profileImage', e.target.files[0])}
+            onChange={handleProfileImageChange}
           />
-        </Grid>
-        <Grid item xs={12} sm={9} lg={8}>
           <InputLabel>Imágenes (Hasta 5)</InputLabel>
           <input
             name="images"
             type="file"
             multiple
-            onChange={(e) => setFieldValue('images', e.target.files)}
+            onChange={handleImagesChange}
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
@@ -254,7 +264,6 @@ const AddService = () => {
         draggable
         pauseOnHover
         theme="dark"
-        transition="Flip"
       />
     </Box>
   );

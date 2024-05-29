@@ -55,6 +55,7 @@ export const getDj = async (id) => {
 
 // --------------- POST ---------------
 export const addDj = async (dj) => {
+  console.log(dj)
   try {
     const response = await axios.post(`${URL_BASE}/dj/registrar`, dj);
     if (response.status === 201) {
@@ -64,8 +65,8 @@ export const addDj = async (dj) => {
       return response;
     }
   } catch (error) {
-    console.error(`Error: ${error}`);
-    errorAlert();
+    // console.error(`Error: ${error}`);
+    // errorAlert();
     return error;
   }
 };
