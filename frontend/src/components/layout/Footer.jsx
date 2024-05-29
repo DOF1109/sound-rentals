@@ -11,7 +11,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <AppBar position="static" sx={{ top: 'auto', bottom: 0, py: 3 }}>
+    <AppBar position="absolute" sx={{ top: 'auto', bottom: 0, py: 3 }}>
       <Container>
         <Toolbar disableGutters>
           <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>

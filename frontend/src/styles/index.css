@@ -23,8 +23,12 @@
   --detail-high-contrast: rgb(101, 101, 101);
 }
 
-body {
+body,#root{
   min-height: 100vh;
+}
+
+#root{
+  position: relative;
 }
 
 .clear-link {
