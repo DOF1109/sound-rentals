@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
+import { Button } from "@mui/material";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -27,12 +28,18 @@ const Footer = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            <Link to="/privacy-policy" className="clear-link" style={{ marginRight: 20, color: 'inherit' }}>
+            {/* <Link to="/privacy-policy" className="clear-link" style={{ marginRight: 20, color: 'inherit' }}>
               Privacy Policy
             </Link>
             <Link to="/terms-of-service" className="clear-link" style={{ color: 'inherit' }}>
               Terms of Service
-            </Link>
+            </Link> */}
+            <Typography variant="body2" mr={2}>
+              Privacy Policy
+            </Typography>
+            <Typography variant="body2">
+              Terms of Service
+            </Typography>
           </Box>
         </Toolbar>
       </Container>

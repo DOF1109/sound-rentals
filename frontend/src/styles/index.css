@@ -84,12 +84,3 @@ body {
   width: 140%;
   background-color: var(--bg-color);
 }
-
-.clear-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.clear-link:hover {
-  text-decoration: underline;
-}
