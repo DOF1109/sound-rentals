@@ -50,7 +50,6 @@ const DjDetail = () => {
 
   const imagesDj = () => {
     const arrayImg = [];
-    
     for (let i = 1; i <= 5; i++) {
       const imgKey = `urlImg${i}`;
       arrayImg.push(dj[imgKey]);
