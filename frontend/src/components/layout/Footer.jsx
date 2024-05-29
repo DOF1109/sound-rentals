@@ -1,17 +1,25 @@
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
-import { Button } from "@mui/material";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <AppBar position="absolute" sx={{ top: 'auto', bottom: 0, py: 3 }}>
+    <Box 
+      component="footer" 
+      sx={{ 
+        width: '100%', 
+        position: 'fixed', 
+        bottom: 0, 
+        py: 3, 
+        backgroundColor: 'background.paper',
+        color: 'white'
+      }}
+    >
       <Container>
         <Toolbar disableGutters>
           <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
@@ -43,7 +51,7 @@ const Footer = () => {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </Box>
   );
 };
 
