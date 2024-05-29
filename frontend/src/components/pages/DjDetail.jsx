@@ -33,7 +33,8 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.default",
-  border: "2px solid #000",
+  border: "1px solid var(--text-color)",
+  borderRadius: 3,
   boxShadow: 24,
   p: 4,
 };
@@ -88,12 +89,20 @@ const DjDetail = () => {
               src={dj.urlPic}
               alt="Foto de perfil del Dj"
               borderRadius={3}
-              sx={{ maxWidth: "200px" }}
+              sx={{
+                maxWidth: "250px",
+                maxHeight: "250px",
+              }}
             />
             <Box>
               <Card
                 variant="outlined"
-                sx={{ borderRadius: 3, p: 1, minWidth: "300px" }}
+                sx={{
+                  borderRadius: 3,
+                  p: 1,
+                  minWidth: "300px",
+                  maxWidth: "500px",
+                }}
               >
                 <CardContent>
                   <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
@@ -173,10 +182,7 @@ const DjDetail = () => {
               >
                 {`${dj.name} ${dj.lastname}`}
               </Typography>
-              <ImageMasonry
-                key={"djGallery"}
-                images={[...djImages, dj.urlPic]}
-              />
+              <ImageMasonry key={"djGallery"} images={djImages} />
             </Box>
           </Modal>
         </Grid>
