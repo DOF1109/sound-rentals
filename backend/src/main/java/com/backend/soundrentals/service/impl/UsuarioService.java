@@ -4,6 +4,7 @@ import com.backend.soundrentals.dto.entrada.UsuarioEntradaDto;
 import com.backend.soundrentals.dto.modificacion.UsuarioModificacionDto;
 import com.backend.soundrentals.dto.salida.UsuarioSalidaDto;
 import com.backend.soundrentals.entity.Usuario;
+import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.repository.UsuarioRepository;
 import com.backend.soundrentals.service.EmailService;
@@ -46,7 +47,13 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException {
+    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException, BadRequestException {
+        Usuario usuarioComprobacion = usuarioRepository.findByEmail(usuarioEntradaDto.getEmail());
+
+        if(usuarioComprobacion!=null){
+            throw new BadRequestException("El correo ya fue registrado");
+        }
+
         Usuario usuario = modelMapper.map(usuarioEntradaDto, Usuario.class);
 
         UsuarioSalidaDto usuarioSalidaDto = modelMapper.map(usuarioRepository.save(usuario), UsuarioSalidaDto.class);
@@ -114,10 +121,9 @@ public class UsuarioService implements IUsuarioService {
 
     public void enviarEmailConfirmacion(UsuarioSalidaDto usuarioSalidaDto) throws MessagingException, IOException {
         String recipient = usuarioSalidaDto.getEmail();
-        String subject = "Bienvenida";
-        String template = "Hola, "+ usuarioSalidaDto.getNombre() +" "+usuarioSalidaDto.getApellido() +"\n\n"
+        String subject = "Bienvenido " + usuarioSalidaDto.getNombre() + "!";
+        String template = "Hola, "+ usuarioSalidaDto.getNombre() +" "+usuarioSalidaDto.getNombre() +"\n\n"
                 + "Bienvenido a Soundrentals!!";
-
 
         //emailService.sendEmail(recipient, subject, template);
         emailService.sendHtmlEmail(recipient, subject, template);

@@ -21,15 +21,12 @@ import javax.validation.constraints.Size;
 public class UsuarioEntradaDto {
     private Long id;
 
-    @NotNull(message = "DNI es requerido")
     private String dni;
 
     @NotNull(message = "Nombre es requerido")
     @Size(min = 1, message = "Nombre no puede estar vacio")
     private String nombre;
 
-    @NotNull(message = "Apellido es requerido")
-    @Size(min = 1, message = "Apellido no puede estar vacio")
     private String apellido;
 
     private String celular;

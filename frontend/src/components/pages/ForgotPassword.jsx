@@ -12,7 +12,6 @@ const ForgotPassword = () => {
   const handleSubmit = async (e)=> {
     e.preventDefault()
     let res = await forgotPassword(email)
-    console.log(res)
     alert('Te enviamos a tu correo los pasos para la recuperacion... ')
     navigate('/signin')
   }

@@ -38,18 +38,10 @@ export const getUser = async (id) => {
 
 // --------------- POST ---------------
 export const postUser = async (user) => {
-    console.log(user);
+  console.log(user);
   try {
-    const response = await axios.post(
-      URL_BASE + `/usuarios/registrar`,
-      user
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-    );
-    if (response.status === 200) {
+    const response = await axios.post(URL_BASE + `/usuarios/registrar`, user);
+    if (response.status === 201) {
       return response.data;
     } else {
       console.error(`Error: ${response.status}`);

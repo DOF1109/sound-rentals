@@ -3,6 +3,7 @@ package com.backend.soundrentals.controller;
 import com.backend.soundrentals.dto.entrada.UsuarioEntradaDto;
 import com.backend.soundrentals.dto.modificacion.UsuarioModificacionDto;
 import com.backend.soundrentals.dto.salida.UsuarioSalidaDto;
+import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.service.IUsuarioService;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class UsuarioController {
 
 
     @PostMapping("/registrar")
-    public ResponseEntity<UsuarioSalidaDto> registrarUsuario(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException {
+    public ResponseEntity<UsuarioSalidaDto> registrarUsuario(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws MessagingException, IOException, BadRequestException {
         return new ResponseEntity<>(usuarioService.registrarUsuario(usuarioEntradaDto), HttpStatus.CREATED);
     }
 

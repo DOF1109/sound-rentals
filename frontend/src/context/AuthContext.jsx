@@ -30,7 +30,6 @@ const AuthContextComponent = ({children}) => {
     const handleName = ( dataName )=> {
        setUserName(dataName)
        localStorage.setItem("userName", JSON.stringify(dataName))
-        console.log(dataName)
     }
 
 
