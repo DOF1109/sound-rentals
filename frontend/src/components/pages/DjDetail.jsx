@@ -50,6 +50,7 @@ const DjDetail = () => {
 
   const imagesDj = () => {
     const arrayImg = [];
+    
     for (let i = 1; i <= 5; i++) {
       const imgKey = `urlImg${i}`;
       arrayImg.push(dj[imgKey]);
@@ -60,7 +61,9 @@ const DjDetail = () => {
   const loadDj = async () => {
     const data = await getDj(id);
     if (data) {
+      console.log(data);
       setDj(data);
+      console.log(dj);
       //   setDjImages(imagesDj());
       setDjImages(arrayImagenesHard);
     }
