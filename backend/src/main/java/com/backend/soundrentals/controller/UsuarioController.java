@@ -29,9 +29,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.registrarUsuario(usuarioEntradaDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioSalidaDto> buscarUsuarioPorId(@PathVariable Long id) throws ResourceNotFoundException {
-        return new ResponseEntity<>(usuarioService.buscarUsuarioPorId(id), HttpStatus.OK);
+//    @GetMapping("/{id}")
+//    public ResponseEntity<UsuarioSalidaDto> buscarUsuarioPorId(@PathVariable Long id) throws ResourceNotFoundException {
+//        return new ResponseEntity<>(usuarioService.buscarUsuarioPorId(id), HttpStatus.OK);
+//    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UsuarioSalidaDto> buscarUsuarioPorEmail(@PathVariable String email) throws ResourceNotFoundException {
+        return new ResponseEntity<>(usuarioService.buscarUsuarioPorEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/listar")

@@ -82,7 +82,21 @@ public class UsuarioService implements IUsuarioService {
         if (usuarioBuscado != null) {
             usuarioSalidaDto = modelMapper.map(usuarioBuscado, UsuarioSalidaDto.class);
         } else {
-            throw new ResourceNotFoundException("usuario no encontrado");
+            throw new ResourceNotFoundException("Usuario no encontrado");
+        }
+
+        return usuarioSalidaDto;
+    }
+
+    @Override
+    public UsuarioSalidaDto buscarUsuarioPorEmail(String email) throws ResourceNotFoundException {
+        Usuario usuarioBuscado = usuarioRepository.findByEmail(email);
+
+        UsuarioSalidaDto usuarioSalidaDto = null;
+        if (usuarioBuscado != null) {
+            usuarioSalidaDto = modelMapper.map(usuarioBuscado, UsuarioSalidaDto.class);
+        } else {
+            throw new ResourceNotFoundException("Usuario no encontrado");
         }
 
         return usuarioSalidaDto;

@@ -10,7 +10,7 @@ const Layout = () => {
       <Box component="main">
         <Outlet />
       </Box>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };
