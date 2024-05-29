@@ -13,23 +13,41 @@ import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
 import { useEffect, useState } from "react";
 
+const arrayImagenesHard = [
+  "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
+  ,
+  "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f",
+  ,
+  "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
+  ,
+  "https://images.unsplash.com/photo-1529655683826-aba9b3e77383",
+  ,
+  "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
+  ,
+];
+
 const DjDetail = () => {
   const { id } = useParams();
   const [dj, setDj] = useState();
+  const [djImages, setDjImages] = useState();
+
+  const imagesDj = () => {
+    const arrayImg = [];
+    for (let i = 1; i <= 5; i++) {
+      const imgKey = `urlImg${i}`;
+      arrayImg.push(dj[imgKey]);
+    }
+    return arrayImg;
+  };
 
   const loadDj = async () => {
     const data = await getDj(id);
-    if (data) setDj(data);
-  };
-
-  const imagesDj = () => {
-    const arrayImg = []
-    for (let i = 1; i <= 5; i++) {
-        const imgKey = `urlImg${i}`;
-        arrayImg.push(dj[imgKey]);
+    if (data) {
+      setDj(data);
+      //   setDjImages(imagesDj());
+      setDjImages(arrayImagenesHard);
     }
-    return arrayImg;
-  }
+  };
 
   useEffect(() => {
     loadDj();
@@ -68,13 +86,19 @@ const DjDetail = () => {
                   <Typography>CATEGORIA:</Typography>
                   {dj.estilos.map((estilo) => {
                     return (
-                      <Typography key={estilo.style}>{estilo.style}</Typography>
+                      <Typography
+                        key={estilo.style}
+                        variant="body2"
+                        pl={1}
+                      >{`* ${estilo.style}`}</Typography>
                     );
                   })}
                   <Typography variant="body2" pt={3} pb={1}>
                     Sobre el DJ
                   </Typography>
-                  <Typography variant="body2">{dj.comment}</Typography>
+                  <Typography variant="body2" pl={1}>
+                    {dj.comment}
+                  </Typography>
                 </CardContent>
               </Card>
             </Box>
@@ -94,7 +118,7 @@ const DjDetail = () => {
               sx={{ borderRadius: 3, p: 2, minWidth: "200px" }}
             >
               <CardContent sx={{ pb: 0 }}>
-                <ImageMasonry />
+                <ImageMasonry images={djImages} />
               </CardContent>
               <CardActions>
                 <Button variant="contained" sx={{ width: "100%", mb: 1 }}>
