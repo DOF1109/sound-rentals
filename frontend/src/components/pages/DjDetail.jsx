@@ -4,7 +4,9 @@ import {
   Card,
   CardActions,
   CardContent,
+  Checkbox,
   Container,
+  FormControlLabel,
   Grid,
   Modal,
   Typography,
@@ -12,7 +14,8 @@ import {
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 const style = {
   position: "absolute",
@@ -31,6 +34,9 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
+  const { handleLogout, user, isLogged } = useContext(AuthContext);
+
+  const isAdmin = user? user.rol === 'sradmin95':false;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -113,6 +119,25 @@ const DjDetail = () => {
                   <Typography variant="body2" pl={1}>
                     {dj.comment}
                   </Typography>
+                  <Typography variant="body1" pt={3} pb={1}>
+                    Caracteristicas
+                  </Typography>
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
+                    label="Animador"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
+                    label="Multigenero"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
+                    label="Mezcla con videos"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
+                    label="Experiencia internacional"
+                  />
                 </CardContent>
               </Card>
             </Box>
