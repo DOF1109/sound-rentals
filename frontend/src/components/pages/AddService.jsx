@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, Grid, TextField, InputLabel, MenuItem, Select, FormControl } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,7 +12,12 @@ const AddService = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
+
+    // Refs para los inputs de archivos
+    const profileImageRef = useRef(null);
+    const imagesRef = useRef(null);
+
+  const formik = useFormik({
     initialValues: {
       name: "",
       lastname: "",
@@ -29,8 +34,13 @@ const AddService = () => {
       sample1: "",
       sample2: ""
     },
-    onSubmit: (data) => {
-      add(data);
+    onSubmit: async (data) => {
+      await add(data);
+      formik.resetForm();
+      setProfileImage(null);
+      setImages([]);
+      if (profileImageRef.current) profileImageRef.current.value = "";
+      if (imagesRef.current) imagesRef.current.value = "";
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Complete este campo"),
@@ -44,7 +54,8 @@ const AddService = () => {
     validateOnChange: false,
   });
 
-  
+  const { handleChange, handleSubmit, errors, values, setFieldValue, resetForm } = formik;
+
 
   const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
@@ -62,14 +73,12 @@ const AddService = () => {
 
 
   const add = async (data) => {
-    console.log(profileImage)
-    console.log(images)
     try {
-      // const profileImageUrl = await uploadToFirebase(data.profileImage, `images/${data.profileImage.name}`);
-  
       const response = await addDj({ ...data, urlPic:profileImage,urlImg1:images[0],urlImg2:images[1],urlImg3:images[2],urlImg4:images[3],urlImg5:images[4]});
       if (response.status === 201) {
         toast.success("¡DJ agregado exitosamente!");
+        setProfileImage(null);
+        setImages([]);
       } else {
         toast.error(`Error: ${response.message}`);
       }
@@ -102,6 +111,7 @@ const AddService = () => {
             label="Nombre"
             variant="outlined"
             onChange={handleChange}
+            value={values.name}
             error={!!errors.name}
             helperText={errors.name}
             fullWidth
@@ -113,6 +123,7 @@ const AddService = () => {
             label="Apellido"
             variant="outlined"
             onChange={handleChange}
+            value={values.lastname}
             error={!!errors.lastname}
             helperText={errors.lastname}
             fullWidth
@@ -124,6 +135,7 @@ const AddService = () => {
             label="Email"
             variant="outlined"
             onChange={handleChange}
+            value={values.email}
             error={!!errors.email}
             helperText={errors.email}
             fullWidth
@@ -136,6 +148,7 @@ const AddService = () => {
             type="number"
             variant="outlined"
             onChange={handleChange}
+            value={values.dni}
             error={!!errors.dni}
             helperText={errors.dni}
             fullWidth
@@ -147,6 +160,7 @@ const AddService = () => {
             label="Teléfono"
             variant="outlined"
             onChange={handleChange}
+            value={values.phone}
             error={!!errors.phone}
             helperText={errors.phone}
             fullWidth
@@ -158,6 +172,7 @@ const AddService = () => {
             label="Dirección"
             variant="outlined"
             onChange={handleChange}
+            value={values.address}
             error={!!errors.address}
             helperText={errors.address}
             fullWidth
@@ -170,6 +185,7 @@ const AddService = () => {
             variant="outlined"
             type="number"
             onChange={handleChange}
+            value={values.charge}
             error={!!errors.charge}
             helperText={errors.charge}
             fullWidth
@@ -181,6 +197,7 @@ const AddService = () => {
             label="Comentario"
             variant="outlined"
             onChange={handleChange}
+            value={values.comment}
             error={!!errors.comment}
             helperText={errors.comment}
             multiline
@@ -194,6 +211,7 @@ const AddService = () => {
             label="Muestra 1"
             variant="outlined"
             onChange={handleChange}
+            value={values.sample1}
             error={!!errors.sample1}
             helperText={errors.sample1}
             fullWidth
@@ -205,6 +223,7 @@ const AddService = () => {
             label="Muestra 2"
             variant="outlined"
             onChange={handleChange}
+            value={values.sample2}
             error={!!errors.sample2}
             helperText={errors.sample2}
             fullWidth
@@ -216,6 +235,7 @@ const AddService = () => {
             name="profileImage"
             type="file"
             onChange={handleProfileImageChange}
+            ref={profileImageRef}
           />
           <InputLabel>Imágenes (Hasta 5)</InputLabel>
           <input
@@ -223,6 +243,7 @@ const AddService = () => {
             type="file"
             multiple
             onChange={handleImagesChange}
+            ref={imagesRef}
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
