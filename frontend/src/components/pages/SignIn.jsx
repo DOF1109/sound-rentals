@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   FormControl,
   Grid,
   IconButton,
@@ -18,84 +19,82 @@ import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useContext, useState } from "react";
 
 import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
-import { collection, doc, getDoc } from 'firebase/firestore'
+import { collection, doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
- 
 
 const SignIn = () => {
-  const { handleLogin } = useContext(AuthContext)
+  const { handleLogin } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const [userCredentials, setUserCredentials] = useState({
-    email: '',
-    password: ''
-  })
+    email: "",
+    password: "",
+  });
 
-  const handleChange = (e)=> {
-    setUserCredentials( {...userCredentials, [e.target.name]: e.target.value} )
-  }
-  
+  const handleChange = (e) => {
+    setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
+  };
+
   //const {email, password} = userCredentials()
 
-  const handleSubmit = async (e)=>{
+  const handleSubmit = async (e) => {
     try {
-      e.preventDefault()
-      const res = await onSignIn(userCredentials)
-      if(res.user){
+      e.preventDefault();
+      const res = await onSignIn(userCredentials);
+      if (res.user) {
         //Capturamos el UID del usuario creado
-        const userCollection = collection(db, "users")
-        const userRef = doc(userCollection, res.user.uid)
+        const userCollection = collection(db, "users");
+        const userRef = doc(userCollection, res.user.uid);
         //En userDoc guardo el usuario de la base de datos
-        const userDoc = await getDoc(userRef)
+        const userDoc = await getDoc(userRef);
 
         let finalyUser = {
           email: res.user.email,
-          rol: userDoc.data().rol
-        }
+          rol: userDoc.data().rol,
+        };
         //Aqui paso al context AuthContext los datos del usuario 'finalyUser'
-        handleLogin(finalyUser)
-        navigate('/')
-
-      }else{
-        alert('Usted no es un usuario registrado o sus datos son incorrectos!...' )
+        handleLogin(finalyUser);
+        navigate("/");
+      } else {
+        alert(
+          "Usted no es un usuario registrado o sus datos son incorrectos!..."
+        );
       }
-
     } catch (error) {
-        swal({
-          title: 'SoundRentals',
-          text: 'Usted no es un usuario registrado o sus datos de acceso son incorrectos, vuelva a intentar...',
-          //icon: successs - error - warning - info
-          icon: 'warning',
-          button: 'Aceptar',
-          //timer: '2000'
-        })
+      swal({
+        title: "SoundRentals",
+        text: "Usted no es un usuario registrado o sus datos de acceso son incorrectos, vuelva a intentar...",
+        //icon: successs - error - warning - info
+        icon: "warning",
+        button: "Aceptar",
+        //timer: '2000'
+      });
     }
-    
-  }
+  };
 
-  const loginWithGoogle = async ()=>{
-    let res = await loginGoogle()
+  const loginWithGoogle = async () => {
+    let res = await loginGoogle();
     let finalyUser = {
       email: res.user.email,
-      rol: "commonusr"
-    }
-    handleLogin(finalyUser)
-    navigate('/')
-  }
-  
+      rol: "commonusr",
+    };
+    handleLogin(finalyUser);
+    navigate("/");
+  };
 
   return (
     <Box
       sx={{
-        width: "100%",
+        maxWidth: "sm",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        mx: "auto",
         // backgroundColor: theme.palette.secondary.main,
       }}
     >
@@ -107,7 +106,12 @@ const SignIn = () => {
           justifyContent={"center"}
         >
           <Grid item xs={10} md={12}>
-            <TextField name="email" label="Email" fullWidth onChange={handleChange}/>
+            <TextField
+              name="email"
+              label="Email"
+              fullWidth
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={10} md={12}>
             <FormControl variant="outlined" fullWidth>
@@ -115,7 +119,8 @@ const SignIn = () => {
                 Contraseña
               </InputLabel>
               <OutlinedInput
-                name="password" onChange={handleChange}
+                name="password"
+                onChange={handleChange}
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -139,17 +144,17 @@ const SignIn = () => {
           </Grid>
           <Link
             to="/forgotPass"
+            className="clear-link"
             style={{ color: "steelblue", marginTop: "10px" }}
           >
             ¿Olvidaste tu contraseña?
           </Link>
 
-          
           <Grid container justifyContent="center" spacing={3} mt={2}>
             <Grid item xs={10} md={5}>
               <Button
                 variant="contained"
-                fullWidth   
+                fullWidth
                 type="submit"
                 sx={{
                   color: "white",
@@ -194,7 +199,7 @@ const SignIn = () => {
                 <Button
                   variant="contained"
                   fullWidth
-                  onClick={()=>navigate("/register")}
+                  onClick={() => navigate("/register")}
                   type="button"
                   sx={{
                     color: "white",
@@ -212,7 +217,7 @@ const SignIn = () => {
                 <Button
                   variant="contained"
                   fullWidth
-                  onClick={()=>navigate("/")}
+                  onClick={() => navigate("/")}
                   type="button"
                   sx={{
                     color: "white",
@@ -224,7 +229,6 @@ const SignIn = () => {
                 </Button>
               </Tooltip>
             </Grid>
-
           </Grid>
         </Grid>
       </form>

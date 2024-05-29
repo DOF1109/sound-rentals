@@ -108,12 +108,13 @@ const Register = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        maxWidth: "sm",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        mx: "auto",
         // backgroundColor: theme.palette.secondary.main,
       }}
     >
@@ -145,9 +146,12 @@ const Register = () => {
           <Grid item xs={10} md={12}>
             <FormControl variant="outlined" fullWidth>
               <InputLabel htmlFor="outlined-adornment-password">
+                Contraseña
+              </InputLabel>
+              {/* <InputLabel htmlFor="outlined-adornment-password">
                 Contraseña - Mínima de 8 letras, con al menos un símbolo, letras
                 mayúsculas y minúsculas y un número.
-              </InputLabel>
+              </InputLabel> */}
 
               <OutlinedInput
                 id="outlined-adornment-password"
@@ -211,9 +215,7 @@ const Register = () => {
                 fullWidth
                 type="submit"
                 sx={{
-                  color: "white",
                   textTransform: "none",
-                  textShadow: "2px 2px 2px grey",
                 }}
               >
                 Registrarme
@@ -225,8 +227,9 @@ const Register = () => {
                 fullWidth
                 onClick={() => navigate("/signin")}
                 type="button"
+                sx={{ textTransform: "none" }}
               >
-                Regresar
+                Iniciar sesión
               </Button>
             </Grid>
           </Grid>

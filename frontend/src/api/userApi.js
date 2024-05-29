@@ -38,7 +38,6 @@ export const getUser = async (id) => {
 
 // --------------- POST ---------------
 export const postUser = async (user) => {
-  console.log(user);
   try {
     const response = await axios.post(URL_BASE + `/usuarios/registrar`, user);
     if (response.status === 201) {
