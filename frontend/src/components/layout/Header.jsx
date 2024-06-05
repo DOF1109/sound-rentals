@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 import { logOut } from "../../firebaseConfig";
 import { AuthContext } from "../../context/AuthContext";
+import Avatar from "../common/Avatar";
 
 const Header = () => {
   const { handleLogout, user, isLogged } = useContext(AuthContext);
@@ -147,7 +148,19 @@ const Header = () => {
           </Box>
 
           {/* ---------- Botones de la derecha ---------- */}
-          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" }, alignItems: 'center' }}>
+            {isLogged && (
+              <Box display="flex" alignItems="center">
+                <Link to="/user-info">
+                  <Avatar name={user.email} />
+                </Link>
+                <Button variant="contained" onClick={handleClouse} sx={{ ml: 2 }}>
+                  <Link className="clear-link light-text" to="">
+                    CERRAR SESIÓN
+                  </Link>
+                </Button>
+              </Box>
+            )}
             {!isLogged && (
               <>
                 <Button variant="contained" sx={{ mx: 2 }}>
@@ -161,14 +174,6 @@ const Header = () => {
                   </Link>
                 </Button>
               </>
-            )}
-
-            {isLogged && (
-              <Button variant="contained" onClick={handleClouse}>
-                <Link className="clear-link light-text" to="">
-                  CERRAR SESIÓN
-                </Link>
-              </Button>
             )}
           </Box>
         </Toolbar>
