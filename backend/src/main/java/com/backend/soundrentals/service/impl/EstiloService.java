@@ -91,10 +91,10 @@ public class EstiloService implements IEstiloService {
         estiloAEliminar = modelMapper.map(buscarEstiloPorId(id),Estilo.class);
         if (estiloAEliminar != null) {
             estiloRepository.deleteById(id);
-            LOGGER.warn("Se ha eliminado la unidad con id: {}", id);
+            LOGGER.warn("Se ha eliminado el estilo con id: {}", id);
         } else {
-            LOGGER.error("No se ha encontrado el recurso con id {}", id);
-            throw new ResourceNotFoundException("No se ha encontrado el recurso con id " + id);
+            LOGGER.error("No se ha encontrado el estilo con id {}", id);
+            throw new ResourceNotFoundException("No se ha encontrado el estilo con id " + id);
         }
         return modelMapper.map(estiloAEliminar,EstiloSalidaDto.class);
     }

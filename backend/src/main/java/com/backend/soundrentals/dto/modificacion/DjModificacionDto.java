@@ -1,6 +1,7 @@
 package com.backend.soundrentals.dto.modificacion;
 
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
+import com.backend.soundrentals.entity.Caracteristica;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,4 +35,5 @@ public class DjModificacionDto {
     private String urlImg4;
     private String urlImg5;
     private List<EstiloSalidaDto> estilos = new ArrayList<>();
+    private List<Caracteristica> caracteristicas = new ArrayList<>();
 }

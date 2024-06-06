@@ -38,4 +38,11 @@ public class Dj {
             inverseJoinColumns = @JoinColumn(name = "style_id")
     )
     private List<Estilo> estilos = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "dj_characteristic",
+            joinColumns = @JoinColumn(name = "dj_id"),
+            inverseJoinColumns = @JoinColumn(name = "characteristic_id")
+    )
+    private List<Caracteristica> caracteristicas = new ArrayList<>();
 }

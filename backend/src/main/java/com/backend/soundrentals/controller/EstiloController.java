@@ -48,7 +48,7 @@ public class EstiloController {
     }
 
     @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<EstiloSalidaDto> eliminarOdontologo(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<EstiloSalidaDto> eliminarEstilo(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(estiloService.eliminarEstilo(id), HttpStatus.OK);
     }
 }
