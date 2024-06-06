@@ -57,7 +57,7 @@ public class DjController {
     }
 
     @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<DjSalidaDto> eliminarOdontologo(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<DjSalidaDto> eliminarDj(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(djService.eliminarDj(id), HttpStatus.OK);
     }
 }

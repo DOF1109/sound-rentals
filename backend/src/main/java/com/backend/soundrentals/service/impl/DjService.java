@@ -5,11 +5,13 @@ import com.backend.soundrentals.dto.entrada.EstiloEntradaDto;
 import com.backend.soundrentals.dto.modificacion.DjModificacionDto;
 import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
+import com.backend.soundrentals.entity.Caracteristica;
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
+import com.backend.soundrentals.repository.CaracteristicaRepository;
 import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.EstiloRepository;
 import com.backend.soundrentals.repository.ReservaRepository;
@@ -36,6 +38,7 @@ public class DjService implements IRecursoService {
 
     private final DjRepository djRepository;
     private final EstiloRepository estiloRepository;
+    private final CaracteristicaRepository caracteristicaRepository;
     private final ReservaRepository reservaRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Dj.class);
     private ModelMapper modelMapper;
@@ -60,13 +63,20 @@ public class DjService implements IRecursoService {
         }
 
         List<Estilo> estilosParaASignar = new ArrayList<>();
+        List<Caracteristica> caracteristicasParaASignar = new ArrayList<>();
 
         for(Long idEstilo : recurso.getEstilos()){
             Estilo estiloEntidad = estiloRepository.findById(idEstilo).orElse(null);
             estilosParaASignar.add(estiloEntidad);
         }
 
+        for(Long idCaracteristica : recurso.getCaracteristicas()){
+            Caracteristica caracteristicaEntidad = caracteristicaRepository.findById(idCaracteristica).orElse(null);
+            caracteristicasParaASignar.add(caracteristicaEntidad);
+        }
+
         djEntidad.setEstilos(estilosParaASignar);
+        djEntidad.setCaracteristicas(caracteristicasParaASignar);
 
         Dj djGuardado = djRepository.save(djEntidad);
 
