@@ -36,6 +36,23 @@ export const getUser = async (id) => {
   }
 };
 
+export const getUserByEmail = async (email) => {
+  try {
+    const response = await axios.get(URL_BASE + `/usuarios/${email}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Error: ${response.status}`);
+      errorAlert();
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+    errorAlert();
+    return null;
+  }
+};
+
 // --------------- POST ---------------
 export const postUser = async (user) => {
   try {
