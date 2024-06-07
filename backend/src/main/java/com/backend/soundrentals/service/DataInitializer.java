@@ -30,13 +30,13 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-//        reservaRepository.deleteAll();
-//        djRepository.deleteAll();
+        reservaRepository.deleteAll();
+        djRepository.deleteAll();
 //        estiloRepository.deleteAll();
 //
-//        jdbcTemplate.execute("ALTER TABLE djs AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE djs AUTO_INCREMENT = 1");
 //        jdbcTemplate.execute("ALTER TABLE mstyle AUTO_INCREMENT = 1");
-//        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
 //
 //
 //        // Lista de estilos junto con sus URLs

@@ -27,7 +27,7 @@ public class DjController {
 
 
     @PostMapping("/registrar")
-    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) throws UsernameAlreadyExistsException {
+    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) throws BadRequestException {
         return new ResponseEntity<>(djService.registrarDj(djEntradaDto), HttpStatus.CREATED);
     }
 

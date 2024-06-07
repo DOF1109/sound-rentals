@@ -3,6 +3,7 @@ package com.backend.soundrentals.controller;
 import com.backend.soundrentals.dto.entrada.ReservaEntradaDto;
 import com.backend.soundrentals.dto.modificacion.ReservaModificacionDto;
 import com.backend.soundrentals.dto.salida.ReservaSalidaDto;
+import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.service.impl.ReservaService;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class ReservaController {
     private final ReservaService reservasService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ReservaSalidaDto> registrarReserva(@Valid @RequestBody ReservaEntradaDto reservasEntradaDto) {
+    public ResponseEntity<ReservaSalidaDto> registrarReserva(@Valid @RequestBody ReservaEntradaDto reservasEntradaDto) throws BadRequestException, ResourceNotFoundException {
         return new ResponseEntity<>(reservasService.registrarReserva(reservasEntradaDto), HttpStatus.CREATED);
     }
 
@@ -39,7 +40,7 @@ public class ReservaController {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<ReservaSalidaDto> actualizarReserva(@Valid @RequestBody ReservaModificacionDto reservasModificacionDto) throws ResourceNotFoundException {
+    public ResponseEntity<ReservaSalidaDto> actualizarReserva(@Valid @RequestBody ReservaModificacionDto reservasModificacionDto) throws ResourceNotFoundException, BadRequestException {
         return new ResponseEntity<>(reservasService.actualizarReserva(reservasModificacionDto), HttpStatus.OK);
     }
 

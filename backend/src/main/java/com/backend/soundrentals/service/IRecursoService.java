@@ -10,7 +10,7 @@ import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
 import java.util.List;
 
 public interface IRecursoService{
-    DjSalidaDto registrarDj(DjEntradaDto recurso) throws UsernameAlreadyExistsException;
+    DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException;
     List<DjSalidaDto> listarDjs();
     List<DjSalidaDto> listarTop10();
     List<DjSalidaDto> listarDjsPorEstilo(Long id);
