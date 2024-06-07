@@ -148,13 +148,23 @@ const Header = () => {
           </Box>
 
           {/* ---------- Botones de la derecha ---------- */}
-          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" }, alignItems: 'center' }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+            }}
+          >
             {isLogged && (
               <Box display="flex" alignItems="center">
-                <Link to="/user-info">
+                <Link to="/user-info" className="clear-link">
                   <Avatar name={user.email} />
                 </Link>
-                <Button variant="contained" onClick={handleClouse} sx={{ ml: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleClouse}
+                  sx={{ ml: 2 }}
+                >
                   <Link className="clear-link light-text" to="">
                     CERRAR SESIÓN
                   </Link>
