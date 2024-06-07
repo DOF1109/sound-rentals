@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import { Flip, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCategories } from "../../api/categoriesApi.js";
+import { getCharacteristics } from "../../api/characteristicsApi.js";
 import { addDj } from "../../api/djsApi.js";
 import { uploadToFirebase } from "../../firebaseConfig";
 
@@ -21,6 +22,7 @@ const AddService = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [characteristics, setCharacteristics] = useState([]);
 
   // Refs para los inputs de archivos
   const profileImageRef = useRef(null);
@@ -40,16 +42,19 @@ const AddService = () => {
       profileImage: "",
       images: [],
       estilos: [],
+      caracteristicas:[],
       sample1: "",
       sample2: "",
     },
     onSubmit: async (data) => {
-      await add(data);
-      formik.resetForm();
-      setProfileImage(null);
-      setImages([]);
-      if (profileImageRef.current) profileImageRef.current.value = "";
-      if (imagesRef.current) imagesRef.current.value = "";
+      let res = await add(data);
+      if(res){
+        formik.resetForm();
+        setProfileImage(null);
+        setImages([]);
+        if (profileImageRef.current) profileImageRef.current.value = "";
+        if (imagesRef.current) imagesRef.current.value = "";
+      }
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Complete este campo"),
@@ -105,8 +110,10 @@ const AddService = () => {
         toast.success("¡DJ agregado exitosamente!");
         setProfileImage(null);
         setImages([]);
+        return true;
       } else {
         toast.error(`Error: ${response.message}`);
+        return false;
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -118,8 +125,14 @@ const AddService = () => {
     if (data) setCategories(data);
   };
 
+  const loadCharacteristics = async () => {
+    const data = await getCharacteristics();
+    if (data) setCharacteristics(data);
+  };
+
   useEffect(() => {
     loadCategories();
+    loadCharacteristics();
   }, []);
 
   return (
@@ -260,23 +273,6 @@ const AddService = () => {
           />
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
-          <InputLabel sx={{ pb: 1 }}>Imagen de Perfil</InputLabel>
-          <input
-            name="profileImage"
-            type="file"
-            onChange={handleProfileImageChange}
-            ref={profileImageRef}
-          />
-          <InputLabel sx={{ pt: 4, pb: 1 }}>Imágenes (Hasta 5)</InputLabel>
-          <input
-            name="images"
-            type="file"
-            multiple
-            onChange={handleImagesChange}
-            ref={imagesRef}
-          />
-        </Grid>
-        <Grid item xs={12} sm={9} lg={8}>
           <FormControl fullWidth>
             <InputLabel>Estilo/Categoría de Música</InputLabel>
             <Select
@@ -293,6 +289,41 @@ const AddService = () => {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <FormControl fullWidth>
+            <InputLabel>Caracteristicas</InputLabel>
+            <Select
+              name="caracteristicas"
+              value={values.caracteristicas}
+              onChange={(event) => setFieldValue("caracteristicas", event.target.value)}
+              error={!!errors.caracteristicas}
+              multiple
+            >
+              {characteristics.map((characteristic, index) => (
+                <MenuItem key={index} value={characteristic.id}>
+                  {characteristic.caracteristica}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <InputLabel sx={{ pb: 1 }}>Imagen de Perfil</InputLabel>
+          <input
+            name="profileImage"
+            type="file"
+            onChange={handleProfileImageChange}
+            ref={profileImageRef}
+          />
+          <InputLabel sx={{ pt: 4, pb: 1 }}>Imágenes (Hasta 5)</InputLabel>
+          <input
+            name="images"
+            type="file"
+            multiple
+            onChange={handleImagesChange}
+            ref={imagesRef}
+          />
         </Grid>
         <Grid item xs={12} sm={9} lg={8} display="flex" justifyContent="center">
           <Button

@@ -8,9 +8,21 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Modal,
   Typography,
 } from "@mui/material";
+import SpeakerIcon from '@mui/icons-material/Speaker';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import AlbumIcon from '@mui/icons-material/Album';
+import MusicVideoIcon from '@mui/icons-material/MusicVideo';
+import TuneIcon from '@mui/icons-material/Tune';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
+import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
 import { getDj } from "../../api/djsApi.js";
@@ -27,6 +39,21 @@ const style = {
   borderRadius: 3,
   boxShadow: 24,
   p: 4,
+};
+
+const getRandomIcon = () => {
+  const icons = [
+    <SpeakerIcon />,
+    <LibraryMusicIcon />,
+    <AudiotrackIcon />,
+    <AlbumIcon />,
+    <MusicVideoIcon />,
+    <TuneIcon />,
+    <EqualizerIcon />,
+    <PlaylistAddCheckCircleIcon />
+  ];
+  const randomIndex = Math.floor(Math.random() * icons.length);
+  return icons[randomIndex];
 };
 
 const DjDetail = () => {
@@ -122,22 +149,16 @@ const DjDetail = () => {
                   <Typography variant="body1" pt={3} pb={1}>
                     Caracteristicas
                   </Typography>
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
-                    label="Animador"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
-                    label="Multigenero"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
-                    label="Mezcla con videos"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked disabled={!isAdmin} />}
-                    label="Experiencia internacional"
-                  />
+                  {
+                    dj && dj.caracteristicas.map((caracteristica,index)=>(
+                      <ListItem key={index}>
+                        <ListItemIcon>
+                          {getRandomIcon()}
+                        </ListItemIcon>
+                        <ListItemText primary={caracteristica.caracteristica} />
+                      </ListItem>
+                    ))
+                  }
                 </CardContent>
               </Card>
             </Box>
