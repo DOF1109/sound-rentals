@@ -9,9 +9,9 @@ import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import java.util.List;
 
 public interface IReservaService {
-    ReservaSalidaDto registrarReserva(ReservaEntradaDto reservasEntradaDto);
+    ReservaSalidaDto registrarReserva(ReservaEntradaDto reservaEntradaDto) throws BadRequestException,ResourceNotFoundException;
     List<ReservaSalidaDto> listarReservas();
     ReservaSalidaDto obtenerReservaPorId(Long id) throws ResourceNotFoundException;
-    ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException;
+    ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException, BadRequestException;
     ReservaSalidaDto eliminarReserva(Long id) throws ResourceNotFoundException;
 }

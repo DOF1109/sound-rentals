@@ -44,7 +44,7 @@ public class DjService implements IRecursoService {
     private ModelMapper modelMapper;
 
     @Override
-    public DjSalidaDto registrarDj(DjEntradaDto recurso) throws UsernameAlreadyExistsException {
+    public DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException {
         Dj djEntidad = modelMapper.map(recurso,Dj.class);
 
         Dj nombreDjYaRegistradoDB = djRepository.findByFullname(recurso.getName(),recurso.getLastname());
