@@ -75,7 +75,7 @@ const Header = () => {
                 </Link>
               </MenuItem>
 
-              {user.rol === "sradmin95" && (
+              {user.rol === import.meta.env.VITE_ADMIN_ROL && (
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Link className="clear-link" to="/add-product">
                     Registrar DJ
@@ -134,7 +134,7 @@ const Header = () => {
                   NUESTROS DJ'S
                 </Link>
               </Button>
-              {user.rol === "sradmin95" && (
+              {user.rol === import.meta.env.VITE_ADMIN_ROL && (
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ display: "block", fontWeight: "500" }}

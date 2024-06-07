@@ -13,6 +13,8 @@ import AuthContextComponent from "./context/AuthContext";
 import DjDetail from "./components/pages/DjDetail";
 import ManageUsers from "./components/pages/ManageUsers";
 import UserInfo from "./components/pages/UserInfo";
+import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
+import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 
 function App() {
   return (
@@ -21,18 +23,29 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/add-product" element={<AddProduct />} />
-              <Route path="/djs" element={<DJs />} />
-              <Route path="/dj-detail/:id" element={<DjDetail />} />
-              <Route path="/manage-users" element={<ManageUsers />} />
-              <Route path="/user-info" element={<UserInfo />} />
-            </Route>
+
+            {/* RUTAS PARA USUARIOS SIN LOGEARSE */}
             <Route path="signin" element={<SignIn />} />
             <Route path="register" element={<Register />} />
             <Route path="forgotPass" element={<ForgotPassword />} />
             <Route path="*" element={<NotFound />} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/djs" element={<DJs />} />
+              <Route path="/dj-detail/:id" element={<DjDetail />} />
+
+              {/* RUTAS PARA USUARIO ADMIN */}
+              <Route element={<ProtectedAdmin />}>
+                <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/manage-users" element={<ManageUsers />} />
+              </Route>
+
+              {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
+              <Route element={<ProtectedUsers />}>
+                <Route path="/user-info" element={<UserInfo />} />
+              </Route>
+            </Route>
+            
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
