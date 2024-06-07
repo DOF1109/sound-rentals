@@ -23,18 +23,14 @@
   --detail-high-contrast: rgb(101, 101, 101);
 }
 
-body,#root{
+body {
   min-height: 100vh;
 }
 
-#root{
-  position: relative;
-  /* padding-bottom: 200px; */
-}
-
-main{
-  max-height: 83vh;
-  overflow-y: auto;
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .clear-link {

@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <Box component="main">
+      <Box component="main" sx={{flexGrow: 1}}>
         <Outlet />
       </Box>
       <Footer />

@@ -8,8 +8,6 @@ import { getCategories } from "../../api/categoriesApi.js";
 import { getTopDjs } from "../../api/djsApi.js";
 
 const OPTIONS = { loop: true };
-const SLIDE_COUNT = 6;
-const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
