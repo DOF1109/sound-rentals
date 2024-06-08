@@ -101,7 +101,7 @@ const EmblaCarousel = (props) => {
       } else {
         emblaApi.scrollTo(0); // Vuelve al primer slide si ya no puede avanzar
       }
-    }, 4000); // Cambia cada 4 segundos
+    }, 7000); // Cambia cada 7 segundos
     return () => clearInterval(timer); // Limpia el intervalo cuando el componente se desmonta
   }, [emblaApi, isHovered]);
 

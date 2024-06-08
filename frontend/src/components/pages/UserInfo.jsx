@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Card, CardContent, Avatar, Typography } from "@mui/material";
 import { getUserByEmail } from "../../api/userApi";
+import Loader from "../common/Loader";
 
 const UserInfo = () => {
   const { user } = useContext(AuthContext);
@@ -18,13 +19,7 @@ const UserInfo = () => {
     loadUserData();
   }, []);
 
-  if (!userData) {
-    return (
-      <Typography variant="h5" ml={5} mt={3}>
-        Cargando...
-      </Typography>
-    );
-  }
+  if (!userData) return <Loader />;
 
   return (
     <Card

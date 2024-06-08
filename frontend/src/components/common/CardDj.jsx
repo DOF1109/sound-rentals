@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import darkTheme from "../../styles/themeConfig";
 
 const CardDj = ({ id, image, name, lastname, styles }) => {
   return (
@@ -35,7 +36,7 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
             alt="DJ image"
           />
           <CardContent sx={{width: "100%", height:"100%"}}>
-            <Typography gutterBottom variant="h6">
+            <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary}>
               {`${name}  ${lastname}`}
             </Typography>
             {styles.map((estilo, index) => {
