@@ -29,10 +29,42 @@ const Header = () => {
     setAnchorElNav(null);
   };
 
-  const handleClouse = () => {
+  const handleClose = () => {
     handleLogout();
     logOut();
     navigate("/signin");
+  };
+
+  const AdminMobileMenuItems = ({ handleClose }) => (
+    <>
+      <MenuItem onClick={handleClose}>
+        <Link className="clear-link" to="/manage-users">
+          Admin. usuarios
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleClose}>
+        <Link className="clear-link" to="/add-product">
+          Registrar DJ
+        </Link>
+      </MenuItem>
+    </>
+  );
+
+  const NoLoggedMobileMenuItems = ({ handleClose }) => {
+    return (
+      <>
+        <MenuItem onClick={handleClose}>
+          <Link className="clear-link" to="/signin">
+            Iniciar sesión
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link className="clear-link" to="/register">
+            Registrarse
+          </Link>
+        </MenuItem>
+      </>
+    );
   };
 
   return (
@@ -75,37 +107,19 @@ const Header = () => {
                 </Link>
               </MenuItem>
 
+              {/* Usuario administrador */}
               {user.rol === import.meta.env.VITE_ADMIN_ROL && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/add-product">
-                    Registrar DJ
-                  </Link>
-                </MenuItem>
+                <AdminMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
+              {/* Usuario sin loguearse */}
               {!isLogged && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/signin">
-                    Iniciar sesión
-                  </Link>
-                </MenuItem>
+                <NoLoggedMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
-              {!isLogged && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/register">
-                    Registrarse
-                  </Link>
-                </MenuItem>
-              )}
-
+              {/* Usuario logueado */}
               {isLogged && (
-                <MenuItem
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    handleClouse();
-                  }}
-                >
+                <MenuItem onClick={handleClose}>
                   <Link className="clear-link" to="">
                     Cerrar sesión
                   </Link>
@@ -134,15 +148,27 @@ const Header = () => {
                   NUESTROS DJ'S
                 </Link>
               </Button>
+
+              {/* Usuario administrador */}
               {user.rol === import.meta.env.VITE_ADMIN_ROL && (
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ display: "block", fontWeight: "500" }}
-                >
-                  <Link className="clear-link shiny-hover" to="/add-product">
-                    REGISTRAR DJ
-                  </Link>
-                </Button>
+                <>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500", pr: 3 }}
+                  >
+                    <Link className="clear-link shiny-hover" to="/manage-users">
+                      ADMIN. USUARIOS
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
+                    <Link className="clear-link shiny-hover" to="/add-product">
+                      REGISTRAR DJ
+                    </Link>
+                  </Button>
+                </>
               )}
             </Box>
           </Box>
@@ -162,7 +188,7 @@ const Header = () => {
                 </Link>
                 <Button
                   variant="contained"
-                  onClick={handleClouse}
+                  onClick={handleClose}
                   sx={{ ml: 2 }}
                 >
                   <Link className="clear-link light-text" to="">
