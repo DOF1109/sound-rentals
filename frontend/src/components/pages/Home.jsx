@@ -6,12 +6,13 @@ import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCa
 import theme from "../../styles/themeConfig";
 import { getCategories } from "../../api/categoriesApi.js";
 import { getTopDjs } from "../../api/djsApi.js";
+import Loader from "../common/Loader.jsx";
 
 const OPTIONS = { loop: true };
 
 const Home = () => {
-  const [categories, setCategories] = useState([]);
-  const [topDjs, setTopDjs] = useState([]);
+  const [categories, setCategories] = useState();
+  const [topDjs, setTopDjs] = useState();
 
   const loadCategories = async () => {
     const data = await getCategories();
@@ -27,6 +28,8 @@ const Home = () => {
     loadCategories();
     loadTopDjs();
   }, []);
+
+  if (!categories || !topDjs) return <Loader />;
 
   return (
     <>

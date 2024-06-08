@@ -5,17 +5,17 @@ import {
   Pagination,
   useMediaQuery,
   useTheme,
-  Button,
 } from "@mui/material";
 import SearchInput from "../common/SearchInput";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs } from "../../api/djsApi.js";
 import { getCategories } from "../../api/categoriesApi.js";
+import Loader from "../common/Loader.jsx";
 
 const DJs = () => {
   const [categories, setCategories] = useState([]);
-  const [djs, setDjs] = useState([]);
+  const [djs, setDjs] = useState();
   const [page, setPage] = useState(1);
   const [pageDjs, setPageDjs] = useState([]);
 
@@ -48,6 +48,8 @@ const DJs = () => {
     loadCategories();
     loadDjs();
   }, []);
+
+  if (!djs) return <Loader />;
 
   return (
     <Container component="section">

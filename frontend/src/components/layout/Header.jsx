@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 import { logOut } from "../../firebaseConfig";
@@ -15,10 +15,10 @@ import { AuthContext } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
 
 const Header = () => {
-  const { handleLogout, user, isLogged } = useContext(AuthContext);
-
+  const { handleLogout } = useContext(AuthContext);
+  const [user, setUser] = useState();
+  const [isLogged, setisLogged] = useState();
   const [anchorElNav, setAnchorElNav] = useState(null);
-
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -29,11 +29,50 @@ const Header = () => {
     setAnchorElNav(null);
   };
 
-  const handleClouse = () => {
+  const handleClose = () => {
     handleLogout();
     logOut();
     navigate("/signin");
   };
+
+  const AdminMobileMenuItems = ({ handleClose }) => (
+    <>
+      <MenuItem onClick={handleClose}>
+        <Link className="clear-link" to="/manage-users">
+          Admin. usuarios
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleClose}>
+        <Link className="clear-link" to="/add-product">
+          Registrar DJ
+        </Link>
+      </MenuItem>
+    </>
+  );
+
+  const NoLoggedMobileMenuItems = ({ handleClose }) => {
+    return (
+      <>
+        <MenuItem onClick={handleClose}>
+          <Link className="clear-link" to="/signin">
+            Iniciar sesión
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link className="clear-link" to="/register">
+            Registrarse
+          </Link>
+        </MenuItem>
+      </>
+    );
+  };
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("userInfo")));
+    setisLogged(JSON.parse(localStorage.getItem("isLogged")));
+  }, []);
+
+  if (!user || !isLogged) return "";
 
   return (
     <AppBar position="sticky" sx={{ py: 3 }}>
@@ -70,42 +109,38 @@ const Header = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
+                <Link className="clear-link" to="/">
+                  Inicio
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/djs">
                   Nuestros DJs
                 </Link>
               </MenuItem>
 
-              {user.rol === "sradmin95" && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/add-product">
-                    Registrar DJ
-                  </Link>
-                </MenuItem>
+              {/* Usuario administrador */}
+              {user.rol === import.meta.env.VITE_ADMIN_ROL && (
+                <AdminMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
+              {/* Usuario sin loguearse */}
               {!isLogged && (
+                <NoLoggedMobileMenuItems handleClose={handleCloseNavMenu} />
+              )}
+
+              {/* Usuario común logueado */}
+              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/signin">
-                    Iniciar sesión
+                  <Link className="clear-link" to="/user-info">
+                    Mis datos
                   </Link>
                 </MenuItem>
               )}
 
-              {!isLogged && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/register">
-                    Registrarse
-                  </Link>
-                </MenuItem>
-              )}
-
+              {/* Usuario logueado */}
               {isLogged && (
-                <MenuItem
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    handleClouse();
-                  }}
-                >
+                <MenuItem onClick={handleClose}>
                   <Link className="clear-link" to="">
                     Cerrar sesión
                   </Link>
@@ -134,13 +169,37 @@ const Header = () => {
                   NUESTROS DJ'S
                 </Link>
               </Button>
-              {user.rol === "sradmin95" && (
+
+              {/* Usuario administrador */}
+              {user.rol === import.meta.env.VITE_ADMIN_ROL && (
+                <>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500", pr: 3 }}
+                  >
+                    <Link className="clear-link shiny-hover" to="/manage-users">
+                      ADMIN. USUARIOS
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
+                    <Link className="clear-link shiny-hover" to="/add-product">
+                      REGISTRAR DJ
+                    </Link>
+                  </Button>
+                </>
+              )}
+
+              {/* Usuario común logueado */}
+              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ display: "block", fontWeight: "500" }}
                 >
-                  <Link className="clear-link shiny-hover" to="/add-product">
-                    REGISTRAR DJ
+                  <Link className="clear-link shiny-hover" to="/user-info">
+                    MIS DATOS
                   </Link>
                 </Button>
               )}
@@ -148,13 +207,30 @@ const Header = () => {
           </Box>
 
           {/* ---------- Botones de la derecha ---------- */}
-          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" }, alignItems: 'center' }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+            }}
+          >
             {isLogged && (
               <Box display="flex" alignItems="center">
-                <Link to="/user-info">
+                <Link
+                  className="clear-link"
+                  to={
+                    user.rol === import.meta.env.VITE_ADMIN_ROL
+                      ? "/manage-users"
+                      : "/user-info"
+                  }
+                >
                   <Avatar name={user.email} />
                 </Link>
-                <Button variant="contained" onClick={handleClouse} sx={{ ml: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleClose}
+                  sx={{ ml: 2 }}
+                >
                   <Link className="clear-link light-text" to="">
                     CERRAR SESIÓN
                   </Link>

@@ -63,7 +63,7 @@ const DjDetail = () => {
   const [open, setOpen] = useState(false);
   const { handleLogout, user, isLogged } = useContext(AuthContext);
 
-  const isAdmin = user? user.rol === 'sradmin95':false;
+  const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
