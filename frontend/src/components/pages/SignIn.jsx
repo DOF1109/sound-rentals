@@ -59,14 +59,12 @@ const SignIn = () => {
         handleLogin(finalyUser);
         navigate("/");
       } else {
-        alert(
-          "Usted no es un usuario registrado o sus datos son incorrectos!..."
-        );
+        alert("Usuario no registrado o datos incorrectos, intente nuevamente");
       }
     } catch (error) {
       swal({
         title: "SoundRentals",
-        text: "Usted no es un usuario registrado o sus datos de acceso son incorrectos, vuelva a intentar...",
+        text: "Usuario no registrado o datos incorrectos, intente nuevamente",
         //icon: successs - error - warning - info
         icon: "warning",
         button: "Aceptar",
@@ -162,7 +160,7 @@ const SignIn = () => {
                   textShadow: "2px 2px 2px grey",
                 }}
               >
-                Ingresar
+                Ingresá
               </Button>
             </Grid>
             <Grid item xs={10} md={5}>
@@ -179,7 +177,7 @@ const SignIn = () => {
                     textShadow: "2px 2px 2px grey",
                   }}
                 >
-                  Ingresa con google
+                  Ingresá con google
                 </Button>
               </Tooltip>
             </Grid>
@@ -190,7 +188,7 @@ const SignIn = () => {
                 mt={1}
                 align="center"
               >
-                ¿Aun no tienes cuenta?
+                ¿Aún no tienes cuenta?
               </Typography>
             </Grid>
 
@@ -225,7 +223,7 @@ const SignIn = () => {
                     textShadow: "2px 2px 2px grey",
                   }}
                 >
-                  Ir al Home
+                  Ir al Inicio
                 </Button>
               </Tooltip>
             </Grid>

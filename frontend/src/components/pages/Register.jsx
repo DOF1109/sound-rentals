@@ -70,7 +70,7 @@ const Register = () => {
           await setDoc(doc(db, "users", res.user.uid), { rol: "commonusr" });
           swal({
             title: "SoundRentals",
-            text: "Usuario creado exitosamente!...",
+            text: "Usuario creado exitosamente!",
             //icon: successs - error - warning - info
             icon: "successs",
             button: "Ingresar",
@@ -79,14 +79,14 @@ const Register = () => {
           registerUser();
         } else {
           alert(
-            "hubo un problema al intentar registrar, vuelva a intentarlo!..."
+            "Hubo un problema, intente nuevamente"
           );
         }
         navigate("/signin");
       } else {
         swal({
           title: "SoundRentals",
-          text: "Las contraseñas ingresadas no coinciden, vuelva a intentarlo!...",
+          text: "Las contraseñas ingresadas no coinciden, intente nuevamente",
           //icon: successs - error - warning - info
           icon: "warning",
           button: "Aceptar",
@@ -96,7 +96,7 @@ const Register = () => {
     } else {
       swal({
         title: "SoundRentals",
-        text: "Los datos de email o contraseña no cumplen con los requisitos de validación, vuelva a intentarlo!...",
+        text: "Los datos de email o contraseña válidos, intente nuevamente",
         //icon: successs - error - warning - info
         icon: "warning",
         button: "Aceptar",
