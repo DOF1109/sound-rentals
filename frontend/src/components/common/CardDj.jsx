@@ -15,7 +15,7 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
         border: 1,
         borderRadius: 3,
         mx: "auto",
-        height: "330px",
+        height: "350px",
       }}
     >
       <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
