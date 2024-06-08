@@ -15,6 +15,7 @@ import ManageUsers from "./components/pages/ManageUsers";
 import UserInfo from "./components/pages/UserInfo";
 import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
 import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
+import ManageDjs from "./components/pages/ManageDjs";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
+                <Route path="/manage-djs" element={<ManageDjs />} />
               </Route>
 
               {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}

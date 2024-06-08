@@ -8,29 +8,29 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import { getUsers } from "../../api/userApi";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { getDjs } from "../../api/djsApi";
 import Loader from "../common/Loader";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
-  { id: "nombre", label: "Nombre", minWidth: 150 },
+  { id: "name", label: "Nombre", minWidth: 150 },
+  { id: "lastname", label: "Apellido", minWidth: 150 },
   { id: "email", label: "Email", minWidth: 150 },
-  { id: "isAdmin", label: "Es administrador?", minWidth: 150 },
 ];
 
-const ManageUsers = () => {
+const ManageDjs = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [users, setUsers] = useState();
+  const [djs, setDjs] = useState();
 
-  const loadUsers = async () => {
-    const data = await getUsers();
-    if (data) setUsers(data);
+  const loadDjs = async () => {
+    const data = await getDjs();
+    if (data) setDjs(data);
   };
 
   useEffect(() => {
-    loadUsers();
+    loadDjs();
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -42,7 +42,7 @@ const ManageUsers = () => {
     setPage(0);
   };
 
-  if (!users) return <Loader />;
+  if (!djs) return <Loader />;
 
   return (
     <Container sx={{ py: 5 }}>
@@ -61,12 +61,12 @@ const ManageUsers = () => {
                   </TableCell>
                 ))}
                 <TableCell align="center" style={{ minWidth: 150 }}>
-                  Cambiar rol
+                  Acciones
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
+              {djs
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
@@ -80,16 +80,12 @@ const ManageUsers = () => {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align="center">
-                            {column.id !== "isAdmin"
-                              ? value
-                              : row.isAdmin
-                              ? "Si"
-                              : "No"}
+                            {value}
                           </TableCell>
                         );
                       })}
                       <TableCell align="center">
-                        <ChangeCircleIcon sx={{ opacity: 0.5 }} />
+                        <DeleteForeverIcon sx={{ opacity: 0.5 }} />
                       </TableCell>
                     </TableRow>
                   );
@@ -100,7 +96,7 @@ const ManageUsers = () => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={users.length}
+          count={djs.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -111,4 +107,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default ManageDjs;

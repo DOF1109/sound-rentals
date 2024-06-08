@@ -43,8 +43,8 @@ const Header = () => {
         </Link>
       </MenuItem>
       <MenuItem onClick={handleClose}>
-        <Link className="clear-link" to="/add-product">
-          Registrar DJ
+        <Link className="clear-link" to="/manage-djs">
+          Admin. DJs
         </Link>
       </MenuItem>
     </>
@@ -185,8 +185,8 @@ const Header = () => {
                     onClick={handleCloseNavMenu}
                     sx={{ display: "block", fontWeight: "500" }}
                   >
-                    <Link className="clear-link shiny-hover" to="/add-product">
-                      REGISTRAR DJ
+                    <Link className="clear-link shiny-hover" to="/manage-djs">
+                      ADMIN. DJ'S
                     </Link>
                   </Button>
                 </>
