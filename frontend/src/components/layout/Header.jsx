@@ -102,6 +102,11 @@ const Header = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
+                <Link className="clear-link" to="/">
+                  Inicio
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link className="clear-link" to="/djs">
                   Nuestros DJs
                 </Link>
