@@ -117,6 +117,15 @@ const Header = () => {
                 <NoLoggedMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
+              {/* Usuario común logueado */}
+              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link className="clear-link" to="/user-info">
+                    Mis datos
+                  </Link>
+                </MenuItem>
+              )}
+
               {/* Usuario logueado */}
               {isLogged && (
                 <MenuItem onClick={handleClose}>
@@ -169,6 +178,18 @@ const Header = () => {
                     </Link>
                   </Button>
                 </>
+              )}
+
+              {/* Usuario común logueado */}
+              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ display: "block", fontWeight: "500" }}
+                >
+                  <Link className="clear-link shiny-hover" to="/user-info">
+                    MIS DATOS
+                  </Link>
+                </Button>
               )}
             </Box>
           </Box>
