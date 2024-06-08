@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   FormControl,
   Grid,
   IconButton,
@@ -15,12 +14,13 @@ import {
 import GoogleIcon from "@mui/icons-material/Google";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useContext, useState } from "react";
 
 import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
+import Logo from "../../assets/images/SoundRentals-logo.webp";
 
 const SignIn = () => {
   const { handleLogin } = useContext(AuthContext);
@@ -96,6 +96,14 @@ const SignIn = () => {
         // backgroundColor: theme.palette.secondary.main,
       }}
     >
+      <Box component={Link} to="/" display="flex">
+        <Box
+          component="img"
+          src={Logo}
+          alt="SountRentals"
+          sx={{ maxWidth: { xs: "130px", md: "150px" }, my: 3 }}
+        />
+      </Box>
       <form onSubmit={handleSubmit}>
         <Grid
           container
@@ -221,6 +229,7 @@ const SignIn = () => {
                     color: "white",
                     textTransform: "none",
                     textShadow: "2px 2px 2px grey",
+                    mb: 3,
                   }}
                 >
                   Ir al Inicio

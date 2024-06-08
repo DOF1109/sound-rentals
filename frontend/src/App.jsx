@@ -24,7 +24,6 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Routes>
-
             {/* RUTAS PARA USUARIOS SIN LOGEARSE */}
             <Route path="signin" element={<SignIn />} />
             <Route path="register" element={<Register />} />
@@ -47,7 +46,6 @@ function App() {
                 <Route path="/user-info" element={<UserInfo />} />
               </Route>
             </Route>
-            
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

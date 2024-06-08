@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,9 +8,11 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { getDjs } from "../../api/djsApi";
 import Loader from "../common/Loader";
+import { Link } from "react-router-dom";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
@@ -46,6 +48,11 @@ const ManageDjs = () => {
 
   return (
     <Container sx={{ py: 5 }}>
+      <Button variant="contained" startIcon={<PersonAddIcon />} sx={{ mb: 2 }}>
+        <Link className="clear-link light-text" to="/add-product">
+          AGREGAR DJ
+        </Link>
+      </Button>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
