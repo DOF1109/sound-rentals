@@ -10,7 +10,7 @@ import { getTopDjs } from "../../api/djsApi.js";
 const OPTIONS = { loop: true };
 
 const Home = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState();
   const [topDjs, setTopDjs] = useState([]);
 
   const loadCategories = async () => {
@@ -27,6 +27,14 @@ const Home = () => {
     loadCategories();
     loadTopDjs();
   }, []);
+
+  if (!categories || !topDjs) {
+    return (
+      <Typography variant="h5" ml={5} mt={3}>
+        Cargando...
+      </Typography>
+    );
+  }
 
   return (
     <>

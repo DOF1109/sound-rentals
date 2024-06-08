@@ -19,7 +19,11 @@ const UserInfo = () => {
   }, []);
 
   if (!userData) {
-    return <Typography>Error al cargar los datos del usuario</Typography>;
+    return (
+      <Typography variant="h5" ml={5} mt={3}>
+        Cargando...
+      </Typography>
+    );
   }
 
   return (

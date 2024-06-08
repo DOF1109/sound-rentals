@@ -204,7 +204,14 @@ const Header = () => {
           >
             {isLogged && (
               <Box display="flex" alignItems="center">
-                <Link to="/user-info" className="clear-link">
+                <Link
+                  className="clear-link"
+                  to={
+                    user.rol === import.meta.env.VITE_ADMIN_ROL
+                      ? "/manage-users"
+                      : "/user-info"
+                  }
+                >
                   <Avatar name={user.email} />
                 </Link>
                 <Button
