@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 import { logOut } from "../../firebaseConfig";
@@ -15,10 +15,10 @@ import { AuthContext } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
 
 const Header = () => {
-  const { handleLogout, user, isLogged } = useContext(AuthContext);
-
+  const { handleLogout } = useContext(AuthContext);
+  const [user, setUser] = useState();
+  const [isLogged, setisLogged] = useState();
   const [anchorElNav, setAnchorElNav] = useState(null);
-
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -66,6 +66,13 @@ const Header = () => {
       </>
     );
   };
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("userInfo")));
+    setisLogged(JSON.parse(localStorage.getItem("isLogged")));
+  }, []);
+
+  if (!user || !isLogged) return "";
 
   return (
     <AppBar position="sticky" sx={{ py: 3 }}>

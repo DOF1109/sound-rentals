@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedAdmin = () => {
-  const { user } = useContext(AuthContext);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   return (
     <>{user.rol === import.meta.env.VITE_ADMIN_ROL ? <Outlet /> : <Navigate to="/signin" />}</>
