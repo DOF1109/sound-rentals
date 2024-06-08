@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
 import { Card, CardContent, Avatar, Typography } from "@mui/material";
 import { getUserByEmail } from "../../api/userApi";
 import Loader from "../common/Loader";
 
 const UserInfo = () => {
-  const { user } = useContext(AuthContext);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const [userData, setUserData] = useState(null);
 
   const loadUserData = async () => {
