@@ -35,8 +35,8 @@ public class DataInitializer implements CommandLineRunner {
 //        estiloRepository.deleteAll();
 //
 //        jdbcTemplate.execute("ALTER TABLE djs AUTO_INCREMENT = 1");
-//        jdbcTemplate.execute("ALTER TABLE mstyle AUTO_INCREMENT = 1");
 //        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
+//        jdbcTemplate.execute("ALTER TABLE mstyle AUTO_INCREMENT = 1");
 //
 //
 //        // Lista de estilos junto con sus URLs
