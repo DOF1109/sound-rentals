@@ -29,17 +29,16 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
 //        reservaRepository.deleteAll();
 //        djRepository.deleteAll();
 //        estiloRepository.deleteAll();
 //
 //        jdbcTemplate.execute("ALTER TABLE djs AUTO_INCREMENT = 1");
-//        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
 //        jdbcTemplate.execute("ALTER TABLE mstyle AUTO_INCREMENT = 1");
+//        jdbcTemplate.execute("ALTER TABLE reserva AUTO_INCREMENT = 1");
 //
 //
-//        // Lista de estilos junto con sus URLs
+//        Lista de estilos junto con sus URLs
 //        Map<String, String> estilos = new HashMap<>();
 //        estilos.put("Electrónica", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/electronica.webp?alt=media&token=cb5691cd-abf2-43ad-bb46-e4365385b267");
 //        estilos.put("Pop y comercial", "https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/pop-comercial.webp?alt=media&token=9303f388-d50c-4a00-a8d6-da5e523c9fa5");
