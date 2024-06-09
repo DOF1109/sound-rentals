@@ -51,7 +51,7 @@ public class CaracteristicaController {
     }
 
     @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<CaracteristicaSalidaDto> eliminarCaracteristica(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<CaracteristicaSalidaDto> eliminarOdontologo(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(caracteristicaService.eliminarCaracteristica(id), HttpStatus.OK);
     }
 }
