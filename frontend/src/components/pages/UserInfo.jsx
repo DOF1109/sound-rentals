@@ -33,7 +33,7 @@ const UserInfo = () => {
     >
       <Avatar name={user.email} />
       <CardContent sx={{ ml: 2 }}>
-        <Typography variant="h6">{`${userData.nombre} ${userData.apellido}`}</Typography>
+        <Typography variant="h6">{`${userData.nombre}`}</Typography>
         <Typography variant="body2" color="textSecondary">
           Email: {user.email}
         </Typography>

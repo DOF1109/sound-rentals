@@ -16,8 +16,8 @@ import Avatar from "../common/Avatar";
 
 const Header = () => {
   const { handleLogout } = useContext(AuthContext);
-  const [user, setUser] = useState();
-  const [isLogged, setisLogged] = useState();
+  const [user, setUser] = useState({ rol: "", email: "" });
+  const [isLogged, setIsLogged] = useState(false);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const navigate = useNavigate();
 
@@ -43,8 +43,8 @@ const Header = () => {
         </Link>
       </MenuItem>
       <MenuItem onClick={handleClose}>
-        <Link className="clear-link" to="/add-product">
-          Registrar DJ
+        <Link className="clear-link" to="/manage-djs">
+          Admin. DJs
         </Link>
       </MenuItem>
     </>
@@ -68,11 +68,16 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("userInfo")));
-    setisLogged(JSON.parse(localStorage.getItem("isLogged")));
+    const userInfo = localStorage.getItem("userInfo");
+    const isLogged = localStorage.getItem("isLogged");
+  
+    if (userInfo && userInfo !== '') {
+      setUser(JSON.parse(userInfo));
+    }
+    if (isLogged && isLogged !== '') {
+      setIsLogged(JSON.parse(isLogged));
+    }
   }, []);
-
-  if (!user || !isLogged) return "";
 
   return (
     <AppBar position="sticky" sx={{ py: 3 }}>
@@ -185,8 +190,8 @@ const Header = () => {
                     onClick={handleCloseNavMenu}
                     sx={{ display: "block", fontWeight: "500" }}
                   >
-                    <Link className="clear-link shiny-hover" to="/add-product">
-                      REGISTRAR DJ
+                    <Link className="clear-link shiny-hover" to="/manage-djs">
+                      ADMIN. DJ'S
                     </Link>
                   </Button>
                 </>
