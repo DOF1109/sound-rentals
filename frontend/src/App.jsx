@@ -15,6 +15,7 @@ import ManageUsers from "./components/pages/ManageUsers";
 import UserInfo from "./components/pages/UserInfo";
 import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
 import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
+import ManageDjs from "./components/pages/ManageDjs";
 
 function App() {
   return (
@@ -23,7 +24,6 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Routes>
-
             {/* RUTAS PARA USUARIOS SIN LOGEARSE */}
             <Route path="signin" element={<SignIn />} />
             <Route path="register" element={<Register />} />
@@ -38,6 +38,7 @@ function App() {
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
+                <Route path="/manage-djs" element={<ManageDjs />} />
               </Route>
 
               {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
@@ -45,7 +46,6 @@ function App() {
                 <Route path="/user-info" element={<UserInfo />} />
               </Route>
             </Route>
-            
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
