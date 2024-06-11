@@ -234,7 +234,7 @@ public class DjService implements IRecursoService {
 
     @Override
     Boolean verificaReserva(Long id, LocalDate[] dateRange) ResourceNotFoundException{
-        Reserva ReservaAVerificar = reservaRepository.findReservaByDj(id).orElse(null);
+        List<Reserva> ReservaAVerificar = reservaRepository.findReservaByDj(id).orElse(null);
 
         if(reservaAVerificar==null){
             throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
@@ -243,11 +243,15 @@ public class DjService implements IRecursoService {
         Boolean verificacion = false;
 
         for (LocalDate fecha : dateRange) {
-            if (reservaAVerificar.getFecha().isEqual(fecha)) {
-                verificacion = true;
+            for (Reserva reserva : ReservaAVerificar) {
+                if (reserva.getFecha().isEqual(fecha)) {
+                    verificacion = true;
+                    break;
+                }
+            }
+            if (verificacion) {
                 break;
             }
-
         }
 
         return verificacion;
