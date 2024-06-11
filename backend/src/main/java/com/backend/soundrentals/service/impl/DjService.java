@@ -212,6 +212,27 @@ public class DjService implements IRecursoService {
 
     }
 
+    @Override
+    DjSalidaDto buscarDjPorCiudad(Long id, LocalDate[] dateRange) throws ResourceNotFoundException {
+        Dj djPorCiudad = djRepository.findByCity.(id).orElse(null);
+
+        if (djPorCiudad == null) {
+            throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
+        }
+
+        List<Dj> djDisponible = new ArrayList<>();
+
+        for (Dj dj : djPorCiudad) {
+            boolean tieneReserva = verificaReserva(dj.id, dateRange);
+            if (!tieneReserva) {
+                djDisponible.add(dj);
+            }
+        }
+
+        return modelMapper.map(djDisponible,DjSalidaDto.class);
+    }
+
+
     @PostConstruct
     private void configureMapping() {
         modelMapper.typeMap(DjEntradaDto.class, Dj.class);

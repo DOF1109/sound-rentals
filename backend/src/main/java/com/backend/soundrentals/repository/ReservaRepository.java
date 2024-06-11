@@ -14,4 +14,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     @Query("SELECT r.dj,COUNT(r.dj) as numReservas FROM Reserva r GROUP BY r.dj ORDER BY numReservas DESC")
      List<Dj> findTop10IdDjMasReservados();
+
+    @Query("SELECT r.dj FROM Reserva r WHERE r.fecha = :fecha")
+     Reserva findReservaByDj(@Param("fecha") LocalDate fecha);
 }

@@ -141,6 +141,28 @@ public class ReservaService implements IReservaService {
 
         return modelMapper.map(reservaAEliminar,ReservaSalidaDto.class);
     }
+
+    @Override
+    Boolean verificaReserva(Long id, LocalDate[] dateRange) ResourceNotFoundException{
+        Reserva ReservaAVerificar = reservaRepository.findReservaByDj(id).orElse(null);
+
+        if(reservaAVerificar==null){
+            throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
+        }
+
+        Boolean verificacion = false;
+
+        for (LocalDate fecha : dateRange) {
+            if (reservaAVerificar.getFecha().isEqual(fecha)) {
+                verificacion = true;
+                break;
+            }
+
+        }
+
+        return verificacion;
+    }
+
     @PostConstruct
     private void configureMapping() {
         modelMapper.typeMap(ReservaEntradaDto.class, Reserva.class);

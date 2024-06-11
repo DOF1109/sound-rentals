@@ -14,4 +14,5 @@ public interface IReservaService {
     ReservaSalidaDto obtenerReservaPorId(Long id) throws ResourceNotFoundException;
     ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException, BadRequestException;
     ReservaSalidaDto eliminarReserva(Long id) throws ResourceNotFoundException;
+    Boolean verificaReserva(Long id, LocalDate[] dateRange) ResourceNotFoundException;
 }
