@@ -223,13 +223,34 @@ public class DjService implements IRecursoService {
         List<Dj> djDisponible = new ArrayList<>();
 
         for (Dj dj : djPorCiudad) {
-            boolean tieneReserva = verificaReserva(dj.id, dateRange);
+            boolean tieneReserva = this.verificaReserva(dj.id, dateRange);
             if (!tieneReserva) {
                 djDisponible.add(dj);
             }
         }
 
         return modelMapper.map(djDisponible,DjSalidaDto.class);
+    }
+
+    @Override
+    Boolean verificaReserva(Long id, LocalDate[] dateRange) ResourceNotFoundException{
+        Reserva ReservaAVerificar = reservaRepository.findReservaByDj(id).orElse(null);
+
+        if(reservaAVerificar==null){
+            throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
+        }
+
+        Boolean verificacion = false;
+
+        for (LocalDate fecha : dateRange) {
+            if (reservaAVerificar.getFecha().isEqual(fecha)) {
+                verificacion = true;
+                break;
+            }
+
+        }
+
+        return verificacion;
     }
 
 
