@@ -16,6 +16,7 @@ import UserInfo from "./components/pages/UserInfo";
 import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
 import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 import ManageDjs from "./components/pages/ManageDjs";
+import DJFavoritos from "./components/pages/DJFavoritos";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
+              <Route path="/djs-favoritos" element={<DJFavoritos />} />
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
