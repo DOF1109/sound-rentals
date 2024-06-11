@@ -16,6 +16,7 @@ import UserInfo from "./components/pages/UserInfo";
 import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
 import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 import ManageDjs from "./components/pages/ManageDjs";
+import Favoritos from "./components/pages/Favoritos"; // Importa el componente Favoritos
 
 function App() {
   return (
@@ -28,11 +29,14 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="register" element={<Register />} />
             <Route path="forgotPass" element={<ForgotPassword />} />
-            <Route path="*" element={<NotFound />} />
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
+
+            {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
+              <Route path="/favoritos" element={<Favoritos />} /> {/* Nueva ruta para Favoritos */}
+              <Route path="/user-info" element={<UserInfo />} />
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
@@ -46,6 +50,8 @@ function App() {
                 <Route path="/user-info" element={<UserInfo />} />
               </Route>
             </Route>
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

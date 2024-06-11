@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/31f41c2567.js" crossorigin="anonymous"></script>
+    <style>
+        *{
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Orbitron", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+        .card-background{
+            background-color: #DCDCDC;
+            width: 600px;
+            height: 700px;
+            padding: 3rem 4rem 2rem 4rem;
+            display: flex;
+            position: relative;
+            align-items: center;
+        }
+
+        .banner-azul{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background-color: rgba(11, 0, 138, 1);
+            z-index: 0;
+        }
+
+        .card{
+            /* background-color: white; */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+        }
+
+        .bienvenida{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 0 20px 30px 20px;
+        }
+
+        .bienvenida > img{
+            width: 110px;
+            height: 80px;
+            margin-top: 15px;
+        }
+
+        .bienvenida > h2{
+            font-size: 16px;
+            letter-spacing: 3px;
+            font-weight: 900;
+            margin-top: 20px;
+        }
+
+        .bienvenida > p{
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 2px;
+            /* line-height: 1px; */
+            /* margin: 0 60px 0 60px; */
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        .link-pagina{
+            background-color: #4200FD;
+            color: white;
+            padding: .8rem 2rem .8rem 2rem;
+            text-decoration: none;
+            letter-spacing: 2px;
+            font-weight: 500;
+            font-size: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .conoce-dj{
+            width: 100%;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            padding: 1.5rem 2rem 2rem 2rem;
+            gap: 20px;
+        }
+
+        .conoce-dj > h3{
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            line-height: 2;
+        }
+
+        .conoce-dj > a{
+            color: #8397FF;
+            font-size: 12px;
+            font-weight: 200;
+            letter-spacing: 2px;
+            line-height: 30px;
+        }
+
+        .preguntas{
+            width: 100%;
+            background-color: rgba(46, 0, 142, .5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0 1rem 0;
+            gap: 15px;
+        }
+
+        .preguntas p{
+            color: #ffffff;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .preguntas a{
+            color:#2E008E;
+            font-size: 10px;
+        }
+
+        .redes{
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 0 15px 0;
+        }
+
+        .redes i{
+            font-size: 30px;
+        }
+
+        .redes i:hover{
+            cursor: pointer;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<div class="card-background">
+    <div class="banner-azul">
+
+    </div>
+    <div class="card">
+        <div class="bienvenida">
+            <img src="https://firebasestorage.googleapis.com/v0/b/soundrentals-ef63b.appspot.com/o/logo.png?alt=media&token=236273aa-634a-423d-9ca2-5690885661a5" alt="">
+            <h2>¡BIENVENIDO A SOUNDRENTALS!</h2>
+            <P>Gracias por escogernos! Para volver a la pagina, haz click en el enlace.</P>
+            <button class="link-pagina" href="">IR A LA PAGINA</button>
+        </div>
+        <div class="conoce-dj">
+            <h3>No sabes por donde empezar?</h3>
+            <a href="">Conoce a nuestros DJ´s <br> Busca una categoria</a>
+        </div>
+        <div class="preguntas">
+            <p>¿Tienes preguntas?</p>
+            <a href="">Contactanos</a>
+        </div>
+        <div class="redes">
+            <i class="fa-brands fa-instagram"></i>
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-tiktok"></i>
+        </div>
+    </div>
+</div>
+</body>
+</html>
