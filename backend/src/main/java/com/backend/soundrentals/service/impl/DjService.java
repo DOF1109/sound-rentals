@@ -213,7 +213,7 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    DjSalidaDto buscarDjPorCiudad(Long id, LocalDate[] dateRange) throws ResourceNotFoundException {
+    DjSalidaDto buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
         Dj djPorCiudad = djRepository.findByCity.(id).orElse(null);
 
         if (djPorCiudad == null) {
@@ -223,7 +223,7 @@ public class DjService implements IRecursoService {
         List<Dj> djDisponible = new ArrayList<>();
 
         for (Dj dj : djPorCiudad) {
-            boolean tieneReserva = this.verificaReserva(dj.id, dateRange);
+            boolean tieneReserva = this.verificaReserva(dj.id, fechaInicio, fechaFin);
             if (!tieneReserva) {
                 djDisponible.add(dj);
             }
@@ -233,26 +233,16 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    Boolean verificaReserva(Long id, LocalDate[] dateRange) ResourceNotFoundException{
-        List<Reserva> ReservaAVerificar = reservaRepository.findReservaByDj(id).orElse(null);
+    Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) ResourceNotFoundException{
+        Boolean verificacion = false;
+
+        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
 
         if(reservaAVerificar==null){
             throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
+            verificacion = true;
         }
 
-        Boolean verificacion = false;
-
-        for (LocalDate fecha : dateRange) {
-            for (Reserva reserva : ReservaAVerificar) {
-                if (reserva.getFecha().isEqual(fecha)) {
-                    verificacion = true;
-                    break;
-                }
-            }
-            if (verificacion) {
-                break;
-            }
-        }
 
         return verificacion;
     }

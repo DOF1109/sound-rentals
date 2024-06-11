@@ -46,6 +46,10 @@ public class DjController {
         return new ResponseEntity<>(djService.listarTop10(), HttpStatus.OK);
     }
 
+    @GetMapping("/buscador/{id}-{fechaInicio}-{fechaFin}")
+    public ResponseEntity<List<DjSalidaDto>> buscadorPorCiudadFecha(@PathVariable Long id, @PathVariable LocalDate fechaInicio, @PathVariable LocalDate fechaFin) throws ResourceNotFoundException  {
+        return new ResponseEntity<>(djService.buscarDjPorCiudadFecha(id, fechaInicio, fechaFin), HttpStatus.OK);}
+
     @GetMapping("/style/{id}")
     public ResponseEntity<List<DjSalidaDto>> obtenerDjsPorEStilo(@PathVariable Long id)  {
         return new ResponseEntity<>(djService.listarDjsPorEstilo(id), HttpStatus.OK);
