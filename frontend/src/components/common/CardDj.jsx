@@ -8,7 +8,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Star, StarBorder } from "@mui/icons-material";
+import { NoMealsOutlined, Star, StarBorder } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { addFavoritos, getFavoritos, deleteFavorito } from "../../api/favoritosApi";
 import darkTheme from "../../styles/themeConfig";
@@ -22,8 +22,10 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
     const fetchFavoritos = async () => {
       try {
         const favoritosFromBackend = await getFavoritos();
-        const isDjInFavoritos = favoritosFromBackend.some((dj) => dj.id === id);
-        setIsFavorito(isDjInFavoritos);
+        console.log(favoritosFromBackend)
+        const isDjInFavoritos = favoritosFromBackend.find((dj)=>dj.id===id && dj.favorite==true);
+        console.log(`${name} ${isDjInFavoritos}`)
+        setIsFavorito(isDjInFavoritos?false:true);
       } catch (error) {
         console.error("Error al obtener la lista de favoritos:", error);
       }
