@@ -89,6 +89,7 @@ export const addDj = async (dj) => {
 };
 
 export const updateFavoriteStatus = async (value) => {
+  console.log(value)
   try {
     const response = await axios.post(`${URL_BASE}/favorito/registrar`, value);
     if (response.status === 201) {
@@ -107,3 +108,17 @@ export const updateFavoriteStatus = async (value) => {
 // --------------- PUT ---------------
 
 // --------------- DELETE ---------------
+export const deleteFavorito = async (id) => {
+  console.log(id);
+  try {
+    const response = await axios.delete(`${URL_BASE}/favorito/eliminar/${id}`);
+    if (response.status === 200 || response.status === 204) {
+      return response;
+    } else {
+      errorAlert();
+      return response;
+    }
+  } catch (error) {
+    return error;
+  }
+};
