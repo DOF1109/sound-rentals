@@ -26,11 +26,15 @@ import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCirc
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
 import { getDj, updateFavoriteStatus } from "../../api/djsApi.js";
+import { getReservas, addReserva } from "../../api/reservaApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Loader from "../common/Loader.jsx";
 import FavoriteButton from "../common/Favorite.jsx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";  
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import { Calendar } from 'react-date-range';
 
 const style = {
   position: "absolute",
@@ -66,7 +70,42 @@ const DjDetail = () => {
   const [open, setOpen] = useState(false);
   const { handleLogout, user, isLogged } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availableDates, setAvailableDates] = useState([]);
+  
 
+  const handleCalendarOpen = () => {
+    setOpenCalendar(true);
+  };
+  
+  const handleCalendarClose = () => {
+    setOpenCalendar(false);
+  };
+  
+  const handleReservar = async () => {
+    try {
+      const reserva = {
+        fecha: selectedDate, 
+        dj: dj.id,
+        usuario: 1,
+      };
+  
+      const response = await addReserva(reserva);
+      if (response && response.status === 201) {
+        toast.success("¡Reserva realizada con éxito!");
+        handleCalendarClose();
+      } else {
+        console.error("Error al realizar la reserva");
+        toast.error("Hubo un error al realizar la reserva");
+      }
+    } catch (error) {
+      console.error("Error al realizar la reserva", error);
+      toast.error("Hubo un error al realizar la reserva");
+    }
+  };
+  
   const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL;
 
   const handleOpen = () => setOpen(true);
@@ -95,6 +134,25 @@ const DjDetail = () => {
   useEffect(() => {
     loadDj();
   }, []);
+
+  useEffect(() => {
+    const fetchReservas = async () => {
+      try {
+        const reservas = await getReservas();
+        if (reservas) {
+          const formattedDates = reservas.map((reserva) => new Date(`${reserva.fecha}T04:00:00.000Z`));
+          setAvailableDates(formattedDates);
+        }
+      } catch (error) {
+        console.error("Error al obtener las reservas", error);
+      }
+    };
+  
+    if (openCalendar) {
+      fetchReservas();
+    }
+  }, [openCalendar]);
+  
 
   const toggleFavorite = async () => {
     const updatedStatus = !isFavorite;
@@ -215,10 +273,9 @@ const DjDetail = () => {
             variant="contained"
             size="large"
             sx={{ width: "100%", my: 2 }}
+            onClick={handleCalendarOpen}
           >
-            <Link className="clear-link light-text" to="/signin">
-              RESERVAR
-            </Link>
+            RESERVAR
           </Button>
         </Grid>
 
@@ -241,6 +298,42 @@ const DjDetail = () => {
             <ImageMasonry images={djImages} />
           </Box>
         </Modal>
+
+
+        {/* Modal reserva */}
+
+        <Modal
+          open={openCalendar}
+          onClose={handleCalendarClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              mb={2}
+            >
+              {`${dj.name} ${dj.lastname}`}
+            </Typography>
+            <Calendar
+              date={selectedDate}
+              onChange={setSelectedDate}
+              minDate={new Date()}
+              disabledDates={availableDates}
+              color="#f50057"
+              months={2}
+              direction="horizontal"
+            />
+
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+              <Button onClick={handleCalendarClose} sx={{ mr: 2 }}>Cancelar</Button>
+              <Button variant="contained" onClick={handleReservar}>Reservar</Button>
+            </Box>
+          </Box>
+        </Modal>
+
       </Grid>
       <ToastContainer
         position="top-center"
