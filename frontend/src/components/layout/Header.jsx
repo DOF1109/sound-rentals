@@ -199,6 +199,15 @@ const Header = () => {
 
               {/* Usuario común logueado */}
               {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
+                <>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ display: "block", fontWeight: "500" }}
+                >
+                  <Link className="clear-link shiny-hover" to="/djs-favoritos">
+                    FAVORITOS
+                  </Link>
+                </Button>
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ display: "block", fontWeight: "500" }}
@@ -207,6 +216,7 @@ const Header = () => {
                     MIS DATOS
                   </Link>
                 </Button>
+                </>
               )}
             </Box>
           </Box>

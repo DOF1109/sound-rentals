@@ -7,28 +7,71 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import darkTheme from "../../styles/themeConfig";
-import { updateFavoriteStatus } from "../../api/djsApi";
+import { updateFavoriteStatus,getDjFavoritos,deleteFavorito } from "../../api/djsApi";
+import { getUserByEmail } from "../../api/userApi";
 import FavoriteButton from "./Favorite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CardDj = ({ id, image, name, lastname, styles }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [idFavorite, setIdFavorite] = useState(null);
+  const [userData,setUserData] = useState(null);
 
   const toggleFavorite = async () => {
     const updatedStatus = !isFavorite;
+
     const value = {
-      id: null,
       dj: id,
-      isFavorite: updatedStatus,
-      usuario: 1,
+      usuario: userData.id,
     };
-    const response = await updateFavoriteStatus(value);
-    if (response.status === 201) {
+
+    let response = undefined
+    if(updatedStatus){
+      response = await updateFavoriteStatus(value);
+    }
+    else{
+      response = await deleteFavorito(idFavorite);
+    }
+    
+    if (response.status === 201 || response.status === 200) {
       setIsFavorite(updatedStatus);
     } else {
       console.error("Error al actualizar el estado de favorito");
     }
   };
+
+  useEffect(() => {
+    const fetchFavoritos = async () => {
+      try {
+        const favoritosFromBackend = await getDjFavoritos();
+        const isDjInFavoritos = favoritosFromBackend.find((favorito)=>favorito.dj.id===id && favorito.favorite==true && favorito.usuario.id==userData.id);
+        if(isDjInFavoritos){
+          setIdFavorite(isDjInFavoritos.id);
+        }
+        setIsFavorite(isDjInFavoritos?true:false);
+      } catch (error) {
+        console.error("Error al obtener la lista de favoritos:", error);
+      }
+    };
+    
+    if(userData){
+      fetchFavoritos();
+    }
+  }, [userData]); 
+
+  useEffect(()=>{
+    const getUser = async ()=>{
+      let user = JSON.parse(localStorage.getItem('userInfo'));
+      let userEmail = user? user.email:undefined;
+      if(userEmail){
+        const userData = await getUserByEmail(userEmail);
+        if(userData){
+          setUserData(userData);
+        }
+      }
+    }
+    getUser();
+  },[])
 
   return (
     <Card
@@ -38,6 +81,7 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
         borderRadius: 3,
         mx: "auto",
         height: "350px",
+        position:"relative"
       }}
     >
       
@@ -62,7 +106,6 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
                 {`${name}  ${lastname}`}
               </Typography>
             </Link>
-            <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />
             {styles.map((estilo, index) => {
               return (
                 <Typography
@@ -77,6 +120,7 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
             })}
           </CardContent>
         </CardActionArea>
+        {userData && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
     </Card>
   );
 };
