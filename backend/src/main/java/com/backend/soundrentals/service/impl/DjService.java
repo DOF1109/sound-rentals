@@ -8,6 +8,7 @@ import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
 import com.backend.soundrentals.entity.Caracteristica;
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
@@ -214,7 +215,7 @@ public class DjService implements IRecursoService {
 
     @Override
     public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
-        List<Dj> djPorCiudad = djRepository.findByCity.(id).orElse(null);
+        List<Dj> djPorCiudad = djRepository.findDjsByCity(id).orElse(null);
 
         if (djPorCiudad == null) {
             throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
