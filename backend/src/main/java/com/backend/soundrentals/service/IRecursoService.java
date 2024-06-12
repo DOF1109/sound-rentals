@@ -17,6 +17,6 @@ public interface IRecursoService{
     DjSalidaDto buscarDjPorId(Long id) throws ResourceNotFoundException;
     DjSalidaDto actualizarDj(DjModificacionDto djModificacionDto) throws ResourceNotFoundException;
     DjSalidaDto eliminarDj(Long id) throws ResourceNotFoundException;
-    DjSalidaDto buscarDjPorCiudadFecha(Long id, LocalDate[] dateRange) throws ResourceNotFoundException;
-    Boolean verificaReserva(Long id, LocalDate[] dateRange) throws ResourceNotFoundException;
+    DjSalidaDto buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException;
+    Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException;
 }

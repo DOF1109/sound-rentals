@@ -213,7 +213,7 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    DjSalidaDto buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+    public DjSalidaDto buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
         Dj djPorCiudad = djRepository.findByCity.(id).orElse(null);
 
         if (djPorCiudad == null) {
@@ -233,7 +233,7 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) ResourceNotFoundException{
+    private Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) ResourceNotFoundException{
         Boolean verificacion = false;
 
         List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
