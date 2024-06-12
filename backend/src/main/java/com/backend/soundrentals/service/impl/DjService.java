@@ -224,7 +224,7 @@ public class DjService implements IRecursoService {
         List<Dj> djDisponible = new ArrayList<>();
 
         for (Dj dj : djPorCiudad) {
-            boolean tieneReserva = this.verificaReserva(dj.id, fechaInicio, fechaFin);
+            boolean tieneReserva = this.verificaReserva(id, fechaInicio, fechaFin);
             if (!tieneReserva) {
                 djDisponible.add(dj);
             }
