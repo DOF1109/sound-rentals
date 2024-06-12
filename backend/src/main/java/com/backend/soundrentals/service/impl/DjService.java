@@ -241,14 +241,13 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException{
+    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
         Boolean verificacion = false;
 
         List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
 
         if(reservaAVerificar==null){
             verificacion = true;
-            throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
         }
 
 

@@ -7,8 +7,29 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import darkTheme from "../../styles/themeConfig";
+import { updateFavoriteStatus } from "../../api/djsApi";
+import FavoriteButton from "./Favorite";
+import { useState } from "react";
 
 const CardDj = ({ id, image, name, lastname, styles }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = async () => {
+    const updatedStatus = !isFavorite;
+    const value = {
+      id: null,
+      dj: id,
+      isFavorite: updatedStatus,
+      usuario: 1,
+    };
+    const response = await updateFavoriteStatus(value);
+    if (response.status === 201) {
+      setIsFavorite(updatedStatus);
+    } else {
+      console.error("Error al actualizar el estado de favorito");
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -19,7 +40,7 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
         height: "350px",
       }}
     >
-      <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
+      
         <CardActionArea
           sx={{
             height: "100%",
@@ -36,9 +57,12 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
             alt="DJ image"
           />
           <CardContent sx={{width: "100%", height:"100%"}}>
-            <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary}>
-              {`${name}  ${lastname}`}
-            </Typography>
+            <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
+              <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary}>
+                {`${name}  ${lastname}`}
+              </Typography>
+            </Link>
+            <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />
             {styles.map((estilo, index) => {
               return (
                 <Typography
@@ -53,7 +77,6 @@ const CardDj = ({ id, image, name, lastname, styles }) => {
             })}
           </CardContent>
         </CardActionArea>
-      </Link>
     </Card>
   );
 };
