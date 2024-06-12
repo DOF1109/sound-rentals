@@ -7,6 +7,7 @@ import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IRecursoService{

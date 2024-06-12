@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -240,14 +241,14 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    private Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) ResourceNotFoundException{
+    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException{
         Boolean verificacion = false;
 
         List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
 
         if(reservaAVerificar==null){
-            throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
             verificacion = true;
+            throw new ResourceNotFoundException("no se encontró reserva para el dj indicado");
         }
 
 
