@@ -53,11 +53,44 @@ export const getDj = async (id) => {
     }
   };
 
+  export const getDjFavoritos = async () => {
+    try {
+      const response = await axios.get(URL_BASE + "/favorito/listar");
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        console.error(`Error: ${response.status}`);
+        errorAlert();
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      errorAlert();
+      return null;
+    }
+  };
+
 // --------------- POST ---------------
 export const addDj = async (dj) => {
   console.log(dj)
   try {
     const response = await axios.post(`${URL_BASE}/dj/registrar`, dj);
+    if (response.status === 201) {
+      return response;
+    } else {
+      errorAlert();
+      return response;
+    }
+  } catch (error) {
+    // console.error(`Error: ${error}`);
+    // errorAlert();
+    return error;
+  }
+};
+
+export const updateFavoriteStatus = async (value) => {
+  try {
+    const response = await axios.post(`${URL_BASE}/favorito/registrar`, value);
     if (response.status === 201) {
       return response;
     } else {

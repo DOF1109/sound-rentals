@@ -25,10 +25,12 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
-import { getDj } from "../../api/djsApi.js";
+import { getDj, updateFavoriteStatus } from "../../api/djsApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Loader from "../common/Loader.jsx";
+import FavoriteButton from "../common/Favorite.jsx";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -63,6 +65,7 @@ const DjDetail = () => {
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
   const { handleLogout, user, isLogged } = useContext(AuthContext);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL;
 
@@ -92,6 +95,25 @@ const DjDetail = () => {
   useEffect(() => {
     loadDj();
   }, []);
+
+  const toggleFavorite = async () => {
+    const updatedStatus = !isFavorite;
+    const value = {
+      id: null,
+      dj: dj.id,
+      isFavorite: updatedStatus,
+      usuario: 1,
+    };
+    const response = await updateFavoriteStatus(value);
+    if (response.status === 201) {
+      setIsFavorite(updatedStatus);
+      toast.success("¡Se ha actualizado el estado de favorito!");
+    } else {
+      console.error("Error al actualizar el estado de favorito");
+      toast.error("Hubo un error al actualizar el estado de favorito");
+    }
+  };
+  
 
   if (!dj) return <Loader />;
 
@@ -129,7 +151,7 @@ const DjDetail = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
+                <Typography variant="h5">{`${dj.name} ${dj.lastname}`} <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} /></Typography>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
                 <Typography>CATEGORIA:</Typography>
@@ -220,6 +242,18 @@ const DjDetail = () => {
           </Box>
         </Modal>
       </Grid>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </Container>
   );
 };
