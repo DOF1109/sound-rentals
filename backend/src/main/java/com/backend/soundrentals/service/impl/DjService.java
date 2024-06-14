@@ -216,7 +216,7 @@ public class DjService implements IRecursoService {
 
     @Override
     public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
-        List<Dj> djPorCiudad = djRepository.findDjsByCity(id).orElse(null);
+        List<Dj> djPorCiudad = djRepository.findDjsByCity(id);
 
         if (djPorCiudad == null) {
             throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
