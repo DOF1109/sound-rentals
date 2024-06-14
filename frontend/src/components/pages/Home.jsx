@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
-import SearchInput from "../common/SearchInput";
+import SearchInput from "../common/SearchAndCalendar";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
 import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCarousel";
 import theme from "../../styles/themeConfig";
