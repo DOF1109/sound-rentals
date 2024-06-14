@@ -1,10 +1,10 @@
 import { Outlet, Navigate } from "react-router-dom";
 
 const ProtectedUsers = () => {
-  const isLogged = JSON.parse(localStorage.getItem("isLogged"));
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   return (
-    <>{isLogged ? <Outlet /> : <Navigate to="/signin" />}</>
+    <>{ user && user.rol === import.meta.env.VITE_COMMON_ROL ? <Outlet /> : <Navigate to="/signin" />}</>
   )
 };
 
