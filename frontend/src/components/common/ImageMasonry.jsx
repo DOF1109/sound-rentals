@@ -7,7 +7,7 @@ export default function ImageMasonry({ images }) {
         <div key={index}>
           <img
             srcSet={`${image}?w=162&auto=format&dpr=2 2x`}
-            src={`${image}?w=162&auto=format`}
+            src={image}
             alt="Imágen del Dj"
             loading="lazy"
             style={{
