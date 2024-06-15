@@ -60,9 +60,10 @@ export const loginGoogle = async ()=>{
 export const signUp = async ({email, password})=> {
     try {
         let res = await createUserWithEmailAndPassword(auth, email, password)
-        return res
+        return { success: true, data: res };
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        return { success: false, error: error.message };
     }
 }
 

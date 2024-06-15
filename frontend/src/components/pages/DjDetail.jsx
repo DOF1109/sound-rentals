@@ -13,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
+  Rating,
   Typography,
 } from "@mui/material";
 import SpeakerIcon from "@mui/icons-material/Speaker";
@@ -25,7 +26,7 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
-import { getDj, updateFavoriteStatus } from "../../api/djsApi.js";
+import { getDj, updateFavoriteStatus,addCalificacion } from "../../api/djsApi.js";
 import { getReservas, addReserva } from "../../api/reservaApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
@@ -74,6 +75,8 @@ const DjDetail = () => {
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableDates, setAvailableDates] = useState([]);
+  const [ratingValue, setRatingValue] = useState(0);
+  const { userDb, djCalificados,djFavorites, loadDjsCalificados } = useContext(AuthContext);
   
 
   const handleCalendarOpen = () => {
@@ -105,6 +108,24 @@ const DjDetail = () => {
       toast.error("Hubo un error al realizar la reserva");
     }
   };
+
+  const handleCalificar = async (event,value) => {
+    let calificacion = value
+    setRatingValue(calificacion);
+    const data = {
+      dj:dj.id,
+      calificacion,
+      usuario:userDb.id
+    }
+
+    const response = await addCalificacion(data);
+    if(response){
+      loadDjsCalificados();
+    }
+    else{
+      alert("Ha ocurrido un error")
+    }
+  };  
   
   const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL;
 
@@ -127,9 +148,26 @@ const DjDetail = () => {
     }
   };
 
+  const loadCalificacion = async () => {
+    const calificacion = djCalificados.find((d)=>d.dj.id==dj.id && d.usuario.id==userDb.id );
+    setRatingValue(calificacion ? calificacion.calificacion : 0)
+  };
+
   useEffect(() => {
     if (dj) setDjImages(imagesDj());
+
+
+    if(djFavorites.length==0 || !userDb) return; 
+    const favoriteCheck = djFavorites.some((f)=>
+    f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
+
+    setIsFavorite(favoriteCheck);
+
   }, [dj]);
+
+  useEffect(() => {
+    if (dj) loadCalificacion();
+  }, [dj,djCalificados]);
 
   useEffect(() => {
     loadDj();
@@ -209,7 +247,10 @@ const DjDetail = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h5">{`${dj.name} ${dj.lastname}`} <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} /></Typography>
+                <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
+                  <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
+                  {userDb && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+                </Box>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
                 <Typography>CATEGORIA:</Typography>
@@ -228,6 +269,16 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
+                {userDb &&
+                <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+                  <Rating
+                    name="simple-controlled"
+                    size="large"
+                    value={ratingValue}
+                    readOnly={ratingValue>0}
+                    onChange={handleCalificar}
+                  />
+                </Box>}
                 <Typography variant="body1" pt={3} pb={1}>
                   Caracteristicas
                 </Typography>

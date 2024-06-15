@@ -70,6 +70,23 @@ export const getDj = async (id) => {
     }
   };
 
+  export const getDjCalificados = async () => {
+    try {
+      const response = await axios.get(URL_BASE + "/calificacion/listar");
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        console.error(`Error: ${response.status}`);
+        errorAlert();
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      errorAlert();
+      return null;
+    }
+  };
+
 // --------------- POST ---------------
 export const addDj = async (dj) => {
   console.log(dj)
@@ -97,6 +114,23 @@ export const updateFavoriteStatus = async (value) => {
     } else {
       errorAlert();
       return response;
+    }
+  } catch (error) {
+    // console.error(`Error: ${error}`);
+    // errorAlert();
+    return error;
+  }
+};
+
+export const addCalificacion = async (data) => {
+  console.log(data)
+  try {
+    const response = await axios.post(`${URL_BASE}/calificacion/registrar`, data);
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      errorAlert();
+      return null;
     }
   } catch (error) {
     // console.error(`Error: ${error}`);
