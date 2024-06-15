@@ -69,8 +69,7 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
         position:"relative"
       }}
     >
-      
-        <CardActionArea
+        <Box
           sx={{
             height: "100%",
             display: "flex",
@@ -85,6 +84,7 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
             image={image}
             alt="DJ image"
           />
+          
           <CardContent sx={{width: "100%", height:"100%"}}>
             <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
               <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
@@ -107,7 +107,7 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
               );
             })}
           </CardContent>
-        </CardActionArea>
+        </Box>
         
     </Card>
   );

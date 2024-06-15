@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import {getUserByEmail} from "../api/userApi"
-import {getDjFavoritos} from "../api/djsApi"
+import {getDjFavoritos,getDjCalificados} from "../api/djsApi"
 
 export const AuthContext = createContext()
 
@@ -11,6 +11,7 @@ const AuthContextComponent = ({children}) => {
     const [userDb, setUserDb] = useState(undefined)
     const [isLogged, setIsLogged] = useState(false)
     const [djFavorites, setDjFavorites] = useState([])
+    const [djCalificados, setDjCalificados] = useState([])
 
     const handleLogin = async ( finalyUser )=> {
         //En el estado 'user' tenemos la direccion de email y el rol
@@ -59,10 +60,18 @@ const AuthContextComponent = ({children}) => {
         localStorage.setItem("djFavorites", JSON.stringify(djFavoritosBd))
     }
 
+    const loadDjsCalificados = async ()=>{
+        const djCalificadosBd = await getDjCalificados();
+        console.log(djCalificadosBd)
+        setDjCalificados(djCalificadosBd)
+        localStorage.setItem("djCalificados", JSON.stringify(djCalificadosBd))
+    }
+
     useEffect(()=>{
         loadUserDb();
         loadDjsFavorites();
-    },[])
+        loadDjsCalificados();
+    },[isLogged])
 
 
     let data = {
@@ -71,10 +80,12 @@ const AuthContextComponent = ({children}) => {
         isLogged,
         userName,
         djFavorites,
+        djCalificados,
         handleName,
         handleLogin,
         handleLogout,
-        loadDjsFavorites
+        loadDjsFavorites,
+        loadDjsCalificados
     }
 
   return (
