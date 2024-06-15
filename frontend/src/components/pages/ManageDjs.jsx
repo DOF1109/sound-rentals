@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, IconButton } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,9 +10,12 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { getDjs } from "../../api/djsApi";
+import { getDjs, deleteDj } from "../../api/djsApi";
 import Loader from "../common/Loader";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Typography from "@mui/material/Typography";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
@@ -25,6 +28,8 @@ const ManageDjs = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [djs, setDjs] = useState();
+  const theme = useTheme();
+  const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const loadDjs = async () => {
     const data = await getDjs();
@@ -43,6 +48,37 @@ const ManageDjs = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleDeleteDj = (id) => {
+    swal({
+      title: "¿Seguro que quieres elimnar el DJ?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        const resp = await deleteDj(id);
+        if (resp.status === 200) {
+          swal("DJ eliminado!", {
+            icon: "success",
+          });
+          setDjs(djs.filter(dj => dj.id !== id));
+        } else {
+          swal("Ocurrió un error, vuelva a intentarlo", {
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  if (isXsOrSm) {
+    return (
+      <Typography variant="h5" my={5} mx={2} textAlign="center">
+        No disponible en móvil
+      </Typography>
+    );
+  }
 
   if (!djs) return <Loader />;
 
@@ -77,12 +113,7 @@ const ManageDjs = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.email}
-                    >
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
@@ -92,7 +123,13 @@ const ManageDjs = () => {
                         );
                       })}
                       <TableCell align="center">
-                        <DeleteForeverIcon sx={{ opacity: 0.5 }} />
+                        <IconButton 
+                          aria-label="delete" 
+                          onClick={() => {
+                            handleDeleteDj(row.id);
+                          }}>
+                            <DeleteForeverIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
