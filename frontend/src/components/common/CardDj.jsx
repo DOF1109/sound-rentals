@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardActionArea,
   CardContent,
@@ -42,16 +43,15 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
   };
 
   useEffect(()=>{
+    if(djFavorites.length==0 || !userDb) return; 
+
     const favoriteCheck = djFavorites.some((f)=>
     f.dj.id==id && f.usuario.id==userDb.id && f.favorite==true)
 
-    console.log(djFavorites.filter((f)=>
-    f.dj.id==id && f.usuario.id==userDb.id && f.favorite==true))
-    // console.log(userDb)
-
     if(favoriteCheck){
-      setIdFavorite(djFavorites.find((f)=>
-      f.dj.id===id && f.usuario.id===userDb.id && f.favorite).id)
+      let dj = djFavorites.find((f)=>
+      f.dj.id===id && f.usuario.id===userDb.id && f.favorite)
+      setIdFavorite(dj.id)
     }
 
     setIsFavorite(favoriteCheck);
@@ -86,11 +86,14 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
             alt="DJ image"
           />
           <CardContent sx={{width: "100%", height:"100%"}}>
-            <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
-              <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary}>
-                {`${name}  ${lastname}`}
-              </Typography>
-            </Link>
+            <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
+              <Link to={`/dj-detail/${id}`} style={{ textDecoration: "none" }}>
+                <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary}>
+                  {`${name}  ${lastname}`}
+                </Typography>
+              </Link>
+              {userDb && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+            </Box>
             {styles.map((estilo, index) => {
               return (
                 <Typography
@@ -105,7 +108,7 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
             })}
           </CardContent>
         </CardActionArea>
-        {userDb && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+        
     </Card>
   );
 };
