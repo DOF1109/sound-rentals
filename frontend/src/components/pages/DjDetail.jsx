@@ -156,18 +156,20 @@ const DjDetail = () => {
   useEffect(() => {
     if (dj) setDjImages(imagesDj());
 
+    if(userDb!=undefined && djFavorites.length>0 && dj){
+      console.log(djFavorites)
+      console.log(userDb)
+      const favoriteCheck = djFavorites.some((f)=> f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
+      setIsFavorite(favoriteCheck);
+    } 
 
-    if(djFavorites.length==0 || !userDb) return; 
-    const favoriteCheck = djFavorites.some((f)=>
-    f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
-
-    setIsFavorite(favoriteCheck);
+    
 
   }, [dj]);
 
   useEffect(() => {
     if (dj) loadCalificacion();
-  }, [dj,djCalificados]);
+  }, [dj,djCalificados,userDb]);
 
   useEffect(() => {
     loadDj();
