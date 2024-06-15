@@ -23,12 +23,17 @@ const AuthContextComponent = ({children}) => {
     }
 
     const handleLogout = ()=> {
-        setUser({})
-        setIsLogged(false)
+      
         //Borro datos del logeo del usuario en localStorage
         localStorage.removeItem("userInfo")
         localStorage.removeItem("isLogged")
-        //localStorage.removeItem("userName")
+        localStorage.removeItem("userDb")
+        localStorage.removeItem("djFavorites")
+        localStorage.removeItem("djCalificados")
+        
+        setUser({})
+        setUserDb({})
+        setIsLogged(false)
     }
 
     const handleName = ( dataName )=> {
@@ -46,7 +51,7 @@ const AuthContextComponent = ({children}) => {
                 setUserDb(userDbCheckLs)
             }
             else{
-                const userBusqueda = await getUserByEmail(userCheck.email)
+                const userBusqueda = await getUserByEmail(userCheckLS.email)
                 setUserDb(userBusqueda)
                 localStorage.setItem("userDb", JSON.stringify(userBusqueda))
             }
@@ -67,8 +72,10 @@ const AuthContextComponent = ({children}) => {
 
     useEffect(()=>{
         loadUserDb();
-        loadDjsFavorites();
-        loadDjsCalificados();
+        if(userDb){
+            loadDjsFavorites();
+            loadDjsCalificados();
+        }
     },[isLogged])
 
 
