@@ -157,3 +157,17 @@ export const deleteFavorito = async (id) => {
     return error;
   }
 };
+
+export const deleteDj = async (id) => {
+    try {
+      const response = await axios.delete(`${URL_BASE}/dj/eliminar/${id}`);
+      if (response.status === 200 || response.status === 204) {
+        return response;
+      } else {
+        errorAlert();
+        return response;
+      }
+    } catch (error) {
+      return error;
+    }
+  };
