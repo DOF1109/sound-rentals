@@ -13,6 +13,9 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { getDjs } from "../../api/djsApi";
 import Loader from "../common/Loader";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Typography from "@mui/material/Typography";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
@@ -25,6 +28,8 @@ const ManageDjs = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [djs, setDjs] = useState();
+  const theme = useTheme();
+  const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const loadDjs = async () => {
     const data = await getDjs();
@@ -43,6 +48,14 @@ const ManageDjs = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if (isXsOrSm) {
+    return (
+      <Typography variant="h5" my={5} mx={2} textAlign="center">
+        No disponible en móvil
+      </Typography>
+    );
+  }
 
   if (!djs) return <Loader />;
 

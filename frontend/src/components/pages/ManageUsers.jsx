@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import { getUsers } from "../../api/userApi";
 import Loader from "../common/Loader";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Typography from "@mui/material/Typography";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
@@ -23,6 +26,9 @@ const ManageUsers = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [users, setUsers] = useState();
+  const theme = useTheme();
+  const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
+
 
   const loadUsers = async () => {
     const data = await getUsers();
@@ -41,6 +47,14 @@ const ManageUsers = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if (isXsOrSm) {
+    return (
+      <Typography variant="h5" my={5} mx={2} textAlign="center">
+        No disponible en móvil
+      </Typography>
+    );
+  }
 
   if (!users) return <Loader />;
 
