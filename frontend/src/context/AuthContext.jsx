@@ -55,14 +55,12 @@ const AuthContextComponent = ({children}) => {
 
     const loadDjsFavorites = async ()=>{
         const djFavoritosBd = await getDjFavoritos();
-        console.log(djFavoritosBd)
         setDjFavorites(djFavoritosBd)
         localStorage.setItem("djFavorites", JSON.stringify(djFavoritosBd))
     }
 
     const loadDjsCalificados = async ()=>{
         const djCalificadosBd = await getDjCalificados();
-        console.log(djCalificadosBd)
         setDjCalificados(djCalificadosBd)
         localStorage.setItem("djCalificados", JSON.stringify(djCalificadosBd))
     }
