@@ -113,6 +113,7 @@ export const deleteFavorito = async (id) => {
   try {
     const response = await axios.delete(`${URL_BASE}/favorito/eliminar/${id}`);
     if (response.status === 200 || response.status === 204) {
+      console.log(response)
       return response;
     } else {
       errorAlert();

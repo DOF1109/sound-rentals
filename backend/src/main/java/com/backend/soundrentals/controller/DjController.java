@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,10 @@ public class DjController {
     public ResponseEntity<List<DjSalidaDto>> obtenerTop10Djs(){
         return new ResponseEntity<>(djService.listarTop10(), HttpStatus.OK);
     }
+
+    @GetMapping("/buscador/{id}-{fechaInicio}-{fechaFin}")
+    public ResponseEntity<List<DjSalidaDto>> buscadorPorCiudadFecha(@PathVariable Long id, @PathVariable LocalDate fechaInicio, @PathVariable LocalDate fechaFin) throws ResourceNotFoundException  {
+        return new ResponseEntity<>(djService.buscarDjPorCiudadFecha(id, fechaInicio, fechaFin), HttpStatus.OK);}
 
     @GetMapping("/style/{id}")
     public ResponseEntity<List<DjSalidaDto>> obtenerDjsPorEStilo(@PathVariable Long id)  {

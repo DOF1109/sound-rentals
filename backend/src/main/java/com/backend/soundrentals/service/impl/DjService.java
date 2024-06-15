@@ -8,6 +8,7 @@ import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
 import com.backend.soundrentals.entity.Caracteristica;
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -211,6 +213,47 @@ public class DjService implements IRecursoService {
         return modelMapper.map(djAEliminar,DjSalidaDto.class);
 
     }
+
+    @Override
+    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+        List<Dj> djPorCiudad = djRepository.findDjsByCity(id);
+
+        if (djPorCiudad == null) {
+            throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
+        }
+
+        List<Dj> djDisponible = new ArrayList<>();
+
+        for (Dj dj : djPorCiudad) {
+            boolean tieneReserva = this.verificaReserva(id, fechaInicio, fechaFin);
+            if (!tieneReserva) {
+                djDisponible.add(dj);
+            }
+        }
+
+        List<DjSalidaDto> djSalidaDto = new ArrayList<>();
+        for (Dj dj : djDisponible) {
+            DjSalidaDto djMap = modelMapper.map(dj, DjSalidaDto.class);
+            djSalidaDto.add(djMap);
+        }
+
+        return djSalidaDto;
+    }
+
+    @Override
+    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
+        Boolean verificacion = false;
+
+        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
+
+        if(reservaAVerificar==null){
+            verificacion = true;
+        }
+
+
+        return verificacion;
+    }
+
 
     @PostConstruct
     private void configureMapping() {

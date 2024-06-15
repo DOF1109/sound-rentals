@@ -44,5 +44,11 @@ public class Dj {
             joinColumns = @JoinColumn(name = "dj_id"),
             inverseJoinColumns = @JoinColumn(name = "characteristic_id")
     )
+
     private List<Caracteristica> caracteristicas = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private Ciudad ciudad;
+
 }
