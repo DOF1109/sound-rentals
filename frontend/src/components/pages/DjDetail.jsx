@@ -69,14 +69,13 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
-  const { handleLogout, user, isLogged } = useContext(AuthContext);
+  const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados  } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableDates, setAvailableDates] = useState([]);
   const [ratingValue, setRatingValue] = useState(0);
-  const { userDb, djCalificados,djFavorites, loadDjsCalificados } = useContext(AuthContext);
   
 
   const handleCalendarOpen = () => {
@@ -126,8 +125,6 @@ const DjDetail = () => {
       alert("Ha ocurrido un error")
     }
   };  
-  
-  const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -157,14 +154,9 @@ const DjDetail = () => {
     if (dj) setDjImages(imagesDj());
 
     if(userDb!=undefined && djFavorites.length>0 && dj){
-      console.log(djFavorites)
-      console.log(userDb)
       const favoriteCheck = djFavorites.some((f)=> f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
       setIsFavorite(favoriteCheck);
     } 
-
-    
-
   }, [dj]);
 
   useEffect(() => {
@@ -271,7 +263,7 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
-                {userDb &&
+                {userDb && user && user.rol === import.meta.env.VITE_COMMON_ROL &&
                 <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
                   <Rating
                     name="simple-controlled"

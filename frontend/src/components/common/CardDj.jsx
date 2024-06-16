@@ -16,7 +16,7 @@ import { AuthContext } from "../../context/AuthContext";
 const CardDj = ({ id, image, name, lastname, styles}) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [idFavorite, setIdFavorite] = useState(null);
-  const { userDb, djFavorites,loadDjsFavorites} = useContext(AuthContext);
+  const { user,userDb, djFavorites,loadDjsFavorites} = useContext(AuthContext);
 
   const toggleFavorite = async () => {
     const updatedStatus = !isFavorite;
@@ -92,7 +92,7 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
                   {`${name}  ${lastname}`}
                 </Typography>
               </Link>
-              {userDb && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+              {userDb && user && user.rol == 'commonusr' && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
             </Box>
             {styles.map((estilo, index) => {
               return (

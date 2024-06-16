@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Container,
   Grid,
@@ -52,12 +53,8 @@ const DJFavoritos = () => {
 
   return (
     <Container component="section">
-      <SearchInput
-        categories={categories.map((category) => {
-          return category.style;
-        })}
-      />
-      <Grid container spacing={6} pb={1} justifyContent="center">
+      {pageDjs.length>0 && <>
+        <Grid container spacing={6} pb={1} justifyContent="center">
         {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <CardDj
@@ -77,7 +74,13 @@ const DJFavoritos = () => {
           page={page}
           onChange={handlePageChange}
         />
-      </Box>
+      </Box> </>}
+
+      {pageDjs.length==0 &&
+        <Box sx={{marginTop:'2rem'}}>
+          <Alert variant="filled" severity="info" sx={{color:'white'}}>No tienes Dj's favoritos.</Alert>
+        </Box>
+      }
     </Container>
   );
 };

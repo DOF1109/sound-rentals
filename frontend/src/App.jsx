@@ -34,7 +34,6 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
-              <Route path="/djs-favoritos" element={<DJFavoritos />} />
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
@@ -46,6 +45,7 @@ function App() {
               {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
               <Route element={<ProtectedUsers />}>
                 <Route path="/user-info" element={<UserInfo />} />
+                <Route path="/djs-favoritos" element={<DJFavoritos />} />
               </Route>
             </Route>
           </Routes>
