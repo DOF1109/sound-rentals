@@ -18,7 +18,8 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate fecha;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @OneToOne
     @JoinColumn(name = "dj_id", referencedColumnName = "id")

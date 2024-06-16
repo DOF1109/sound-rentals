@@ -56,11 +56,11 @@ public class ReservaService implements IReservaService {
             throw new ResourceNotFoundException("El dj no existe");
         }
 
-        for(ReservaSalidaDto reserva : this.listarReservas()){
-            if(reservaEntradaDto.getFecha()==reserva.getFecha() && reservaEntradaDto.getDj()==reserva.getDj().getId()){
-                throw new BadRequestException("Ya existe una reserva para el Dj");
-            }
-        }
+//        for(ReservaSalidaDto reserva : this.listarReservas()){
+//            if(reservaEntradaDto.getFecha()==reserva.getFecha() && reservaEntradaDto.getDj()==reserva.getDj().getId()){
+//                throw new BadRequestException("Ya existe una reserva para el Dj");
+//            }
+//        }
 
         Reserva reservaEntidad = modelMapper.map(reservaEntradaDto,Reserva.class);
         reservaEntidad.setUsuario(usuarioReserva);
@@ -112,11 +112,11 @@ public class ReservaService implements IReservaService {
             throw new ResourceNotFoundException("El dj no existe");
         }
 
-        for(ReservaSalidaDto reserva : this.listarReservas()){
-            if(reservaModificacionDto.getFecha()==reserva.getFecha() && reservaModificacionDto.getDj()==reserva.getDj().getId()){
-                throw new BadRequestException("Ya existe una reserva para el Dj");
-            }
-        }
+//        for(ReservaSalidaDto reserva : this.listarReservas()){
+//            if(reservaModificacionDto.getFecha()==reserva.getFecha() && reservaModificacionDto.getDj()==reserva.getDj().getId()){
+//                throw new BadRequestException("Ya existe una reserva para el Dj");
+//            }
+//        }
 
         Reserva reservaEntidad = modelMapper.map(reservaModificacionDto,Reserva.class);
         reservaEntidad.setUsuario(usuarioReserva);

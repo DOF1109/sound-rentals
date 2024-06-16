@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ReservaSalidaDto {
     private Long id;
-    private LocalDate fecha;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private DjSalidaDto dj;
     private UsuarioSalidaDto usuario;
 }
