@@ -28,7 +28,7 @@ public class DjController {
 
 
     @PostMapping("/registrar")
-    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) throws BadRequestException {
+    public ResponseEntity<DjSalidaDto> registrarRecurso(@Valid @RequestBody DjEntradaDto djEntradaDto) throws BadRequestException, ResourceNotFoundException {
         return new ResponseEntity<>(djService.registrarDj(djEntradaDto), HttpStatus.CREATED);
     }
 

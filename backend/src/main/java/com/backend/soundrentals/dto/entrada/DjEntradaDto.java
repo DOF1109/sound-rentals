@@ -2,6 +2,7 @@ package com.backend.soundrentals.dto.entrada;
 
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
 import com.backend.soundrentals.entity.Caracteristica;
+import com.backend.soundrentals.entity.Ciudad;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DjEntradaDto {
     private Long id;
     private Integer dni;
@@ -34,4 +37,5 @@ public class DjEntradaDto {
     private String urlImg5;
     private List<Long> estilos = new ArrayList<>();
     private List<Long> caracteristicas = new ArrayList<>();
+    private Long ciudad;
 }
