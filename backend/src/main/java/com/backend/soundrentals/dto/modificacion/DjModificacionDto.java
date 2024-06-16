@@ -36,4 +36,5 @@ public class DjModificacionDto {
     private String urlImg5;
     private List<EstiloSalidaDto> estilos = new ArrayList<>();
     private List<Caracteristica> caracteristicas = new ArrayList<>();
+    private Long ciudad;
 }
