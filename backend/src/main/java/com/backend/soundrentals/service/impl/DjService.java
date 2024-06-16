@@ -244,11 +244,11 @@ public class DjService implements IRecursoService {
     public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
         Boolean verificacion = false;
 
-        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
+//        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
 
-        if(reservaAVerificar==null){
-            verificacion = true;
-        }
+//        if(reservaAVerificar==null){
+//            verificacion = true;
+//        }
 
 
         return verificacion;
