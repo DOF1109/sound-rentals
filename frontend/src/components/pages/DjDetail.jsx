@@ -35,7 +35,8 @@ import FavoriteButton from "../common/Favorite.jsx";
 import { ToastContainer, toast } from "react-toastify";  
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { Calendar } from 'react-date-range';
+import { DateRange } from 'react-date-range';
+import {format} from 'date-fns'
 
 const style = {
   position: "absolute",
@@ -73,7 +74,11 @@ const DjDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState({
+    startDate:new Date(),
+    endDate:new Date(),
+    key:'selection'
+  });
   const [availableDates, setAvailableDates] = useState([]);
   const [ratingValue, setRatingValue] = useState(0);
   
@@ -85,19 +90,25 @@ const DjDetail = () => {
   const handleCalendarClose = () => {
     setOpenCalendar(false);
   };
+
+  const handleChangeRangeDate = (ranges)=>{
+    setDateRange(ranges.selection);
+  }
   
   const handleReservar = async () => {
     try {
       const reserva = {
-        fecha: selectedDate, 
+        startDate: format(dateRange.startDate,'yyyy-MM-dd'), 
+        endDate: format(dateRange.endDate,'yyyy-MM-dd'), 
         dj: dj.id,
-        usuario: 1,
+        usuario: userDb.id,
       };
   
       const response = await addReserva(reserva);
       if (response && response.status === 201) {
         toast.success("¡Reserva realizada con éxito!");
         handleCalendarClose();
+        setDateRange({    startDate:new Date(),endDate:new Date(),key:'selection'})
       } else {
         console.error("Error al realizar la reserva");
         toast.error("Hubo un error al realizar la reserva");
@@ -170,9 +181,29 @@ const DjDetail = () => {
   useEffect(() => {
     const fetchReservas = async () => {
       try {
-        const reservas = await getReservas();
+        let reservas = await getReservas();
+        reservas = reservas.filter((r)=>r.dj.id==dj.id);
         if (reservas) {
-          const formattedDates = reservas.map((reserva) => new Date(`${reserva.fecha}T04:00:00.000Z`));
+          const formattedDates = reservas.map((reserva) => {
+
+            let startDate = new Date();
+            startDate.setFullYear(reserva.startDate.split('-')[0])
+            startDate.setMonth(reserva.startDate.split('-')[1]-1)
+            startDate.setDate(reserva.startDate.split('-')[2])
+
+            let endDate = new Date();
+            endDate.setFullYear(reserva.endDate.split('-')[0])
+            endDate.setMonth(reserva.endDate.split('-')[1]-1)
+            endDate.setDate(reserva.endDate.split('-')[2])
+  
+            // Crear un array de fechas desde el inicio hasta el final
+            const dates = [];
+            for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+              dates.push(new Date(d));
+            }
+            return dates;
+          }).flat();
+  
           setAvailableDates(formattedDates);
         }
       } catch (error) {
@@ -362,15 +393,17 @@ const DjDetail = () => {
             >
               {`${dj.name} ${dj.lastname}`}
             </Typography>
-            <Calendar
-              date={selectedDate}
-              onChange={setSelectedDate}
+            <DateRange
+              ranges={[dateRange]}
+              onChange={handleChangeRangeDate}
               minDate={new Date()}
               disabledDates={availableDates}
               color="#f50057"
               months={2}
               direction="horizontal"
             />
+
+            {/* <DateRangeCalendar/> */}
 
             <Box display="flex" justifyContent="flex-end" mt={2}>
               <Button onClick={handleCalendarClose} sx={{ mr: 2 }}>Cancelar</Button>
