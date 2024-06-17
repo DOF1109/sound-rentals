@@ -134,13 +134,21 @@ const Header = () => {
                 <NoLoggedMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
+              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Link className="clear-link" to="/djs-favoritos">
+                      Favoritos
+                    </Link>
+                  </MenuItem>
+              )}
+
               {/* Usuario común logueado */}
               {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/user-info">
-                    Mis datos
-                  </Link>
-                </MenuItem>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Link className="clear-link" to="/user-info">
+                      Mis datos
+                    </Link>
+                  </MenuItem>
               )}
 
               {/* Usuario logueado */}
@@ -239,7 +247,7 @@ const Header = () => {
                       : "/user-info"
                   }
                 >
-                  <Avatar name={user.email} />
+                <Avatar name={user.email} />
                 </Link>
                 <Button
                   variant="contained"
