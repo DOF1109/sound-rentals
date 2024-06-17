@@ -20,7 +20,7 @@ import { useContext, useState } from "react";
 import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
-import { postUser } from "../../api/userApi";
+import { postUser,getUserByEmail } from "../../api/userApi";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 
 const SignIn = () => {
@@ -40,14 +40,16 @@ const SignIn = () => {
   };
 
   const registerUser = async (finalyUser) => {
-    const userData = {
-      nombre: "Nombre",
-      email: finalyUser.email,
-    };
-    const data = await postUser(userData);
-  };
+    let userDb = await getUserByEmail(finalyUser.email);
 
-  //const {email, password} = userCredentials()
+    if(!userDb){
+      const userData = {
+        nombre: finalyUser.name,
+        email: finalyUser.email,
+      };
+      const data = await postUser(userData);
+    }
+  };
 
   const handleSubmit = async (e) => {
     try {
@@ -65,7 +67,6 @@ const SignIn = () => {
           rol: userDoc.data().rol,
         };
         //Aqui paso al context AuthContext los datos del usuario 'finalyUser'
-        registerUser(finalyUser);
         handleLogin(finalyUser);
         navigate("/");
       } else {
@@ -87,8 +88,10 @@ const SignIn = () => {
     let res = await loginGoogle();
     let finalyUser = {
       email: res.user.email,
+      name:res.user.displayName,
       rol: "commonusr",
     };
+    registerUser(finalyUser);
     handleLogin(finalyUser);
     navigate("/");
   };
