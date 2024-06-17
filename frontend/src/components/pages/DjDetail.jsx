@@ -26,7 +26,7 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
-import { getDj, updateFavoriteStatus,addCalificacion } from "../../api/djsApi.js";
+import { getDj, updateFavoriteStatus,addCalificacion,deleteFavorito} from "../../api/djsApi.js";
 import { getReservas, addReserva } from "../../api/reservaApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
@@ -70,8 +70,9 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
-  const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados  } = useContext(AuthContext);
+  const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados,loadDjsFavorites  } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [idFavorite, setIdFavorite] = useState(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [error, setError] = useState(null);
   const [dateRange, setDateRange] = useState({
@@ -167,8 +168,14 @@ const DjDetail = () => {
     if(userDb!=undefined && djFavorites.length>0 && dj){
       const favoriteCheck = djFavorites.some((f)=> f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
       setIsFavorite(favoriteCheck);
+
+      if(favoriteCheck){
+        let registroFav = djFavorites.find((f)=>
+        f.dj.id===dj.id && f.usuario.id===userDb.id && f.favorite)
+        setIdFavorite(registroFav.id)
+      }
     } 
-  }, [dj]);
+  }, [userDb,dj,djFavorites]);
 
   useEffect(() => {
     if (dj) loadCalificacion();
@@ -223,15 +230,23 @@ const DjDetail = () => {
       id: null,
       dj: dj.id,
       isFavorite: updatedStatus,
-      usuario: 1,
+      usuario: userDb.id,
     };
-    const response = await updateFavoriteStatus(value);
-    if (response.status === 201) {
+    
+    let response = undefined
+    if(updatedStatus){
+      response = await updateFavoriteStatus(value);
+    }
+    else{
+      console.log(idFavorite)
+      response = await deleteFavorito(idFavorite);
+    }
+    
+    if (response.status === 201 || response.status === 200) {
       setIsFavorite(updatedStatus);
-      toast.success("¡Se ha actualizado el estado de favorito!");
+      loadDjsFavorites();
     } else {
       console.error("Error al actualizar el estado de favorito");
-      toast.error("Hubo un error al actualizar el estado de favorito");
     }
   };
   
@@ -345,14 +360,14 @@ const DjDetail = () => {
               </Button>
             </CardActions>
           </Card>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ width: "100%", my: 2 }}
-            onClick={handleCalendarOpen}
-          >
-            RESERVAR
-          </Button>
+          {userDb &&         
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ width: "100%", my: 2 }}
+              onClick={handleCalendarOpen}
+            > RESERVAR
+            </Button>}
         </Grid>
 
         {/* ---------- Modal de galeria de imagenes ---------- */}
@@ -407,7 +422,7 @@ const DjDetail = () => {
 
             <Box display="flex" justifyContent="flex-end" mt={2}>
               <Button onClick={handleCalendarClose} sx={{ mr: 2 }}>Cancelar</Button>
-              <Button variant="contained" onClick={handleReservar}>Reservar</Button>
+              {userDb && <Button variant="contained" onClick={handleReservar}>Reservar</Button>}
             </Box>
           </Box>
         </Modal>
