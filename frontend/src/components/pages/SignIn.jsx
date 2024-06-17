@@ -20,6 +20,7 @@ import { useContext, useState } from "react";
 import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
+import { postUser } from "../../api/userApi";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 
 const SignIn = () => {
@@ -36,6 +37,14 @@ const SignIn = () => {
 
   const handleChange = (e) => {
     setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
+  };
+
+  const registerUser = async (finalyUser) => {
+    const userData = {
+      nombre: "Nombre",
+      email: finalyUser.email,
+    };
+    const data = await postUser(userData);
   };
 
   //const {email, password} = userCredentials()
@@ -56,6 +65,7 @@ const SignIn = () => {
           rol: userDoc.data().rol,
         };
         //Aqui paso al context AuthContext los datos del usuario 'finalyUser'
+        registerUser(finalyUser);
         handleLogin(finalyUser);
         navigate("/");
       } else {
