@@ -35,6 +35,8 @@ public class DjService implements IRecursoService {
     private final DjRepository djRepository;
     private final EstiloRepository estiloRepository;
     private final CaracteristicaRepository caracteristicaRepository;
+    private final FavoritoRepository favoritoRepository;
+    private final CalificacionRepository calificacionRepository;
     private final ReservaRepository reservaRepository;
     private final CiudadRepository ciudadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Dj.class);
@@ -202,11 +204,15 @@ public class DjService implements IRecursoService {
     public DjSalidaDto eliminarDj(Long id) throws ResourceNotFoundException {
         Dj djAEliminar = djRepository.findById(id).orElse(null);
 
-        LOGGER.info("Dj eliminado: "+ JsonPrinter.toString(djAEliminar));
-
         if(djAEliminar==null){
             throw new ResourceNotFoundException("El Dj con id "+ id + " no existe");
         }
+
+        favoritoRepository.deleteByDjId(id);
+        calificacionRepository.deleteByDjId(id);
+
+        djAEliminar.getEstilos().clear();
+        djAEliminar.getCaracteristicas().clear();
 
         djRepository.delete(djAEliminar);
 
