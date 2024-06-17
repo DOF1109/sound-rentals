@@ -6,17 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservaEntradaDto {
+public class CiudadEntradaDto {
     private Long id;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Long dj;
-    private Long usuario;
+    private String nombre;
 }

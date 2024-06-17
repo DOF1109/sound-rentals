@@ -17,11 +17,13 @@ import { getCategories } from "../../api/categoriesApi.js";
 import { getCharacteristics } from "../../api/characteristicsApi.js";
 import { addDj } from "../../api/djsApi.js";
 import { uploadToFirebase } from "../../firebaseConfig";
+import { getCiudades } from "../../api/ciudadesApi.js";
 
 const AddService = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [ciudades, setCiudades] = useState([]);
   const [characteristics, setCharacteristics] = useState([]);
 
   // Refs para los inputs de archivos
@@ -34,6 +36,7 @@ const AddService = () => {
       lastname: "",
       email: "",
       phone: "",
+      ciudad:"",
       address: "",
       password: "",
       dni: "",
@@ -130,9 +133,15 @@ const AddService = () => {
     if (data) setCharacteristics(data);
   };
 
+  const loadCiudades = async () => {
+    const data = await getCiudades();
+    if (data) setCiudades(data);
+  };
+
   useEffect(() => {
     loadCategories();
     loadCharacteristics();
+    loadCiudades();
   }, []);
 
   return (
@@ -208,6 +217,23 @@ const AddService = () => {
             helperText={errors.phone}
             fullWidth
           />
+        </Grid>
+        <Grid item xs={12} sm={9} lg={8}>
+          <FormControl fullWidth>
+            <InputLabel>Ciudad</InputLabel>
+            <Select
+              name="ciudad"
+              value={values.ciudad}
+              onChange={(event) => setFieldValue("ciudad", event.target.value)}
+              error={!!errors.ciudad}
+            >
+              {ciudades.map((ciudad, index) => (
+                <MenuItem key={index} value={ciudad.id}>
+                  {ciudad.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={9} lg={8}>
           <TextField
