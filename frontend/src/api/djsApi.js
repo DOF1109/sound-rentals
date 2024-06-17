@@ -89,7 +89,7 @@ export const getDj = async (id) => {
 
 export const getDjSearch = async (id, fechainicio, fechafin) => {
     try {
-      const response = await axios.get(URL_BASE + `/dj/${id}+{fechainicio}+{fechafin}`);
+      const response = await axios.get(URL_BASE + `/dj/buscador/${id}+${fechainicio}+${fechafin}`);
       if (response.status === 200) {
         return response.data;
       } else {
