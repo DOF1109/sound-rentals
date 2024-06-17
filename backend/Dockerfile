@@ -1,14 +1,16 @@
-# Use a JDK image based on Java 17
+#
+# Build stage
+#
+FROM maven:3.8.4-openjdk-17 as BUILD
+COPY src /home/app/src
+COPY pom.xml /home/app
+WORKDIR /home/app
+RUN mvn clean package
+
+#
+# Package stage
+#
 FROM openjdk:17-oracle
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the JAR file into the container
-COPY target/*.jar app.jar
-
-# Expose port 8080
-EXPOSE 8080
-
-# Command to run the application
-CMD ["java", "-jar", "app.jar"]
+COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/app.jar"]
