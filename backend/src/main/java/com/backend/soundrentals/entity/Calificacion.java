@@ -22,8 +22,8 @@ public class Calificacion {
     private Integer calificacion;
 
     @ManyToOne
-    @JoinColumn(name = "dj_id")
-    private Dj dj;
+    @JoinColumn(name = "reserva_id")
+    private Reserva reserva;
 
     @ManyToOne
     @JoinColumn(name = "_user_id")

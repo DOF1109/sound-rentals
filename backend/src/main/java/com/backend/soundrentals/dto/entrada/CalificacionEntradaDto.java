@@ -18,6 +18,6 @@ import javax.persistence.*;
 public class CalificacionEntradaDto {
     private Long id;
     private Integer calificacion;
-    private Long dj;
+    private Long reserva;
     private Long usuario;
 }

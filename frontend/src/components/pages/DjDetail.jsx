@@ -289,7 +289,7 @@ const DjDetail = () => {
               <CardContent>
                 <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
                   <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
-                  {userDb && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+                  {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
                 </Box>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
@@ -309,7 +309,7 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
-                {userDb && user && user.rol === import.meta.env.VITE_COMMON_ROL &&
+                {/* {userDb && user && user.rol === import.meta.env.VITE_COMMON_ROL &&
                 <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
                   <Rating
                     name="simple-controlled"
@@ -318,7 +318,7 @@ const DjDetail = () => {
                     readOnly={ratingValue>0}
                     onChange={handleCalificar}
                   />
-                </Box>}
+                </Box>} */}
                 <Typography variant="body1" pt={3} pb={1}>
                   Caracteristicas
                 </Typography>
@@ -360,7 +360,7 @@ const DjDetail = () => {
               </Button>
             </CardActions>
           </Card>
-          {userDb &&         
+          {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL  &&
             <Button
               variant="contained"
               size="large"

@@ -14,6 +14,6 @@ import lombok.Setter;
 public class CalificacionSalidaDto {
     private Long id;
     private Integer calificacion;
-    private DjSalidaDto dj;
+    private ReservaSalidaDto reserva;
     private UsuarioSalidaDto usuario;
 }

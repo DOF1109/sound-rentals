@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
-import {getUserByEmail} from "../api/userApi"
+import {getUserByEmail, getUsers} from "../api/userApi"
 import {getDjFavoritos,getDjCalificados} from "../api/djsApi"
+import { getAllUsers } from '../firebaseConfig'
 
 export const AuthContext = createContext()
 
@@ -9,17 +10,19 @@ const AuthContextComponent = ({children}) => {
     const [userName, setUserName] = useState("")
     const [user, setUser] = useState(undefined)
     const [userDb, setUserDb] = useState(undefined)
+    const [usersFb, setUsersFb] = useState([])
     const [isLogged, setIsLogged] = useState(false)
     const [djFavorites, setDjFavorites] = useState([])
     const [djCalificados, setDjCalificados] = useState([])
 
     const handleLogin = async ( finalyUser )=> {
-        //En el estado 'user' tenemos la direccion de email y el rol
-        setUser(finalyUser)
-        setIsLogged(true)
         //Guardo datos del logeo del usuario en localStorage
         localStorage.setItem("userInfo", JSON.stringify(finalyUser))
         localStorage.setItem("isLogged", JSON.stringify(true))
+
+        //En el estado 'user' tenemos la direccion de email y el rol
+        setUser(finalyUser)
+        setIsLogged(true)
     }
 
     const handleLogout = ()=> {
@@ -42,14 +45,17 @@ const AuthContextComponent = ({children}) => {
 
     //Buscar usuario en BD 
     const loadUserDb = async ()=>{
-        const userCheckLS = JSON.parse(localStorage.getItem("userInfo")) || undefined;
-
-        if(userCheckLS){
-            setUser(userCheckLS)
-            const userBusqueda = await getUserByEmail(userCheckLS.email)
+        if(user){
+            const usersBd = await getUsers();
+            const userBusqueda = usersBd.find((u)=>u.email==user.email);
             setUserDb(userBusqueda)
             localStorage.setItem("userDb", JSON.stringify(userBusqueda))
         }
+    }
+
+    const loadUsersFb = async ()=>{
+        const data = await getAllUsers();
+        if (data) setUsersFb(data);
     }
 
     const loadDjsFavorites = async ()=>{
@@ -66,7 +72,8 @@ const AuthContextComponent = ({children}) => {
 
     useEffect(()=>{
         loadUserDb();
-    },[isLogged])
+        loadUsersFb();
+    },[user])
 
     useEffect(()=>{
         if(userDb){
@@ -79,6 +86,8 @@ const AuthContextComponent = ({children}) => {
     let data = {
         user,
         userDb,
+        usersFb,
+        loadUsersFb,
         isLogged,
         userName,
         djFavorites,
