@@ -223,7 +223,7 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, String fechaInicio, String fechaFin) throws ResourceNotFoundException {
         List<Dj> djPorCiudad = djRepository.findDjsByCity(id);
 
         if (djPorCiudad == null) {
@@ -231,9 +231,11 @@ public class DjService implements IRecursoService {
         }
 
         List<Dj> djDisponible = new ArrayList<>();
+        LocalDate fechai = LocalDate.parse(fechaInicio);
+        LocalDate fechaf = LocalDate.parse(fechaFin);
 
         for (Dj dj : djPorCiudad) {
-            boolean tieneReserva = this.verificaReserva(id, fechaInicio, fechaFin);
+            boolean tieneReserva = this.verificaReserva(id, fechai, fechai);
             if (!tieneReserva) {
                 djDisponible.add(dj);
             }
@@ -252,11 +254,11 @@ public class DjService implements IRecursoService {
     public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
         Boolean verificacion = false;
 
-//        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
+        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
 
-//        if(reservaAVerificar==null){
-//            verificacion = true;
-//        }
+        if(reservaAVerificar==null){
+            verificacion = true;
+        }
 
 
         return verificacion;

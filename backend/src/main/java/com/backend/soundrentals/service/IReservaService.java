@@ -12,6 +12,7 @@ public interface IReservaService {
     ReservaSalidaDto registrarReserva(ReservaEntradaDto reservaEntradaDto) throws BadRequestException,ResourceNotFoundException;
     List<ReservaSalidaDto> listarReservas();
     ReservaSalidaDto obtenerReservaPorId(Long id) throws ResourceNotFoundException;
+    List<ReservaSalidaDto> obtenerReservasPorUsuario(Long id) throws ResourceNotFoundException;
     ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException, BadRequestException;
     ReservaSalidaDto eliminarReserva(Long id) throws ResourceNotFoundException;
 }

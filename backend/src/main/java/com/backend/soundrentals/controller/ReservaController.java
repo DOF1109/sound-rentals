@@ -34,6 +34,11 @@ public class ReservaController {
         return new ResponseEntity<>(reservasService.obtenerReservaPorId(id), HttpStatus.OK);
     }
 
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<ReservaSalidaDto>> obtenerReservasPorUsuario(@PathVariable Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(reservasService.obtenerReservasPorUsuario(id), HttpStatus.OK);
+    }
+
     @GetMapping("/listar")
     public ResponseEntity<List<ReservaSalidaDto>> listarReservas() {
         return new ResponseEntity<>(reservasService.listarReservas(), HttpStatus.OK);

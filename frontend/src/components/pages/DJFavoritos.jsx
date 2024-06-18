@@ -17,7 +17,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const DJFavoritos = () => {
   const [categories, setCategories] = useState([]);
-  const [djs, setDjs] = useState();
+  const [djs, setDjs] = useState(undefined);
   const [page, setPage] = useState(1);
   const [pageDjs, setPageDjs] = useState([]);
   const {userDb,djFavorites} = useContext(AuthContext);
