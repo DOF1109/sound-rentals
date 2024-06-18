@@ -93,6 +93,20 @@ public class ReservaService implements IReservaService {
     }
 
     @Override
+    public List<ReservaSalidaDto> obtenerReservasPorUsuario(Long id) throws ResourceNotFoundException{
+        Usuario usuarioBusqueda = usuarioRepository.findById(id).orElse(null);
+
+        if(usuarioBusqueda==null){
+            throw new ResourceNotFoundException("La reserva con id "+ id + " no existe");
+        }
+
+        List<ReservaSalidaDto> reservas = reservaRepository.findReservaByUsuario_Id(id).stream()
+                .map(r -> modelMapper.map(r, ReservaSalidaDto.class)).toList();
+
+        return reservas;
+    }
+
+    @Override
     public ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException, BadRequestException {
         Reserva reservaComprobacion = reservaRepository.findById(reservaModificacionDto.getId()).orElse(null);
 

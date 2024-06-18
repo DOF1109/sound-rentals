@@ -11,7 +11,6 @@ import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs,getDjFavoritos } from "../../api/djsApi.js";
 import { getCategories } from "../../api/categoriesApi.js";
-import { getUserByEmail } from "../../api/userApi";
 import Loader from "../common/Loader.jsx";
 
 const DJs = () => {

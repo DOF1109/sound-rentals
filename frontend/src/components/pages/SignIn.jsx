@@ -17,10 +17,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useContext, useState } from "react";
 
-import { db, loginGoogle, onSignIn } from "../../firebaseConfig";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { db, getUserByEmailFirebase, loginGoogle, onSignIn } from "../../firebaseConfig";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
-import { postUser,getUserByEmail } from "../../api/userApi";
+import { postUser,getUserByEmail, getUsers } from "../../api/userApi";
 import Logo from "../../assets/images/SoundRentals-logo.webp";
 
 const SignIn = () => {
@@ -40,9 +40,10 @@ const SignIn = () => {
   };
 
   const registerUser = async (finalyUser) => {
-    let userDb = await getUserByEmail(finalyUser.email);
+    const usersBd = await getUsers();
+    const userBd = usersBd.find((u)=>u.email==finalyUser.email);
 
-    if(!userDb){
+    if(!userBd){
       const userData = {
         nombre: finalyUser.name,
         email: finalyUser.email,
@@ -86,12 +87,21 @@ const SignIn = () => {
 
   const loginWithGoogle = async () => {
     let res = await loginGoogle();
+
+    let checkUserFirebase = await getUserByEmailFirebase(res.user.email);
+
+    if(!checkUserFirebase){
+      await setDoc(doc(db, "users", res.user.uid), { name:res.user.displayName, email:res.user.email,rol: "commonusr" });
+      checkUserFirebase = await getUserByEmailFirebase(res.user.email);
+    }
+
     let finalyUser = {
-      email: res.user.email,
-      name:res.user.displayName,
-      rol: "commonusr",
+      email: checkUserFirebase.email,
+      name: checkUserFirebase.name,
+      rol: checkUserFirebase.rol
     };
-    registerUser(finalyUser);
+    
+    await registerUser(finalyUser);
     handleLogin(finalyUser);
     navigate("/");
   };
