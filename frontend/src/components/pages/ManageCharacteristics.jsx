@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { getCharacteristics, deleteCharacteristic } from "../../api/characteristicsApi";
 import Loader from "../common/Loader";
 import { Link } from "react-router-dom";
@@ -82,7 +82,7 @@ const ManageCharacteristics = () => {
 
   return (
     <Container sx={{ py: 5 }}>
-      <Button variant="contained" startIcon={<PersonAddIcon />} sx={{ mb: 2 }}>
+      <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ mb: 2 }}>
         <Link className="clear-link light-text" to="/add-characteristic">
           AGREGAR CARACTERISTICA
         </Link>
