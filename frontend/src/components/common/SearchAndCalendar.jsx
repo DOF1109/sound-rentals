@@ -100,17 +100,8 @@ function SearchAndCalendar() {
 
   return (
     <>
-       <div style={{ display: 'flex', alignItems: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
     <SearchInput ciudades={ciudades.map((ciudad) => ciudad.ciudad)} />
-    <div style={{ marginLeft: '2rem' }}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DateRangePicker']}>
-          <DateRangePicker localeText={{ start: 'Check-in', end: 'Check-out' }} />
-        </DemoContainer>
-      </LocalizationProvider>
-    </div>
-  </div>
-  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
+  {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
     <Button
       variant="contained"
       onClick={resetInput}
@@ -134,7 +125,7 @@ function SearchAndCalendar() {
     >
       Buscar
     </Button>
-  </div>
+  </div> */}
     </>
   )
 }
