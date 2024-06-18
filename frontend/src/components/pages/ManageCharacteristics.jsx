@@ -9,8 +9,11 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { getCharacteristics, deleteCharacteristic } from "../../api/characteristicsApi";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import {
+  getCharacteristics,
+  deleteCharacteristic,
+} from "../../api/characteristicsApi";
 import Loader from "../common/Loader";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -55,12 +58,15 @@ const ManageCharacteristics = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        const resp = await deleteCharacteristic(id);
+        // const resp = await deleteCharacteristic(id);
+        alert("Paaaraaaaa...todavia no borres nada!");
         if (resp.status === 200) {
           swal("Caracteristica eliminada!", {
             icon: "success",
           });
-          setCharacteristics(characteristics.filter(characteristic => characteristic.id !== id));
+          setCharacteristics(
+            characteristics.filter((characteristic) => characteristic.id !== id)
+          );
         } else {
           swal("Ocurrió un error, vuelva a intentarlo", {
             icon: "error",
@@ -82,10 +88,16 @@ const ManageCharacteristics = () => {
 
   return (
     <Container sx={{ py: 5 }}>
-      <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ mb: 2 }}>
-        <Link className="clear-link light-text" to="/add-characteristic">
+      <Button
+        variant="contained"
+        startIcon={<AddCircleIcon />}
+        sx={{ mb: 2 }}
+        onClick={() => alert("Proximamente!")}
+      >
+        AGREGAR CARACTERISTICA
+        {/* <Link className="clear-link light-text" to="/add-characteristic">
           AGREGAR CARACTERISTICA
-        </Link>
+        </Link> */}
       </Button>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -121,12 +133,13 @@ const ManageCharacteristics = () => {
                         );
                       })}
                       <TableCell align="center">
-                        <IconButton 
-                          aria-label="delete" 
+                        <IconButton
+                          aria-label="delete"
                           onClick={() => {
                             handleDeleteCharacteristics(row.id);
-                          }}>
-                            <DeleteForeverIcon />
+                          }}
+                        >
+                          <DeleteForeverIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
