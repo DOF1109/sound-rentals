@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Autocomplete, Box, InputAdornment, TextField, Button,useTheme } from '@mui/material';
+import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DateRange } from 'react-date-range';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import {getDjSearch} from '../../api/djsApi';
+import { borderRadius } from '@mui/system';
 
 const SearchInput = ({ ciudades }) => {
   const theme = useTheme();
@@ -19,7 +21,10 @@ const SearchInput = ({ ciudades }) => {
       key: 'selection',
     },
   ]);
+  const [searchResults, setSearchResults] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [dateWritten, setDateWritten] = useState(false);
 
   if (!ciudades || ciudades.length === 0) return null;
 
@@ -42,6 +47,7 @@ const SearchInput = ({ ciudades }) => {
 
   const handleDateRangeChange = (item) => {
     setDateRange([item.selection]);
+    setDateWritten(true)
   };
   console.log('date range:', dateRange);
 
@@ -49,18 +55,60 @@ const SearchInput = ({ ciudades }) => {
     setShowDatePicker(!showDatePicker);
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await getDjSearch(1, dateRange[0].startDate, dateRange[0].endDate);
+      setSearchResults(response);
+      console.log('response:', response);
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+      if (error.response) {
+        console.error('Error de la API:', error.response.data.message);
+      } else {
+        console.error('Error general:', error.message);
+      }
+    }
+  };
+  const handleDateRangeClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleDateRangeClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'date-range-popover' : undefined;
+
   return (
     <Box
       className="shiny-dark"
       sx={{
-        display:'flex',
+        display: 'flex',
+        flexDirection: {
+          xs: 'column',
+          sm: 'row',
+        },
         background: theme.palette.background.paper,
         borderRadius: "50px",
         border: 0,
-        maxWidth: 650,
-        mx: "auto",
-        my: 4,
-        p: 1,
+        maxWidth: {
+          xs: '100%',
+          sm: 700,
+          md: 900,
+        },
+        mx: 'auto',
+        my: {
+          xs: 2,
+          sm: 4,
+          md: 6,
+        },
+        p: {
+          xs: 1,
+          sm: 1.5,
+          md: 2,
+        },
+        position: 'relative',
       }}
     >
       <Autocomplete
@@ -77,7 +125,12 @@ const SearchInput = ({ ciudades }) => {
             variant="outlined"
             color="secondary"
             sx={{
-              width: 350,
+              ml:'1rem',
+              width: {
+                xs: '100%',
+                sm: 350,
+                md: 400,
+              },
               ".MuiOutlinedInput-root": {
                 position: 'relative',
                 "& fieldset": {
@@ -104,7 +157,7 @@ const SearchInput = ({ ciudades }) => {
                 background: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))', 
               },
               '& .MuiInputBase-input': {
-                color: '#07020D',
+                color: '#ffff',
               },
             }}
             InputLabelProps={{
@@ -114,97 +167,133 @@ const SearchInput = ({ ciudades }) => {
         )}
       />
       <Box
+        sx={{
+          display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            sm: 'row',
+          },
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: {
+            xs: '1rem',
+            sm: 0,
+            md: 0,
+          },
+          marginLeft: {
+            sm: '2rem',
+            md: '3rem',
+          },
+        }}
+      >
+        <Box
           sx={{
             display: 'flex',
-            // alignItems: 'center',
-            // justifyContent: 'center',
-            // height: '100%',
-            // marginLeft: 2,
+            alignItems: 'center',
+            marginRight: '1rem',
           }}
         >
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: theme.palette.text.primary,
-              cursor: 'pointer',
-            }}
-            onClick={handleDatePickerToggle}
+          onClick={handleDateRangeClick}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
           >
-            <DateRangeIcon
+         <IconButton
+            aria-describedby={id}
+            
+            sx={{
+              color: theme.palette.secondary.main,
+              '&:hover': {
+                color: theme.palette.secondary.dark,
+              },
+            }}
+          >
+            <DateRangeIcon />
+          </IconButton>
+          {dateWritten === true ? 
+              <Typography
+              variant="body1"
               sx={{
-                mr: '1rem',
-              }}
-            />
-            <p
-              style={{
-                fontSize: '10px',
+                fontSize: {
+                  xs: '0.8rem',
+                  sm: '0.8rem',
+                },
+                fontWeight: 'bold',
+                margin: '0',
+              }}>
+                {new Date(dateRange[0].startDate).toLocaleDateString()}
+                -
+                {new Date(dateRange[0].endDate).toLocaleDateString()}
+              </Typography>  : 
+              <Typography
+              variant="body1"
+              sx={{
+                fontSize: {
+                  xs: '0.8rem',
+                  sm: '0.8rem',
+                },
                 fontWeight: 'bold',
                 margin: '0',
               }}
             >
-              __/__/__ <HorizontalRuleIcon sx={{ fontSize: '15px' }} /> __/__/__
-            </p>
+              
+              __/__/__ <HorizontalRuleIcon sx={{ fontSize: {
+                xs: '1rem',
+                sm: '1.2rem',
+              } }} /> __/__/__
+            </Typography>        
+            }
+          
           </Box>
+ 
           <Box
-            sx={{
+             sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: theme.palette.text.primary,
               cursor: 'pointer',
-              marginLeft: '3rem',
+              marginLeft: '2rem',
+              border: 'solid',
+              borderRadius: '2rem',
+              padding: '0.5rem 1rem',
+              '&:hover': {
+                color: theme.palette.secondary.dark,
+              },
             }}
           >
-            <SearchIcon />
+            <Typography >
+              Buscar
+            </Typography>
+            <SearchIcon 
+              onClick={handleSearch}
+            />
           </Box>
         </Box>
-      {showDatePicker && (
-        <Box
-          sx={{
-            position: 'absolute',
-            zIndex: 100,
-            top:'20%',
-            left: '60%',
-            transform: 'translateX(-50%)',
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleDateRangeClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
           }}
         >
           <DateRange
-            minDate={new Date()}
+          minDate={new Date()}
             onChange={handleDateRangeChange}
+            moveRangeOnFirstSelection={false}
             ranges={dateRange}
-            rangeColors={[theme.palette.background.paper]}
-            style={{color:'black'}}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-              variant="contained"
-              onClick={handleCancelDateRange}
-              type="submit"
-              sx={{
-                color: 'white',
-                textTransform: 'none',
-                textShadow: '2px 2px 2px grey',
-              }}
-            >
-              Cerrar
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleDateSelect}
-              type="submit"
-              sx={{
-                color: 'white',
-                textTransform: 'none',
-                textShadow: '2px 2px 2px grey',
-              }}
-            >
-              listo
-            </Button>
-          </div>
-        </Box>
-      )}
+        </Popover>
+      </Box>
     </Box>
   );
 };

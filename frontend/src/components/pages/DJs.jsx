@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import SearchInput from "../common/SearchInput";
+import SearchInput from "../common/SearchAndCalendar";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs,getDjFavoritos } from "../../api/djsApi.js";
