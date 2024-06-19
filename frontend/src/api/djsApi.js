@@ -70,7 +70,7 @@ export const getDj = async (id) => {
     }
   };
 
-  export const getDjCalificados = async () => {
+  export const getReservasCalificadas = async () => {
     try {
       const response = await axios.get(URL_BASE + "/calificacion/listar");
       if (response.status === 200) {
