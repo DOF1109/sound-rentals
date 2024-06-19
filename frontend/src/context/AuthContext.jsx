@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import {getUserByEmail, getUsers} from "../api/userApi"
-import {getDjFavoritos,getDjCalificados} from "../api/djsApi"
+import {getDjFavoritos,getReservasCalificadas} from "../api/djsApi"
 import { getAllUsers } from '../firebaseConfig'
 
 export const AuthContext = createContext()
@@ -13,7 +13,7 @@ const AuthContextComponent = ({children}) => {
     const [usersFb, setUsersFb] = useState([])
     const [isLogged, setIsLogged] = useState(false)
     const [djFavorites, setDjFavorites] = useState([])
-    const [djCalificados, setDjCalificados] = useState([])
+    const [reservasCalificadas, setReservasCalificadas] = useState([])
 
     const handleLogin = async ( finalyUser )=> {
         //Guardo datos del logeo del usuario en localStorage
@@ -45,6 +45,12 @@ const AuthContextComponent = ({children}) => {
 
     //Buscar usuario en BD 
     const loadUserDb = async ()=>{
+
+        if(!user){
+            const userLocalS = localStorage.getItem('userInfo');
+            setUser(JSON.parse(userLocalS));
+        }
+
         if(user){
             const usersBd = await getUsers();
             const userBusqueda = usersBd.find((u)=>u.email==user.email);
@@ -64,10 +70,10 @@ const AuthContextComponent = ({children}) => {
         localStorage.setItem("djFavorites", JSON.stringify(djFavoritosBd))
     }
 
-    const loadDjsCalificados = async ()=>{
-        const djCalificadosBd = await getDjCalificados();
-        setDjCalificados(djCalificadosBd)
-        localStorage.setItem("djCalificados", JSON.stringify(djCalificadosBd))
+    const loadReservasCalificadas = async ()=>{
+        const reservasCalificadasBd = await getReservasCalificadas();
+        setReservasCalificadas(reservasCalificadasBd)
+        localStorage.setItem("reservasCalificadas", JSON.stringify(reservasCalificadasBd))
     }
 
     useEffect(()=>{
@@ -78,7 +84,7 @@ const AuthContextComponent = ({children}) => {
     useEffect(()=>{
         if(userDb){
             loadDjsFavorites();
-            loadDjsCalificados();
+            loadReservasCalificadas();
         }
     },[userDb])
 
@@ -91,12 +97,12 @@ const AuthContextComponent = ({children}) => {
         isLogged,
         userName,
         djFavorites,
-        djCalificados,
+        reservasCalificadas,
         handleName,
         handleLogin,
         handleLogout,
         loadDjsFavorites,
-        loadDjsCalificados
+        loadReservasCalificadas
     }
 
   return (

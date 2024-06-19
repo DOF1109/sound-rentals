@@ -63,6 +63,11 @@ const Header = () => {
         </Link>
       </MenuItem>
       <MenuItem onClick={handleCloseNavMenu}>
+        <Link className="clear-link" to="/reservations">
+          Reservas
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleCloseNavMenu}>
         <Link className="clear-link" to="/user-info">
           Mis datos
         </Link>
@@ -242,10 +247,19 @@ const Header = () => {
                     onClick={handleCloseNavMenu}
                     sx={{ display: "block", fontWeight: "500" }}
                   >
+                    <Link className="clear-link shiny-hover" to="/reservations">
+                      RESERVAS
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
                     <Link className="clear-link shiny-hover" to="/user-info">
                       MIS DATOS
                     </Link>
                   </Button>
+
                 </>
               )}
             </Box>

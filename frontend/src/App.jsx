@@ -18,6 +18,7 @@ import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 import ManageDjs from "./components/pages/ManageDjs";
 import DJFavoritos from "./components/pages/DJFavoritos";
 import ManageCharacteristics from "./components/pages/ManageCharacteristics";
+import Reservations from "./components/pages/Reservations";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route element={<ProtectedUsers />}>
                 <Route path="/user-info" element={<UserInfo />} />
                 <Route path="/djs-favoritos" element={<DJFavoritos />} />
+                <Route path="/reservations" element={<Reservations />} />
               </Route>
             </Route>
           </Routes>
