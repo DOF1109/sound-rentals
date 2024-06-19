@@ -81,7 +81,7 @@ const DjDetail = () => {
     key:'selection'
   });
   const [availableDates, setAvailableDates] = useState([]);
-  const [ratingValue, setRatingValue] = useState(0);
+
   
 
   const handleCalendarOpen = () => {
@@ -120,23 +120,7 @@ const DjDetail = () => {
     }
   };
 
-  const handleCalificar = async (event,value) => {
-    let calificacion = value
-    setRatingValue(calificacion);
-    const data = {
-      dj:dj.id,
-      calificacion,
-      usuario:userDb.id
-    }
 
-    const response = await addCalificacion(data);
-    if(response){
-      loadDjsCalificados();
-    }
-    else{
-      alert("Ha ocurrido un error")
-    }
-  };  
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -157,10 +141,6 @@ const DjDetail = () => {
     }
   };
 
-  const loadCalificacion = async () => {
-    const calificacion = djCalificados.find((d)=>d.dj.id==dj.id && d.usuario.id==userDb.id );
-    setRatingValue(calificacion ? calificacion.calificacion : 0)
-  };
 
   useEffect(() => {
     if (dj) setDjImages(imagesDj());
@@ -176,10 +156,6 @@ const DjDetail = () => {
       }
     } 
   }, [userDb,dj,djFavorites]);
-
-  useEffect(() => {
-    if (dj) loadCalificacion();
-  }, [dj,djCalificados,userDb]);
 
   useEffect(() => {
     loadDj();
@@ -309,16 +285,6 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
-                {/* {userDb && user && user.rol === import.meta.env.VITE_COMMON_ROL &&
-                <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-                  <Rating
-                    name="simple-controlled"
-                    size="large"
-                    value={ratingValue}
-                    readOnly={ratingValue>0}
-                    onChange={handleCalificar}
-                  />
-                </Box>} */}
                 <Typography variant="body1" pt={3} pb={1}>
                   Caracteristicas
                 </Typography>
