@@ -41,7 +41,7 @@ const Register = () => {
     setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
   };
 
-  const registerUser = async () => {
+  const registerUserDb = async () => {
     const userData = {
       nombre: nameUser,
       email: userCredentials.email,
@@ -64,10 +64,11 @@ const Register = () => {
         const res = await signUp(userCredentials);
         //Aqui tambien voy a usar uid que viene el la raspuesta (res) para crear un documento en la colleccion user
         //con el rol del usuario
-        if (res.user.uid) {
+        console.log(res)
+        if (res.success) {
           //Con el metodo setDoc (me permite agrgar un documento(registro) y setear yo el id) distinto al metodo addDoc
           //que lo agrega sin yo poder modificar
-          await setDoc(doc(db, "users", res.user.uid), { rol: "commonusr" });
+          await setDoc(doc(db, "users", res.data.user.uid), { name:nameUser, email:userCredentials.email,rol: "commonusr" });
           swal({
             title: "SoundRentals",
             text: "Usuario creado exitosamente!",
@@ -76,13 +77,13 @@ const Register = () => {
             button: "Ingresar",
             //timer: '2000'
           });
-          registerUser();
+          registerUserDb();
+          navigate("/signin");
         } else {
           alert(
-            "Hubo un problema, intente nuevamente"
+            res.error
           );
         }
-        navigate("/signin");
       } else {
         swal({
           title: "SoundRentals",

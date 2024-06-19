@@ -11,10 +11,7 @@ import com.backend.soundrentals.dto.salida.ReservaSalidaDto;
 import com.backend.soundrentals.entity.*;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
-import com.backend.soundrentals.repository.CalificacionRepository;
-import com.backend.soundrentals.repository.CaracteristicaRepository;
-import com.backend.soundrentals.repository.DjRepository;
-import com.backend.soundrentals.repository.UsuarioRepository;
+import com.backend.soundrentals.repository.*;
 import com.backend.soundrentals.service.ICalificacionService;
 import com.backend.soundrentals.service.ICaracteristicaService;
 import com.backend.soundrentals.utils.JsonPrinter;
@@ -37,7 +34,7 @@ public class CalificacionService implements ICalificacionService {
 
     private final CalificacionRepository calificacionRepository;
     private final UsuarioRepository usuarioRepository;
-    private final DjRepository djRepository;
+    private final ReservaRepository reservaRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Calificacion.class);
     private ModelMapper modelMapper;
 
@@ -49,10 +46,10 @@ public class CalificacionService implements ICalificacionService {
             throw new ResourceNotFoundException("El usuario no existe");
         }
 
-        Dj djFavorito = djRepository.findById(calificacion.getDj()).orElse(null);
+        Reserva reservaCalificada = reservaRepository.findById(calificacion.getReserva()).orElse(null);
 
-        if(djFavorito==null){
-            throw new ResourceNotFoundException("El dj no existe");
+        if(reservaCalificada==null){
+            throw new ResourceNotFoundException("La reserva no existe");
         }
 
         if(calificacion.getCalificacion()<0 || calificacion.getCalificacion()>5){
@@ -62,14 +59,14 @@ public class CalificacionService implements ICalificacionService {
         Calificacion calificacionEntidad = new Calificacion();
 
         for(CalificacionSalidaDto c : this.listarCalificaciones()){
-            if(c.getUsuario().getId() == calificacion.getUsuario() && c.getDj().getId() == calificacion.getDj()){
+            if(c.getUsuario().getId() == calificacion.getUsuario() && c.getReserva().getId() == calificacion.getReserva()){
                 calificacionEntidad.setId(c.getId());
                 break;
             }
         }
 
         calificacionEntidad.setUsuario(usuarioRegistraFavorito);
-        calificacionEntidad.setDj(djFavorito);
+        calificacionEntidad.setReserva(reservaCalificada);
         calificacionEntidad.setCalificacion(calificacion.getCalificacion());
 
         return modelMapper.map(calificacionRepository.save(calificacionEntidad),CalificacionSalidaDto.class);

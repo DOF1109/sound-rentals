@@ -7,15 +7,17 @@ import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IRecursoService{
-    DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException;
+    DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException,ResourceNotFoundException;
     List<DjSalidaDto> listarDjs();
     List<DjSalidaDto> listarTop10();
     List<DjSalidaDto> listarDjsPorEstilo(Long id);
     DjSalidaDto buscarDjPorId(Long id) throws ResourceNotFoundException;
     DjSalidaDto actualizarDj(DjModificacionDto djModificacionDto) throws ResourceNotFoundException;
     DjSalidaDto eliminarDj(Long id) throws ResourceNotFoundException;
-
+    List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, String fechaInicio, String fechaFin) throws ResourceNotFoundException;
+    Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin);
 }

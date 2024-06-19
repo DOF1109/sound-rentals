@@ -6,7 +6,7 @@ import { NoMealsOutlined, Star, StarBorder } from "@mui/icons-material";
 
 const FavoriteButton = ({ isFavorite, onClick }) => {
   return (
-    <IconButton onClick={onClick} sx={{ color: isFavorite ? "yellow" : "inherit", position: "absolute", top: 212, right: 15, zIndex: 1 }}>
+    <IconButton onClick={onClick} sx={{ color: isFavorite ? "yellow" : "inherit", zIndex: 10 }}>
       {isFavorite ? <StarIcon /> : <StarOutlineIcon />}
     </IconButton>
   );

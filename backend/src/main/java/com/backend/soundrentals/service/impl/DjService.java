@@ -5,16 +5,11 @@ import com.backend.soundrentals.dto.entrada.EstiloEntradaDto;
 import com.backend.soundrentals.dto.modificacion.DjModificacionDto;
 import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
-import com.backend.soundrentals.entity.Caracteristica;
-import com.backend.soundrentals.entity.Dj;
-import com.backend.soundrentals.entity.Estilo;
+import com.backend.soundrentals.entity.*;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
-import com.backend.soundrentals.repository.CaracteristicaRepository;
-import com.backend.soundrentals.repository.DjRepository;
-import com.backend.soundrentals.repository.EstiloRepository;
-import com.backend.soundrentals.repository.ReservaRepository;
+import com.backend.soundrentals.repository.*;
 import com.backend.soundrentals.service.IRecursoService;
 import com.backend.soundrentals.utils.JsonPrinter;
 import lombok.AllArgsConstructor;
@@ -26,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,31 +35,35 @@ public class DjService implements IRecursoService {
     private final DjRepository djRepository;
     private final EstiloRepository estiloRepository;
     private final CaracteristicaRepository caracteristicaRepository;
+    private final FavoritoRepository favoritoRepository;
+    private final CalificacionRepository calificacionRepository;
     private final ReservaRepository reservaRepository;
+    private final CiudadRepository ciudadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Dj.class);
     private ModelMapper modelMapper;
 
     @Override
-    public DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException {
+    public DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException,ResourceNotFoundException {
         Dj djEntidad = modelMapper.map(recurso,Dj.class);
 
         Dj nombreDjYaRegistradoDB = djRepository.findByFullname(recurso.getName(),recurso.getLastname());
         if(nombreDjYaRegistradoDB!=null){
-            throw new UsernameAlreadyExistsException("El nombre ya ha sido registrado");
+            throw new BadRequestException("El nombre ya ha sido registrado");
         }
 
         Dj emailYaRegistradoDb = djRepository.findByEmail(recurso.getEmail());
         if(emailYaRegistradoDb!=null){
-            throw new UsernameAlreadyExistsException("El email ya ha sido registrado");
+            throw new BadRequestException("El email ya ha sido registrado");
         }
 
         Dj dniYaRegistradoDb = djRepository.findByDni(recurso.getDni());
         if(dniYaRegistradoDb!=null){
-            throw new UsernameAlreadyExistsException("El dni ya ha sido registrado");
+            throw new BadRequestException("El dni ya ha sido registrado");
         }
 
         List<Estilo> estilosParaASignar = new ArrayList<>();
         List<Caracteristica> caracteristicasParaASignar = new ArrayList<>();
+        Ciudad ciudadParaAsignar = new Ciudad();
 
         for(Long idEstilo : recurso.getEstilos()){
             Estilo estiloEntidad = estiloRepository.findById(idEstilo).orElse(null);
@@ -75,8 +75,14 @@ public class DjService implements IRecursoService {
             caracteristicasParaASignar.add(caracteristicaEntidad);
         }
 
+        ciudadParaAsignar = ciudadRepository.findById(recurso.getCiudad()).orElse(null);
+        if(ciudadParaAsignar==null){
+            throw new ResourceNotFoundException("La ciudad no existe");
+        }
+
         djEntidad.setEstilos(estilosParaASignar);
         djEntidad.setCaracteristicas(caracteristicasParaASignar);
+        djEntidad.setCiudad(ciudadParaAsignar);
 
         Dj djGuardado = djRepository.save(djEntidad);
 
@@ -198,11 +204,15 @@ public class DjService implements IRecursoService {
     public DjSalidaDto eliminarDj(Long id) throws ResourceNotFoundException {
         Dj djAEliminar = djRepository.findById(id).orElse(null);
 
-        LOGGER.info("Dj eliminado: "+ JsonPrinter.toString(djAEliminar));
-
         if(djAEliminar==null){
             throw new ResourceNotFoundException("El Dj con id "+ id + " no existe");
         }
+
+        favoritoRepository.deleteByDjId(id);
+        calificacionRepository.deleteByDjId(id);
+
+        djAEliminar.getEstilos().clear();
+        djAEliminar.getCaracteristicas().clear();
 
         djRepository.delete(djAEliminar);
 
@@ -211,6 +221,49 @@ public class DjService implements IRecursoService {
         return modelMapper.map(djAEliminar,DjSalidaDto.class);
 
     }
+
+    @Override
+    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, String fechaInicio, String fechaFin) throws ResourceNotFoundException {
+        List<Dj> djPorCiudad = djRepository.findDjsByCity(id);
+
+        if (djPorCiudad == null) {
+            throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
+        }
+
+        List<Dj> djDisponible = new ArrayList<>();
+        LocalDate fechai = LocalDate.parse(fechaInicio);
+        LocalDate fechaf = LocalDate.parse(fechaFin);
+
+        for (Dj dj : djPorCiudad) {
+            boolean tieneReserva = this.verificaReserva(id, fechai, fechai);
+            if (!tieneReserva) {
+                djDisponible.add(dj);
+            }
+        }
+
+        List<DjSalidaDto> djSalidaDto = new ArrayList<>();
+        for (Dj dj : djDisponible) {
+            DjSalidaDto djMap = modelMapper.map(dj, DjSalidaDto.class);
+            djSalidaDto.add(djMap);
+        }
+
+        return djSalidaDto;
+    }
+
+    @Override
+    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
+        Boolean verificacion = false;
+
+        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
+
+        if(reservaAVerificar==null){
+            verificacion = true;
+        }
+
+
+        return verificacion;
+    }
+
 
     @PostConstruct
     private void configureMapping() {

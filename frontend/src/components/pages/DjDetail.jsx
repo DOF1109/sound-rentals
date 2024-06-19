@@ -13,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
+  Rating,
   Typography,
 } from "@mui/material";
 import SpeakerIcon from "@mui/icons-material/Speaker";
@@ -25,7 +26,7 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
-import { getDj, updateFavoriteStatus } from "../../api/djsApi.js";
+import { getDj, updateFavoriteStatus,addCalificacion,deleteFavorito} from "../../api/djsApi.js";
 import { getReservas, addReserva } from "../../api/reservaApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
@@ -34,7 +35,8 @@ import FavoriteButton from "../common/Favorite.jsx";
 import { ToastContainer, toast } from "react-toastify";  
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { Calendar } from 'react-date-range';
+import { DateRange } from 'react-date-range';
+import {format} from 'date-fns'
 
 const style = {
   position: "absolute",
@@ -68,12 +70,18 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
-  const { handleLogout, user, isLogged } = useContext(AuthContext);
+  const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados,loadDjsFavorites  } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [idFavorite, setIdFavorite] = useState(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState({
+    startDate:new Date(),
+    endDate:new Date(),
+    key:'selection'
+  });
   const [availableDates, setAvailableDates] = useState([]);
+  const [ratingValue, setRatingValue] = useState(0);
   
 
   const handleCalendarOpen = () => {
@@ -83,19 +91,25 @@ const DjDetail = () => {
   const handleCalendarClose = () => {
     setOpenCalendar(false);
   };
+
+  const handleChangeRangeDate = (ranges)=>{
+    setDateRange(ranges.selection);
+  }
   
   const handleReservar = async () => {
     try {
       const reserva = {
-        fecha: selectedDate, 
+        startDate: format(dateRange.startDate,'yyyy-MM-dd'), 
+        endDate: format(dateRange.endDate,'yyyy-MM-dd'), 
         dj: dj.id,
-        usuario: 1,
+        usuario: userDb.id,
       };
   
       const response = await addReserva(reserva);
       if (response && response.status === 201) {
         toast.success("¡Reserva realizada con éxito!");
         handleCalendarClose();
+        setDateRange({    startDate:new Date(),endDate:new Date(),key:'selection'})
       } else {
         console.error("Error al realizar la reserva");
         toast.error("Hubo un error al realizar la reserva");
@@ -105,8 +119,24 @@ const DjDetail = () => {
       toast.error("Hubo un error al realizar la reserva");
     }
   };
-  
-  const isAdmin = user.rol === import.meta.env.VITE_ADMIN_ROL;
+
+  const handleCalificar = async (event,value) => {
+    let calificacion = value
+    setRatingValue(calificacion);
+    const data = {
+      dj:dj.id,
+      calificacion,
+      usuario:userDb.id
+    }
+
+    const response = await addCalificacion(data);
+    if(response){
+      loadDjsCalificados();
+    }
+    else{
+      alert("Ha ocurrido un error")
+    }
+  };  
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -127,9 +157,29 @@ const DjDetail = () => {
     }
   };
 
+  const loadCalificacion = async () => {
+    const calificacion = djCalificados.find((d)=>d.dj.id==dj.id && d.usuario.id==userDb.id );
+    setRatingValue(calificacion ? calificacion.calificacion : 0)
+  };
+
   useEffect(() => {
     if (dj) setDjImages(imagesDj());
-  }, [dj]);
+
+    if(userDb!=undefined && djFavorites.length>0 && dj){
+      const favoriteCheck = djFavorites.some((f)=> f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
+      setIsFavorite(favoriteCheck);
+
+      if(favoriteCheck){
+        let registroFav = djFavorites.find((f)=>
+        f.dj.id===dj.id && f.usuario.id===userDb.id && f.favorite)
+        setIdFavorite(registroFav.id)
+      }
+    } 
+  }, [userDb,dj,djFavorites]);
+
+  useEffect(() => {
+    if (dj) loadCalificacion();
+  }, [dj,djCalificados,userDb]);
 
   useEffect(() => {
     loadDj();
@@ -138,9 +188,29 @@ const DjDetail = () => {
   useEffect(() => {
     const fetchReservas = async () => {
       try {
-        const reservas = await getReservas();
+        let reservas = await getReservas();
+        reservas = reservas.filter((r)=>r.dj.id==dj.id);
         if (reservas) {
-          const formattedDates = reservas.map((reserva) => new Date(`${reserva.fecha}T04:00:00.000Z`));
+          const formattedDates = reservas.map((reserva) => {
+
+            let startDate = new Date();
+            startDate.setFullYear(reserva.startDate.split('-')[0])
+            startDate.setMonth(reserva.startDate.split('-')[1]-1)
+            startDate.setDate(reserva.startDate.split('-')[2])
+
+            let endDate = new Date();
+            endDate.setFullYear(reserva.endDate.split('-')[0])
+            endDate.setMonth(reserva.endDate.split('-')[1]-1)
+            endDate.setDate(reserva.endDate.split('-')[2])
+  
+            // Crear un array de fechas desde el inicio hasta el final
+            const dates = [];
+            for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+              dates.push(new Date(d));
+            }
+            return dates;
+          }).flat();
+  
           setAvailableDates(formattedDates);
         }
       } catch (error) {
@@ -160,15 +230,23 @@ const DjDetail = () => {
       id: null,
       dj: dj.id,
       isFavorite: updatedStatus,
-      usuario: 1,
+      usuario: userDb.id,
     };
-    const response = await updateFavoriteStatus(value);
-    if (response.status === 201) {
+    
+    let response = undefined
+    if(updatedStatus){
+      response = await updateFavoriteStatus(value);
+    }
+    else{
+      console.log(idFavorite)
+      response = await deleteFavorito(idFavorite);
+    }
+    
+    if (response.status === 201 || response.status === 200) {
       setIsFavorite(updatedStatus);
-      toast.success("¡Se ha actualizado el estado de favorito!");
+      loadDjsFavorites();
     } else {
       console.error("Error al actualizar el estado de favorito");
-      toast.error("Hubo un error al actualizar el estado de favorito");
     }
   };
   
@@ -209,7 +287,10 @@ const DjDetail = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h5">{`${dj.name} ${dj.lastname}`} <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} /></Typography>
+                <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
+                  <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
+                  {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+                </Box>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
                 <Typography>CATEGORIA:</Typography>
@@ -228,6 +309,16 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
+                {/* {userDb && user && user.rol === import.meta.env.VITE_COMMON_ROL &&
+                <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+                  <Rating
+                    name="simple-controlled"
+                    size="large"
+                    value={ratingValue}
+                    readOnly={ratingValue>0}
+                    onChange={handleCalificar}
+                  />
+                </Box>} */}
                 <Typography variant="body1" pt={3} pb={1}>
                   Caracteristicas
                 </Typography>
@@ -269,14 +360,14 @@ const DjDetail = () => {
               </Button>
             </CardActions>
           </Card>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ width: "100%", my: 2 }}
-            onClick={handleCalendarOpen}
-          >
-            RESERVAR
-          </Button>
+          {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL  &&
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ width: "100%", my: 2 }}
+              onClick={handleCalendarOpen}
+            > RESERVAR
+            </Button>}
         </Grid>
 
         {/* ---------- Modal de galeria de imagenes ---------- */}
@@ -317,9 +408,9 @@ const DjDetail = () => {
             >
               {`${dj.name} ${dj.lastname}`}
             </Typography>
-            <Calendar
-              date={selectedDate}
-              onChange={setSelectedDate}
+            <DateRange
+              ranges={[dateRange]}
+              onChange={handleChangeRangeDate}
               minDate={new Date()}
               disabledDates={availableDates}
               color="#f50057"
@@ -327,9 +418,11 @@ const DjDetail = () => {
               direction="horizontal"
             />
 
+            {/* <DateRangeCalendar/> */}
+
             <Box display="flex" justifyContent="flex-end" mt={2}>
               <Button onClick={handleCalendarClose} sx={{ mr: 2 }}>Cancelar</Button>
-              <Button variant="contained" onClick={handleReservar}>Reservar</Button>
+              {userDb && <Button variant="contained" onClick={handleReservar}>Reservar</Button>}
             </Box>
           </Box>
         </Modal>

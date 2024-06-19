@@ -47,6 +47,26 @@ const Header = () => {
           Admin. DJs
         </Link>
       </MenuItem>
+      <MenuItem onClick={handleClose}>
+        <Link className="clear-link" to="/manage-characteristics">
+          Admin. Caract.
+        </Link>
+      </MenuItem>
+    </>
+  );
+
+  const CommonUserMobileMenuItems = ({ handleClose }) => (
+    <>
+      <MenuItem onClick={handleCloseNavMenu}>
+        <Link className="clear-link" to="/djs-favoritos">
+          Favoritos
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleCloseNavMenu}>
+        <Link className="clear-link" to="/user-info">
+          Mis datos
+        </Link>
+      </MenuItem>
     </>
   );
 
@@ -70,11 +90,11 @@ const Header = () => {
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     const isLogged = localStorage.getItem("isLogged");
-  
-    if (userInfo && userInfo !== '') {
+
+    if (userInfo && userInfo !== "") {
       setUser(JSON.parse(userInfo));
     }
-    if (isLogged && isLogged !== '') {
+    if (isLogged && isLogged !== "") {
       setIsLogged(JSON.parse(isLogged));
     }
   }, []);
@@ -129,18 +149,14 @@ const Header = () => {
                 <AdminMobileMenuItems handleClose={handleCloseNavMenu} />
               )}
 
+              {/* Usuario común logueado */}
+              {user.rol === import.meta.env.VITE_COMMON_ROL && (
+                <CommonUserMobileMenuItems handleClose={handleCloseNavMenu} />
+              )}
+
               {/* Usuario sin loguearse */}
               {!isLogged && (
                 <NoLoggedMobileMenuItems handleClose={handleCloseNavMenu} />
-              )}
-
-              {/* Usuario común logueado */}
-              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link className="clear-link" to="/user-info">
-                    Mis datos
-                  </Link>
-                </MenuItem>
               )}
 
               {/* Usuario logueado */}
@@ -180,7 +196,7 @@ const Header = () => {
                 <>
                   <Button
                     onClick={handleCloseNavMenu}
-                    sx={{ display: "block", fontWeight: "500", pr: 3 }}
+                    sx={{ display: "block", fontWeight: "500", pr: 2 }}
                   >
                     <Link className="clear-link shiny-hover" to="/manage-users">
                       ADMIN. USUARIOS
@@ -188,34 +204,48 @@ const Header = () => {
                   </Button>
                   <Button
                     onClick={handleCloseNavMenu}
-                    sx={{ display: "block", fontWeight: "500" }}
+                    sx={{ display: "block", fontWeight: "500", pr: 2 }}
                   >
                     <Link className="clear-link shiny-hover" to="/manage-djs">
                       ADMIN. DJ'S
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
+                    <Link
+                      className="clear-link shiny-hover"
+                      to="/manage-characteristics"
+                    >
+                      ADMIN. CARACT.
                     </Link>
                   </Button>
                 </>
               )}
 
               {/* Usuario común logueado */}
-              {isLogged && user.rol !== import.meta.env.VITE_ADMIN_ROL && (
+              {user.rol === import.meta.env.VITE_COMMON_ROL && (
                 <>
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ display: "block", fontWeight: "500" }}
-                >
-                  <Link className="clear-link shiny-hover" to="/djs-favoritos">
-                    FAVORITOS
-                  </Link>
-                </Button>
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ display: "block", fontWeight: "500" }}
-                >
-                  <Link className="clear-link shiny-hover" to="/user-info">
-                    MIS DATOS
-                  </Link>
-                </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500", pr: 3 }}
+                  >
+                    <Link
+                      className="clear-link shiny-hover"
+                      to="/djs-favoritos"
+                    >
+                      FAVORITOS
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
+                    <Link className="clear-link shiny-hover" to="/user-info">
+                      MIS DATOS
+                    </Link>
+                  </Button>
                 </>
               )}
             </Box>

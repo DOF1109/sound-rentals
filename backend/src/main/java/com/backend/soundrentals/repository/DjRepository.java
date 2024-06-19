@@ -20,5 +20,8 @@ public interface DjRepository extends JpaRepository<Dj, Long> {
     @Query("SELECT dj FROM Dj dj WHERE dj.dni = :dni")
     Dj findByDni(@Param("dni") Integer dni);
 
+    @Query("SELECT dj FROM Dj dj WHERE dj.ciudad.id = :id")
+    List<Dj> findDjsByCity(@Param("id") Long id);
+
     List<Dj> findByEstilosId(Long styleId);
 }

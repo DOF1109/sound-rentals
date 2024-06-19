@@ -17,6 +17,7 @@ import ProtectedAdmin from "./protectedRoutes/ProtectedAdmin";
 import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 import ManageDjs from "./components/pages/ManageDjs";
 import DJFavoritos from "./components/pages/DJFavoritos";
+import ManageCharacteristics from "./components/pages/ManageCharacteristics";
 
 function App() {
   return (
@@ -34,18 +35,19 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
-              <Route path="/djs-favoritos" element={<DJFavoritos />} />
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
                 <Route path="/manage-djs" element={<ManageDjs />} />
+                <Route path="/manage-characteristics" element={<ManageCharacteristics />} />
               </Route>
 
               {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
               <Route element={<ProtectedUsers />}>
                 <Route path="/user-info" element={<UserInfo />} />
+                <Route path="/djs-favoritos" element={<DJFavoritos />} />
               </Route>
             </Route>
           </Routes>

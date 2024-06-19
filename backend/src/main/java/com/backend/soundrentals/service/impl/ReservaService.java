@@ -56,11 +56,11 @@ public class ReservaService implements IReservaService {
             throw new ResourceNotFoundException("El dj no existe");
         }
 
-        for(ReservaSalidaDto reserva : this.listarReservas()){
-            if(reservaEntradaDto.getFecha()==reserva.getFecha() && reservaEntradaDto.getDj()==reserva.getDj().getId()){
-                throw new BadRequestException("Ya existe una reserva para el Dj");
-            }
-        }
+//        for(ReservaSalidaDto reserva : this.listarReservas()){
+//            if(reservaEntradaDto.getFecha()==reserva.getFecha() && reservaEntradaDto.getDj()==reserva.getDj().getId()){
+//                throw new BadRequestException("Ya existe una reserva para el Dj");
+//            }
+//        }
 
         Reserva reservaEntidad = modelMapper.map(reservaEntradaDto,Reserva.class);
         reservaEntidad.setUsuario(usuarioReserva);
@@ -93,6 +93,20 @@ public class ReservaService implements IReservaService {
     }
 
     @Override
+    public List<ReservaSalidaDto> obtenerReservasPorUsuario(Long id) throws ResourceNotFoundException{
+        Usuario usuarioBusqueda = usuarioRepository.findById(id).orElse(null);
+
+        if(usuarioBusqueda==null){
+            throw new ResourceNotFoundException("La reserva con id "+ id + " no existe");
+        }
+
+        List<ReservaSalidaDto> reservas = reservaRepository.findReservaByUsuario_Id(id).stream()
+                .map(r -> modelMapper.map(r, ReservaSalidaDto.class)).toList();
+
+        return reservas;
+    }
+
+    @Override
     public ReservaSalidaDto actualizarReserva(ReservaModificacionDto reservaModificacionDto) throws ResourceNotFoundException, BadRequestException {
         Reserva reservaComprobacion = reservaRepository.findById(reservaModificacionDto.getId()).orElse(null);
 
@@ -112,11 +126,11 @@ public class ReservaService implements IReservaService {
             throw new ResourceNotFoundException("El dj no existe");
         }
 
-        for(ReservaSalidaDto reserva : this.listarReservas()){
-            if(reservaModificacionDto.getFecha()==reserva.getFecha() && reservaModificacionDto.getDj()==reserva.getDj().getId()){
-                throw new BadRequestException("Ya existe una reserva para el Dj");
-            }
-        }
+//        for(ReservaSalidaDto reserva : this.listarReservas()){
+//            if(reservaModificacionDto.getFecha()==reserva.getFecha() && reservaModificacionDto.getDj()==reserva.getDj().getId()){
+//                throw new BadRequestException("Ya existe una reserva para el Dj");
+//            }
+//        }
 
         Reserva reservaEntidad = modelMapper.map(reservaModificacionDto,Reserva.class);
         reservaEntidad.setUsuario(usuarioReserva);

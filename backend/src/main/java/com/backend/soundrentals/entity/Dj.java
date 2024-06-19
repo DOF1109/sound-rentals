@@ -32,17 +32,23 @@ public class Dj {
     private String urlImg4;
     private String urlImg5;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dj_style",
             joinColumns = @JoinColumn(name = "dj_id"),
             inverseJoinColumns = @JoinColumn(name = "style_id")
     )
     private List<Estilo> estilos = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dj_characteristic",
             joinColumns = @JoinColumn(name = "dj_id"),
             inverseJoinColumns = @JoinColumn(name = "characteristic_id")
     )
+
     private List<Caracteristica> caracteristicas = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private Ciudad ciudad;
+
 }

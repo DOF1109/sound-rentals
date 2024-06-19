@@ -9,7 +9,7 @@ import {
 import SearchInput from "../common/SearchInput";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
-import { getDjs } from "../../api/djsApi.js";
+import { getDjs,getDjFavoritos } from "../../api/djsApi.js";
 import { getCategories } from "../../api/categoriesApi.js";
 import Loader from "../common/Loader.jsx";
 

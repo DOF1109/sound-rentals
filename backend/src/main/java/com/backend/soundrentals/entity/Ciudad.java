@@ -20,5 +20,5 @@ public class Ciudad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ciudad;
+    private String nombre;
 }
