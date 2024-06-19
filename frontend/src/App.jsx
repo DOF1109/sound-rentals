@@ -19,6 +19,7 @@ import ManageDjs from "./components/pages/ManageDjs";
 import DJFavoritos from "./components/pages/DJFavoritos";
 import ManageCharacteristics from "./components/pages/ManageCharacteristics";
 import Reservations from "./components/pages/Reservations";
+import Policies from './components/pages/Policies';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
+              <Route path="/policies" element={<Policies />} />
+              
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>

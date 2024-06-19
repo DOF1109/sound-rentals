@@ -1,3 +1,4 @@
+// src/components/layout/Footer.jsx
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
@@ -34,15 +35,11 @@ const Footer = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            {/* <Link to="/privacy-policy" className="clear-link" style={{ marginRight: 20, color: 'inherit' }}>
-              Privacy Policy
+            <Link to="/policies" className="clear-link" style={{ marginRight: 20, color: 'inherit' }}>
+              <Typography variant="body2">
+                Privacy Policy
+              </Typography>
             </Link>
-            <Link to="/terms-of-service" className="clear-link" style={{ color: 'inherit' }}>
-              Terms of Service
-            </Link> */}
-            <Typography variant="body2" mr={2}>
-              Privacy Policy
-            </Typography>
             <Typography variant="body2">
               Terms of Service
             </Typography>
