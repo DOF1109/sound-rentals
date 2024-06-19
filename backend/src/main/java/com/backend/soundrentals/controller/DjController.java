@@ -10,6 +10,7 @@ import com.backend.soundrentals.service.impl.DjService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,9 +48,15 @@ public class DjController {
         return new ResponseEntity<>(djService.listarTop10(), HttpStatus.OK);
     }
 
-    @GetMapping("/buscador/{id}_{fechaInicio}_{fechaFin}")
-    public ResponseEntity<List<DjSalidaDto>> buscadorPorCiudadFecha(@PathVariable Long id, @PathVariable String fechaInicio, @PathVariable String fechaFin) throws ResourceNotFoundException  {
-        return new ResponseEntity<>(djService.buscarDjPorCiudadFecha(id, fechaInicio, fechaFin), HttpStatus.OK);}
+    @GetMapping("/buscador")
+    public ResponseEntity<List<DjSalidaDto>> buscadorPorCiudadFecha(
+            @RequestParam(required = false) Long ciudadId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin
+    ) throws ResourceNotFoundException {
+        List<DjSalidaDto> resultado = djService.buscarDjPorCiudadFecha(ciudadId, fechaInicio, fechaFin);
+        return new ResponseEntity<>(resultado, HttpStatus.OK);
+    }
 
     @GetMapping("/style/{id}")
     public ResponseEntity<List<DjSalidaDto>> obtenerDjsPorEStilo(@PathVariable Long id)  {
