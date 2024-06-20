@@ -58,8 +58,7 @@ const ManageCharacteristics = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        // const resp = await deleteCharacteristic(id);
-        alert("Paaaraaaaa...todavia no borres nada!");
+        const resp = await deleteCharacteristic(id);
         if (resp.status === 200) {
           swal("Caracteristica eliminada!", {
             icon: "success",
@@ -92,12 +91,10 @@ const ManageCharacteristics = () => {
         variant="contained"
         startIcon={<AddCircleIcon />}
         sx={{ mb: 2 }}
-        onClick={() => alert("Proximamente!")}
       >
-        AGREGAR CARACTERISTICA
-        {/* <Link className="clear-link light-text" to="/add-characteristic">
+        <Link className="clear-link light-text" to="/add-characteristic">
           AGREGAR CARACTERISTICA
-        </Link> */}
+        </Link>
       </Button>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
