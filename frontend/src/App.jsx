@@ -4,6 +4,7 @@ import darkTheme from "./styles/themeConfig";
 import Layout from "./components/layout/Layout";
 import Home from "./components/pages/Home";
 import AddProduct from "./components/pages/AddService";
+import AddCharacteristic from "./components/pages/AddCharacteristic";
 import NotFound from "./components/pages/NotFound";
 import DJs from "./components/pages/DJs";
 import SignIn from "./components/pages/SignIn";
@@ -43,6 +44,7 @@ function App() {
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/add-characteristic" element={<AddCharacteristic />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
                 <Route path="/manage-djs" element={<ManageDjs />} />
                 <Route path="/manage-characteristics" element={<ManageCharacteristics />} />
