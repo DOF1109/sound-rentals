@@ -223,47 +223,12 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, String fechaInicio, String fechaFin) throws ResourceNotFoundException {
-        List<Dj> djPorCiudad = djRepository.findDjsByCity(id);
+    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+        List<DjSalidaDto> djDisponibles = reservaRepository.findReservaByDjFecha(id,fechaInicio,fechaFin).stream()
+                .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
 
-        if (djPorCiudad == null) {
-            throw new ResourceNotFoundException("No se encontraron DJs según lo solicitado");
-        }
-
-        List<Dj> djDisponible = new ArrayList<>();
-        LocalDate fechai = LocalDate.parse(fechaInicio);
-        LocalDate fechaf = LocalDate.parse(fechaFin);
-
-        for (Dj dj : djPorCiudad) {
-            boolean tieneReserva = this.verificaReserva(id, fechai, fechai);
-            if (!tieneReserva) {
-                djDisponible.add(dj);
-            }
-        }
-
-        List<DjSalidaDto> djSalidaDto = new ArrayList<>();
-        for (Dj dj : djDisponible) {
-            DjSalidaDto djMap = modelMapper.map(dj, DjSalidaDto.class);
-            djSalidaDto.add(djMap);
-        }
-
-        return djSalidaDto;
+        return djDisponibles;
     }
-
-    @Override
-    public Boolean verificaReserva(Long id, LocalDate fechaInicio, LocalDate fechaFin) {
-        Boolean verificacion = false;
-
-        List<Reserva> reservaAVerificar = reservaRepository.findReservaByDjFecha(id, fechaInicio, fechaFin);
-
-        if(reservaAVerificar==null){
-            verificacion = true;
-        }
-
-
-        return verificacion;
-    }
-
 
     @PostConstruct
     private void configureMapping() {
