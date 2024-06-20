@@ -22,7 +22,6 @@ export const getCharacteristics = async () => {
 // --------------- POST ---------------
 export const addCharacteristic = async (data) => {
   try {
-    console.log(data);
     const response = await axios.post(
       `${URL_BASE}/caracteristica/registrar`,
       data

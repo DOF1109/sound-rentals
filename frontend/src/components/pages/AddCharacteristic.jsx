@@ -12,9 +12,7 @@ const AddCharacteristic = () => {
     },
     onSubmit: async (data) => {
       let res = await add(data);
-      if (res) {
-        formik.resetForm();
-      }
+      if (res) formik.resetForm();
     },
     validationSchema: Yup.object({
       caracteristica: Yup.string()
@@ -24,23 +22,16 @@ const AddCharacteristic = () => {
     validateOnChange: false,
   });
 
-  const {
-    handleChange,
-    handleSubmit,
-    errors,
-    values,
-    resetForm,
-  } = formik;
+  const { handleChange, handleSubmit, errors, values, resetForm } = formik;
 
   const add = async (data) => {
     try {
-      const response = await addCharacteristic({ data });
+      const response = await addCharacteristic(data);
       if (response.status === 201) {
         toast.success("Caracteristica agregada exitosamente!");
         return true;
       } else {
         toast.error(`Error: ${response.message}`);
-        return false;
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
