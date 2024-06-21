@@ -5,11 +5,13 @@ import com.backend.soundrentals.dto.entrada.EstiloEntradaDto;
 import com.backend.soundrentals.dto.modificacion.DjModificacionDto;
 import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.dto.salida.EstiloSalidaDto;
+import com.backend.soundrentals.dto.salida.UsuarioSalidaDto;
 import com.backend.soundrentals.entity.*;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.exceptions.UsernameAlreadyExistsException;
 import com.backend.soundrentals.repository.*;
+import com.backend.soundrentals.service.EmailService;
 import com.backend.soundrentals.service.IRecursoService;
 import com.backend.soundrentals.utils.JsonPrinter;
 import lombok.AllArgsConstructor;
@@ -18,9 +20,12 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +46,9 @@ public class DjService implements IRecursoService {
     private final CiudadRepository ciudadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Dj.class);
     private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public DjSalidaDto registrarDj(DjEntradaDto recurso) throws BadRequestException,ResourceNotFoundException {
@@ -89,6 +97,14 @@ public class DjService implements IRecursoService {
         LOGGER.info("Dj guardado: "+ JsonPrinter.toString(djGuardado));
 
         DjSalidaDto djSalidaDto = modelMapper.map(djGuardado,DjSalidaDto.class);
+
+        if (djSalidaDto != null) {
+            try {
+                enviarEmailConfirmacion(djSalidaDto);
+            } catch (MessagingException | IOException e) {
+                LOGGER.info("Error al enviar el email de confirmación: " + e.getMessage(), e);
+            }
+        }
 
         return djSalidaDto;
     }
@@ -228,6 +244,14 @@ public class DjService implements IRecursoService {
                 .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
 
         return djDisponibles;
+    }
+
+    public void enviarEmailConfirmacion(DjSalidaDto dj) throws MessagingException, IOException {
+        String recipient = dj.getEmail();
+        String subject = "Bienvenido " + dj.getName() + " " + dj.getLastname() + "!";
+        String type = "dj_notify";
+
+        emailService.sendHtmlEmail(recipient, subject, type);
     }
 
     @PostConstruct
