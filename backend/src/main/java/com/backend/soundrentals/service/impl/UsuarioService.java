@@ -3,6 +3,7 @@ package com.backend.soundrentals.service.impl;
 import com.backend.soundrentals.dto.entrada.UsuarioEntradaDto;
 import com.backend.soundrentals.dto.modificacion.UsuarioModificacionDto;
 import com.backend.soundrentals.dto.salida.UsuarioSalidaDto;
+import com.backend.soundrentals.entity.Reserva;
 import com.backend.soundrentals.entity.Usuario;
 import com.backend.soundrentals.exceptions.BadRequestException;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
@@ -13,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +41,8 @@ public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private EmailService emailService;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(Reserva.class);
 
     @PostConstruct
     private void configureMapping() {
@@ -58,8 +64,12 @@ public class UsuarioService implements IUsuarioService {
 
         UsuarioSalidaDto usuarioSalidaDto = modelMapper.map(usuarioRepository.save(usuario), UsuarioSalidaDto.class);
 
-        if(usuarioSalidaDto!=null){
-            enviarEmailConfirmacion(usuarioSalidaDto);
+        if (usuarioSalidaDto != null) {
+            try {
+                enviarEmailConfirmacion(usuarioSalidaDto);
+            } catch (MessagingException | IOException e) {
+                LOGGER.info("Error al enviar el email de confirmación: " + e.getMessage(), e);
+            }
         }
 
         return usuarioSalidaDto;
@@ -136,14 +146,9 @@ public class UsuarioService implements IUsuarioService {
     public void enviarEmailConfirmacion(UsuarioSalidaDto usuarioSalidaDto) throws MessagingException, IOException {
         String recipient = usuarioSalidaDto.getEmail();
         String subject = "Bienvenido " + usuarioSalidaDto.getNombre() + "!";
-        String template = "Hola, "+ usuarioSalidaDto.getNombre() +" "+usuarioSalidaDto.getNombre() +"\n\n"
-                + "Bienvenido a Soundrentals!!";
+        String type = "user_register_notify";
 
-        //emailService.sendEmail(recipient, subject, template);
-        emailService.sendHtmlEmail(recipient, subject, template);
+        emailService.sendHtmlEmail(recipient, subject, type);
     }
-
-    //public String readFile
-
 
 }
