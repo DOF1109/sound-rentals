@@ -15,7 +15,7 @@ import Loader from "../common/Loader.jsx";
 
 const DJs = () => {
   const [categories, setCategories] = useState([]);
-  const [djs, setDjs] = useState();
+  const [djs, setDjs] = useState([]);
   const [page, setPage] = useState(1);
   const [pageDjs, setPageDjs] = useState([]);
 
@@ -54,10 +54,12 @@ const DJs = () => {
   return (
     <Container component="section">
       <SearchInput
+      setDjs={setDjs}
         categories={categories.map((category) => {
           return category.style;
         })}
       />
+      
       <Grid container spacing={6} pb={1} justifyContent="center">
         {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>

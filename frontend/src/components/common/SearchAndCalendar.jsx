@@ -73,7 +73,7 @@ const ciudades = [
     { id: 48, ciudad: 'Tafí Viejo' }
 ];
 
-function SearchAndCalendar() {
+function SearchAndCalendar(setDjs) {
   const [categories, setCategories] = useState(ciudades);
   const [selectedCity, setSelectedCity] = useState(null);
 
@@ -106,6 +106,7 @@ function SearchAndCalendar() {
     <>
     <SearchInput ciudades={ciudades.map((ciudad) => ciudad.ciudad)}
     onCitySelect={handleCitySelect} 
+    setDjs={setDjs}
     // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
     />
   {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>

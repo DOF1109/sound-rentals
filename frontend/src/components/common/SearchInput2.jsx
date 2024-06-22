@@ -9,7 +9,7 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 
-const SearchInput = ({ ciudades }) => {
+const SearchInput = ({ ciudades, setDjs }) => {
   console.log('ciudades', ciudades);
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
@@ -22,7 +22,6 @@ const SearchInput = ({ ciudades }) => {
       key: 'selection',
     },
   ]);
-  const [searchResults, setSearchResults] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateWritten, setDateWritten] = useState(false);
@@ -73,7 +72,7 @@ const handleSearchByCiudad = async () => {
   try {
     const ciudadId = getIndiceCiudadSeleccionada();
     const response = await getDjSearch({ ciudadId });
-    setSearchResults(response);
+    setDjs(response.data);
     console.log('response:', response);
   } catch (error) {
     console.error('Error en la búsqueda por ciudad:', error);
@@ -88,7 +87,8 @@ const handleSearchByDateRange = async () => {
       fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
-    setSearchResults(response);
+    console.log(response.data);
+    setDjs(response.data);
     console.log('response:', response);
   } catch (error) {
     console.error('Error en la búsqueda por fechas:', error);
@@ -105,7 +105,7 @@ const handleSearchByCiudadAndDateRange = async () => {
       fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
-    setSearchResults(response);
+    setDjs(response.data);
     console.log('response:', response);
   } catch (error) {
     console.error('Error en la búsqueda por ciudad y fechas:', error);
