@@ -10,6 +10,7 @@ import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 
 const SearchInput = ({ ciudades }) => {
+  console.log('ciudades', ciudades);
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
   const [startDate, setStartDate] = useState(new Date())
@@ -25,6 +26,7 @@ const SearchInput = ({ ciudades }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateWritten, setDateWritten] = useState(false);
+  const [ciudadId, setCiudadId] = useState(null)
 
   if (!ciudades || ciudades.length === 0) return null;
 
@@ -33,7 +35,18 @@ const SearchInput = ({ ciudades }) => {
   }));
 
   const handleCityChange = (event, newValue) => {
+   console.log('newValue',newValue);
     setSelectedCity(newValue);
+  };
+
+  const getIndiceCiudadSeleccionada = () => {
+    if (selectedCity !== null) {
+      const indiceCiudad = ciudades.findIndex((ciudad) => ciudad === selectedCity.label);
+      const ciudadId = indiceCiudad + 1
+      return ciudadId;
+    } else {
+      return -1; // Retorna -1 si no se ha seleccionado ninguna ciudad
+    }
   };
 
   const handleDateSelect = (ranges) => {
@@ -57,7 +70,11 @@ const SearchInput = ({ ciudades }) => {
 
   const handleSearch = async () => {
     try {
-      const response = await getDjSearch(1, dateRange[0].startDate, dateRange[0].endDate);
+      const ciudadId = getIndiceCiudadSeleccionada();
+      const response = await getDjSearch(
+        ciudadId, dateRange[0].startDate.toISOString().slice(0, 10), 
+        dateRange[0].endDate.toISOString().slice(0, 10)
+        );
       setSearchResults(response);
       console.log('response:', response);
     } catch (error) {
@@ -69,6 +86,7 @@ const SearchInput = ({ ciudades }) => {
       }
     }
   };
+
   const handleDateRangeClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -247,7 +265,7 @@ const SearchInput = ({ ciudades }) => {
             }
           
           </Box>
- 
+            <p>id: {getIndiceCiudadSeleccionada()}</p>
           <Box
              sx={{
               display: 'flex',
@@ -263,12 +281,13 @@ const SearchInput = ({ ciudades }) => {
                 color: theme.palette.secondary.dark,
               },
             }}
+            onClick={handleSearch}
+
           >
             <Typography >
               Buscar
             </Typography>
             <SearchIcon 
-              onClick={handleSearch}
             />
           </Box>
         </Box>

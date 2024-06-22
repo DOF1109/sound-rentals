@@ -75,7 +75,7 @@ const ciudades = [
 
 function SearchAndCalendar() {
   const [categories, setCategories] = useState(ciudades);
-
+  const [selectedCity, setSelectedCity] = useState(null);
 
   //estados del calendario
   const [startDate, setStartDate] = useState(new Date())
@@ -97,10 +97,17 @@ function SearchAndCalendar() {
     setSearchItem('')
   }
 
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+  };
+
 
   return (
     <>
-    <SearchInput ciudades={ciudades.map((ciudad) => ciudad.ciudad)} />
+    <SearchInput ciudades={ciudades.map((ciudad) => ciudad.ciudad)}
+    onCitySelect={handleCitySelect} 
+    // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
+    />
   {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
     <Button
       variant="contained"
