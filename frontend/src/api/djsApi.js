@@ -87,9 +87,21 @@ export const getDj = async (id) => {
     }
   };
 
-  export const getDjSearch = async (ciudadId, fechaInicio, fechaFin) => {
+  export const getDjSearch = async (options) => {
     try {
-      const response = await axios.get(`${URL_BASE}/dj/buscador?ciudadId=${ciudadId}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+      let url = `${URL_BASE}/dj/buscador`;
+      let params = {};
+  
+      if (options.ciudadId) {
+        params.ciudadId = options.ciudadId;
+      }
+  
+      if (options.fechaInicio && options.fechaFin) {
+        params.fechaInicio = options.fechaInicio;
+        params.fechaFin = options.fechaFin;
+      }
+  
+      const response = await axios.get(url, { params });
   
       if (response.status === 200) {
         return response.data;

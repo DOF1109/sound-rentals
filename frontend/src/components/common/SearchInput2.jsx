@@ -13,8 +13,8 @@ const SearchInput = ({ ciudades }) => {
   console.log('ciudades', ciudades);
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState()
+  const [endDate, setEndDate] = useState()
   const [dateRange, setDateRange] = useState([
     {
       startDate: startDate,
@@ -68,24 +68,63 @@ const SearchInput = ({ ciudades }) => {
     setShowDatePicker(!showDatePicker);
   };
 
-  const handleSearch = async () => {
-    try {
-      const ciudadId = getIndiceCiudadSeleccionada();
-      const response = await getDjSearch(
-        ciudadId, dateRange[0].startDate.toISOString().slice(0, 10), 
-        dateRange[0].endDate.toISOString().slice(0, 10)
-        );
-      setSearchResults(response);
-      console.log('response:', response);
-    } catch (error) {
-      console.error('Error en la búsqueda:', error);
-      if (error.response) {
-        console.error('Error de la API:', error.response.data.message);
-      } else {
-        console.error('Error general:', error.message);
-      }
-    }
-  };
+// Búsqueda por ciudad
+const handleSearchByCiudad = async () => {
+  try {
+    const ciudadId = getIndiceCiudadSeleccionada();
+    const response = await getDjSearch({ ciudadId });
+    setSearchResults(response);
+    console.log('response:', response);
+  } catch (error) {
+    console.error('Error en la búsqueda por ciudad:', error);
+    // Manejo del error
+  }
+};
+
+// Búsqueda por fechas
+const handleSearchByDateRange = async () => {
+  try {
+    const response = await getDjSearch({
+      fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
+      fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
+    });
+    setSearchResults(response);
+    console.log('response:', response);
+  } catch (error) {
+    console.error('Error en la búsqueda por fechas:', error);
+    // Manejo del error
+  }
+};
+
+// Búsqueda por ciudad y fechas
+const handleSearchByCiudadAndDateRange = async () => {
+  try {
+    const ciudadId = getIndiceCiudadSeleccionada();
+    const response = await getDjSearch({
+      ciudadId,
+      fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
+      fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
+    });
+    setSearchResults(response);
+    console.log('response:', response);
+  } catch (error) {
+    console.error('Error en la búsqueda por ciudad y fechas:', error);
+    // Manejo del error
+  }
+};
+
+const handleSearch = () => {
+  if (selectedCity !== null && dateRange[0].startDate && dateRange[0].endDate) {
+    handleSearchByCiudadAndDateRange();
+  } else if (selectedCity) {
+    handleSearchByCiudad();
+  } else if (dateRange[0].startDate && dateRange[0].endDate) {
+    handleSearchByDateRange();
+  } else {
+    // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ni ciudad ni fechas
+    console.error('Debes seleccionar una ciudad y/o un rango de fechas para realizar la búsqueda.');
+  }
+};
 
   const handleDateRangeClick = (event) => {
     setAnchorEl(event.currentTarget);
