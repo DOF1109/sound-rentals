@@ -1,4 +1,14 @@
-import { Button, Container, IconButton } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,6 +18,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
@@ -29,8 +40,17 @@ const ManageCharacteristics = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [characteristics, setCharacteristics] = useState();
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const loadCharacteristics = async () => {
     const data = await getCharacteristics();
@@ -48,6 +68,31 @@ const ManageCharacteristics = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleUpdateCharacteristics = (id) => {
+    swal({
+      title: "¿Seguro que quieres elimnar la característica?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        const resp = await deleteCharacteristic(id);
+        if (resp.status === 200) {
+          swal("Caracteristica eliminada!", {
+            icon: "success",
+          });
+          setCharacteristics(
+            characteristics.filter((characteristic) => characteristic.id !== id)
+          );
+        } else {
+          swal("Ocurrió un error, vuelva a intentarlo", {
+            icon: "error",
+          });
+        }
+      }
+    });
   };
 
   const handleDeleteCharacteristics = (id) => {
@@ -87,11 +132,7 @@ const ManageCharacteristics = () => {
 
   return (
     <Container sx={{ py: 5 }}>
-      <Button
-        variant="contained"
-        startIcon={<AddCircleIcon />}
-        sx={{ mb: 2 }}
-      >
+      <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ mb: 2 }}>
         <Link className="clear-link light-text" to="/add-characteristic">
           AGREGAR CARACTERISTICA
         </Link>
@@ -131,6 +172,13 @@ const ManageCharacteristics = () => {
                       })}
                       <TableCell align="center">
                         <IconButton
+                          aria-label="update"
+                          onClick={handleClickOpen}
+                          sx={{ mr: 1 }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
                           aria-label="delete"
                           onClick={() => {
                             handleDeleteCharacteristics(row.id);
@@ -155,6 +203,45 @@ const ManageCharacteristics = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {/* Dialog de edición de caracteristica */}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: "form",
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const email = formJson.email;
+            console.log(email);
+            handleClose();
+          },
+        }}
+      >
+        <DialogTitle sx={{ mr: 15 }}>Editar característica</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Característica"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions sx={{ mb: 1, mr: 2 }}>
+          <Button variant="contained" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button variant="contained" type="submit">
+            Guardar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
