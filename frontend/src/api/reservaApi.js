@@ -20,6 +20,23 @@ export const getReservas = async () => {
   }
 };
 
+export const getReservasByUser = async (id) => {
+  try {
+    const response = await axios.get(URL_BASE + "/reservas/usuario/"+id);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Error: ${response.status}`);
+      errorAlert();
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+    errorAlert();
+    return null;
+  }
+};
+
 // --------------- POST ---------------
 
 export const addReserva = async (reserva) => {

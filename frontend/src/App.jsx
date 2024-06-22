@@ -4,6 +4,7 @@ import darkTheme from "./styles/themeConfig";
 import Layout from "./components/layout/Layout";
 import Home from "./components/pages/Home";
 import AddProduct from "./components/pages/AddService";
+import AddCharacteristic from "./components/pages/AddCharacteristic";
 import NotFound from "./components/pages/NotFound";
 import DJs from "./components/pages/DJs";
 import SignIn from "./components/pages/SignIn";
@@ -18,6 +19,8 @@ import ProtectedUsers from "./protectedRoutes/ProtectedUsers";
 import ManageDjs from "./components/pages/ManageDjs";
 import DJFavoritos from "./components/pages/DJFavoritos";
 import ManageCharacteristics from "./components/pages/ManageCharacteristics";
+import Reservations from "./components/pages/Reservations";
+import Policies from './components/pages/Policies';
 
 function App() {
   return (
@@ -35,10 +38,13 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/djs" element={<DJs />} />
               <Route path="/dj-detail/:id" element={<DjDetail />} />
+              <Route path="/policies" element={<Policies />} />
+              
 
               {/* RUTAS PARA USUARIO ADMIN */}
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/add-characteristic" element={<AddCharacteristic />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
                 <Route path="/manage-djs" element={<ManageDjs />} />
                 <Route path="/manage-characteristics" element={<ManageCharacteristics />} />
@@ -48,6 +54,7 @@ function App() {
               <Route element={<ProtectedUsers />}>
                 <Route path="/user-info" element={<UserInfo />} />
                 <Route path="/djs-favoritos" element={<DJFavoritos />} />
+                <Route path="/reservations" element={<Reservations />} />
               </Route>
             </Route>
           </Routes>

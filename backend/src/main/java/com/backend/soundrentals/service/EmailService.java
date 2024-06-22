@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +46,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendHtmlEmail(String to, String subject, String body) throws MessagingException,IOException {
+    public void sendHtmlEmail(String to, String subject, String type) throws MessagingException,IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -53,10 +54,17 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
 
-        String htmlTemplate = readFile("classpath:templates/email/index.html");
-        helper.setText(htmlTemplate, true);
+        String htmlTemplate = switch (type) {
+            case "user_register_notify" -> readFile("classpath:templates/user_register_notify/index.html");
+            case "dj_notify" -> readFile("classpath:templates/dj_notify/index.html");
+            case "user_reservation_notify" -> readFile("classpath:templates/user_reservation_notify/index.html");
+            default -> "";
+        };
 
-        mailSender.send(message);
+        if(!Objects.equals(htmlTemplate, "")){
+            helper.setText(htmlTemplate, true);
+            mailSender.send(message);
+        }
     }
 
     private String readFile(String path) throws IOException {
