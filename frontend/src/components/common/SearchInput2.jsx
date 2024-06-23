@@ -44,7 +44,7 @@ const SearchInput = ({ ciudades, setDjs }) => {
       const ciudadId = indiceCiudad + 1
       return ciudadId;
     } else {
-      return -1; // Retorna -1 si no se ha seleccionado ninguna ciudad
+      return -1; 
     }
   };
 
@@ -72,8 +72,7 @@ const handleSearchByCiudad = async () => {
   try {
     const ciudadId = getIndiceCiudadSeleccionada();
     const response = await getDjSearch({ ciudadId });
-    setDjs(response.data);
-    console.log('response:', response);
+    setDjs(response);
   } catch (error) {
     console.error('Error en la búsqueda por ciudad:', error);
     // Manejo del error
@@ -87,9 +86,7 @@ const handleSearchByDateRange = async () => {
       fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
-    console.log(response.data);
-    setDjs(response.data);
-    console.log('response:', response);
+    setDjs(response);
   } catch (error) {
     console.error('Error en la búsqueda por fechas:', error);
     // Manejo del error
@@ -105,8 +102,7 @@ const handleSearchByCiudadAndDateRange = async () => {
       fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
-    setDjs(response.data);
-    console.log('response:', response);
+    setDjs(response);
   } catch (error) {
     console.error('Error en la búsqueda por ciudad y fechas:', error);
     // Manejo del error
@@ -304,7 +300,6 @@ const handleSearch = () => {
             }
           
           </Box>
-            <p>id: {getIndiceCiudadSeleccionada()}</p>
           <Box
              sx={{
               display: 'flex',
