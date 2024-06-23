@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover } from '@mui/material';
+import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover, useMediaQuery } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DateRange } from 'react-date-range';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -9,7 +9,7 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 
-const SearchInput = ({ ciudades, setDjs }) => {
+const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
   console.log('ciudades', ciudades);
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
@@ -28,6 +28,10 @@ const SearchInput = ({ ciudades, setDjs }) => {
   const [ciudadId, setCiudadId] = useState(null)
 
   if (!ciudades || ciudades.length === 0) return null;
+
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
+
+  const itemsPerPage = isMd ? 9 : 10;
 
   const formattedCategories = ciudades.map((category) => ({
     label: category,
@@ -73,6 +77,7 @@ const handleSearchByCiudad = async () => {
     const ciudadId = getIndiceCiudadSeleccionada();
     const response = await getDjSearch({ ciudadId });
     setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
   } catch (error) {
     console.error('Error en la búsqueda por ciudad:', error);
     // Manejo del error
@@ -87,6 +92,7 @@ const handleSearchByDateRange = async () => {
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
     setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
   } catch (error) {
     console.error('Error en la búsqueda por fechas:', error);
     // Manejo del error
@@ -103,6 +109,7 @@ const handleSearchByCiudadAndDateRange = async () => {
       fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
     });
     setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
   } catch (error) {
     console.error('Error en la búsqueda por ciudad y fechas:', error);
     // Manejo del error
