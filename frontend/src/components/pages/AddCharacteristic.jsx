@@ -17,6 +17,7 @@ const AddCharacteristic = () => {
     validationSchema: Yup.object({
       caracteristica: Yup.string()
         .required("Complete este campo")
+        .min(3, "Al menos debe tener 3 letas")
         .max(25, "No debe ser demasiado largo"),
     }),
     validateOnChange: false,
