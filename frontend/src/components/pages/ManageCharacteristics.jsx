@@ -23,6 +23,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   getCharacteristics,
+  updateCharacteristic,
   deleteCharacteristic,
 } from "../../api/characteristicsApi";
 import Loader from "../common/Loader";
@@ -40,11 +41,17 @@ const ManageCharacteristics = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [characteristics, setCharacteristics] = useState();
+  const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
+  const [actualId, setActualId] = useState();
+  const [actualCharacteristic, setActualCharacteristic] = useState();
   const theme = useTheme();
   const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id, caracteristica) => {
+    setActualId(id);
+    setActualCharacteristic(caracteristica);
+    setError(false);
     setOpen(true);
   };
 
@@ -70,29 +77,38 @@ const ManageCharacteristics = () => {
     setPage(0);
   };
 
-  const handleUpdateCharacteristics = (id) => {
-    swal({
-      title: "¿Seguro que quieres elimnar la característica?",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        const resp = await deleteCharacteristic(id);
-        if (resp.status === 200) {
-          swal("Caracteristica eliminada!", {
-            icon: "success",
-          });
-          setCharacteristics(
-            characteristics.filter((characteristic) => characteristic.id !== id)
-          );
-        } else {
-          swal("Ocurrió un error, vuelva a intentarlo", {
-            icon: "error",
-          });
-        }
-      }
-    });
+  const handleUpdateCharacteristics = async (caracteristica) => {
+    const data = {
+      id: actualId,
+      caracteristica: caracteristica,
+    };
+    const resp = await updateCharacteristic(data);
+    if (resp.status === 200) {
+      const updatedCharacteristics = characteristics.map((char) => 
+        char.id === actualId ? { ...char, caracteristica } : char
+      );
+      setCharacteristics(updatedCharacteristics);
+      swal("Caracteristica actualizada!", {
+        icon: "success",
+      });
+    } else {
+      swal("Ocurrió un error, vuelva a intentarlo", {
+        icon: "error",
+      });
+    }
+  };
+
+  const submitDialog = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const formJson = Object.fromEntries(formData.entries());
+    const caracteristica = formJson.caracteristica;
+    if (caracteristica.length > 2 && caracteristica.length < 26) {
+      handleUpdateCharacteristics(caracteristica);
+      handleClose();
+    } else {
+      setError(true);
+    }
   };
 
   const handleDeleteCharacteristics = (id) => {
@@ -173,7 +189,9 @@ const ManageCharacteristics = () => {
                       <TableCell align="center">
                         <IconButton
                           aria-label="update"
-                          onClick={handleClickOpen}
+                          onClick={() => {
+                            handleClickOpen(row.id, row.caracteristica);
+                          }}
                           sx={{ mr: 1 }}
                         >
                           <EditIcon />
@@ -209,14 +227,7 @@ const ManageCharacteristics = () => {
         onClose={handleClose}
         PaperProps={{
           component: "form",
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
-          },
+          onSubmit: submitDialog,
         }}
       >
         <DialogTitle sx={{ mr: 15 }}>Editar característica</DialogTitle>
@@ -226,11 +237,14 @@ const ManageCharacteristics = () => {
             required
             margin="dense"
             id="name"
-            name="email"
+            name="caracteristica"
             label="Característica"
-            type="email"
+            type="text"
             fullWidth
             variant="standard"
+            defaultValue={actualCharacteristic}
+            error={error}
+            helperText={error ? "Debe tener entre 3 y 25 caracteres" : ""}
           />
         </DialogContent>
         <DialogActions sx={{ mb: 1, mr: 2 }}>
