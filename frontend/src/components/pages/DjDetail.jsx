@@ -279,6 +279,9 @@ const DjDetail = () => {
                     >{`* ${estilo.style}`}</Typography>
                   );
                 })}
+                
+                <Typography py={3}>{`CIUDAD: ${dj.ciudad.nombre}`}</Typography>
+                
                 <Typography variant="body2" pt={3} pb={1}>
                   Sobre el DJ
                 </Typography>
