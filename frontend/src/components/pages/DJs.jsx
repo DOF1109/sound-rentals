@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem
 } from "@mui/material";
-import SearchInput from "../common/SearchInput";
+import SearchInput from "../common/SearchAndCalendar";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs, getDjFavoritos } from "../../api/djsApi.js";
@@ -20,6 +20,7 @@ import Loader from "../common/Loader.jsx";
 const DJs = () => {
   const [categories, setCategories] = useState([]);
   const [djs, setDjs] = useState([]);
+  const [searchDjs, setSearchDjs] = useState();
   const [page, setPage] = useState(1);
   const [pageDjs, setPageDjs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -71,6 +72,8 @@ const DJs = () => {
   return (
     <Container component="section">
       <SearchInput
+      setDjs={setSearchDjs}
+      setPageDjs={setPageDjs}
         categories={categories.map((category) => {
           return category.style;
         })}
@@ -93,7 +96,10 @@ const DJs = () => {
         </Select>
       </FormControl>
       <Grid container spacing={6} pb={1} justifyContent="center">
-        {pageDjs.map((dj, index) => (
+        {pageDjs === []? 
+        <p>No hay Djs</p>
+        :
+        pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <CardDj
               id={dj.id}
@@ -103,7 +109,9 @@ const DJs = () => {
               styles={dj.estilos}
             />
           </Grid>
-        ))}
+        ))
+        }
+        
       </Grid>
       <Box display="flex" justifyContent="center" p={3}>
         <Pagination
