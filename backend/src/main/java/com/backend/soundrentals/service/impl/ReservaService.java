@@ -12,6 +12,7 @@ import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.ReservaRepository;
 import com.backend.soundrentals.repository.UsuarioRepository;
+import com.backend.soundrentals.service.EmailService;
 import com.backend.soundrentals.service.IRecursoService;
 import com.backend.soundrentals.service.IReservaService;
 import com.backend.soundrentals.utils.JsonPrinter;
@@ -22,10 +23,15 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,6 +46,9 @@ public class ReservaService implements IReservaService {
     private final DjRepository djRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Reserva.class);
     private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ReservaSalidaDto registrarReserva(ReservaEntradaDto reservaEntradaDto) throws BadRequestException,ResourceNotFoundException{
@@ -66,9 +75,17 @@ public class ReservaService implements IReservaService {
         reservaEntidad.setUsuario(usuarioReserva);
         reservaEntidad.setDj(djReserva);
 
-        return modelMapper.map(reservaRepository.save(reservaEntidad),ReservaSalidaDto.class);
+        ReservaSalidaDto reservaSalidaDto = modelMapper.map(reservaRepository.save(reservaEntidad),ReservaSalidaDto.class);
 
+        if (reservaSalidaDto != null) {
+            try {
+                enviarEmailConfirmacion(reservaSalidaDto);
+            } catch (MessagingException | IOException e) {
+                LOGGER.info("Error al enviar el email de confirmación: " + e.getMessage(), e);
+            }
+        }
 
+        return reservaSalidaDto;
     }
 
     @Override
@@ -155,6 +172,32 @@ public class ReservaService implements IReservaService {
 
         return modelMapper.map(reservaAEliminar,ReservaSalidaDto.class);
     }
+
+    public void enviarEmailConfirmacion(ReservaSalidaDto reserva) throws MessagingException, IOException {
+
+        // Obtener los valores de la reserva
+        String nombreDj = reserva.getDj().getName() + " " + reserva.getDj().getLastname();
+        String precioReserva = String.valueOf(reserva.getDj().getCharge());
+        String ciudadDj = reserva.getDj().getCiudad().getNombre();
+        String fechaInicio = reserva.getStartDate().toString();  // Asegúrate de que toString() devuelve el formato correcto
+        String fechaFin = reserva.getEndDate().toString();        // Asegúrate de que toString() devuelve el formato correcto
+        String urlImageDj = reserva.getDj().getUrlPic();
+
+        Map<String, String> valores = new HashMap<>();
+        valores.put("nombre_dj", nombreDj);
+        valores.put("precio_reserva", precioReserva);
+        valores.put("ciudad_dj", ciudadDj);
+        valores.put("fecha_inicio", fechaInicio);
+        valores.put("fecha_fin", fechaFin);
+        valores.put("url_image_dj", urlImageDj);
+
+        String recipient = reserva.getUsuario().getEmail();
+        String subject = "Confirmación de tu reserva";
+        String type = "user_reservation_notify";
+
+        emailService.sendHtmlEmail(recipient, subject, type,valores);
+    }
+
     @PostConstruct
     private void configureMapping() {
         modelMapper.typeMap(ReservaEntradaDto.class, Reserva.class);
