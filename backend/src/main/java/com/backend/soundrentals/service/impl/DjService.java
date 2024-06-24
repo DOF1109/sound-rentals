@@ -251,7 +251,7 @@ public class DjService implements IRecursoService {
         String subject = "Bienvenido " + dj.getName() + " " + dj.getLastname() + "!";
         String type = "dj_notify";
 
-        emailService.sendHtmlEmail(recipient, subject, type);
+        emailService.sendHtmlEmail(recipient, subject, type,null);
     }
 
     @PostConstruct
