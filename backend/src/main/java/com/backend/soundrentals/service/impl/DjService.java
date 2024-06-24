@@ -237,6 +237,8 @@ public class DjService implements IRecursoService {
         djAEliminar.getEstilos().clear();
         djAEliminar.getCaracteristicas().clear();
 
+        djRepository.deleteById(id);
+
         LOGGER.info("Dj eliminado: "+ JsonPrinter.toString(djAEliminar));
 
         return modelMapper.map(djAEliminar,DjSalidaDto.class);
