@@ -12,6 +12,7 @@ import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
 import com.backend.soundrentals.repository.CaracteristicaRepository;
+import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.EstiloRepository;
 import com.backend.soundrentals.service.ICaracteristicaService;
 import com.backend.soundrentals.service.IEstiloService;
@@ -34,6 +35,7 @@ import java.util.List;
 public class CaracteristicaService implements ICaracteristicaService {
 
     private final CaracteristicaRepository caracteristicaRepository;
+    private final DjRepository djRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Caracteristica.class);
     private ModelMapper modelMapper;
 
@@ -90,16 +92,18 @@ public class CaracteristicaService implements ICaracteristicaService {
 
     @Override
     public CaracteristicaSalidaDto eliminarCaracteristica(Long id) throws ResourceNotFoundException {
-        Caracteristica caracteristicaAEliminar = null;
-        caracteristicaAEliminar = modelMapper.map(buscarCaracteristicaPorId(id),Caracteristica.class);
-        if (caracteristicaAEliminar != null) {
-            caracteristicaRepository.deleteById(id);
-            LOGGER.warn("Se ha eliminado la caracteristica con id: {}", id);
-        } else {
-            LOGGER.error("No se ha encontrado la caracteristica con id {}", id);
-            throw new ResourceNotFoundException("No se ha encontrado la caracteristica con id " + id);
-        }
-        return modelMapper.map(caracteristicaAEliminar,CaracteristicaSalidaDto.class);
+        // Buscar la característica a eliminar
+        Caracteristica caracteristicaAEliminar = caracteristicaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No se ha encontrado la caracteristica con id " + id));
+
+        // Eliminar la característica de todas las entidades Dj en una sola operación
+        djRepository.removeCaracteristicaFromDjs(caracteristicaAEliminar.getId());
+
+        // Eliminar la característica del repositorio
+        caracteristicaRepository.deleteById(id);
+        LOGGER.warn("Se ha eliminado la caracteristica con id: {}", id);
+
+        return modelMapper.map(caracteristicaAEliminar, CaracteristicaSalidaDto.class);
     }
 
     @PostConstruct
