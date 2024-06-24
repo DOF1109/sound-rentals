@@ -4,9 +4,11 @@ import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.entity.Estilo;
 import com.backend.soundrentals.entity.Reserva;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -31,4 +33,11 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
                                                 @Param("fechaFin") LocalDate fechaFin);
 
     List<Reserva> findReservaByUsuario_Id(Long id);
+
+    List<Reserva> findReservaByDjId(Long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM reserva WHERE dj_id = :djId", nativeQuery = true)
+    void deleteByDjId(@Param("djId") Long djId);
 }
