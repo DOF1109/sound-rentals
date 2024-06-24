@@ -1,5 +1,23 @@
 import { useState } from 'react'
 import { DateRange } from 'react-date-range';
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import SearchInput from "../common/SearchInput2";
@@ -55,9 +73,9 @@ const ciudades = [
     { id: 48, ciudad: 'Tafí Viejo' }
 ];
 
-function SearchAndCalendar() {
+function SearchAndCalendar({setDjs, setPageDjs}) {
   const [categories, setCategories] = useState(ciudades);
-
+  const [selectedCity, setSelectedCity] = useState(null);
 
   //estados del calendario
   const [startDate, setStartDate] = useState(new Date())
@@ -79,28 +97,44 @@ function SearchAndCalendar() {
     setSearchItem('')
   }
 
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+  };
+
 
   return (
     <>
-      <SearchInput
-            ciudades={ciudades.map((ciudad) => {
-              return ciudad.ciudad;
-            })}
-      />
-      {SearchInput && (
-        <div>
-          <DateRange ranges={[selectionRange]}
-          minDate={new Date()}
-          rangeColors={["#160526"]}
-          onChange={handleDateSelect}
-          />
-          <div className="flex">
-            <button onClick={resetInput} className='flex-grow text-gray-500'>cancelar</button>
-            <button className='flex-grow'>buscar</button>
-          </div>
-        </div>
-        
-      )}
+    <SearchInput ciudades={ciudades.map((ciudad) => ciudad.ciudad)}
+    onCitySelect={handleCitySelect} 
+    setDjs={setDjs}
+    setPageDjs={setPageDjs}
+    // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
+    />
+  {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
+    <Button
+      variant="contained"
+      onClick={resetInput}
+      type="submit"
+      sx={{
+        color: 'white',
+        textTransform: 'none',
+        textShadow: '2px 2px 2px grey',
+      }}
+    >
+      Cancelar
+    </Button>
+    <Button
+      variant="contained"
+      type="submit"
+      sx={{
+        color: 'white',
+        textTransform: 'none',
+        textShadow: '2px 2px 2px grey',
+      }}
+    >
+      Buscar
+    </Button>
+  </div> */}
     </>
   )
 }

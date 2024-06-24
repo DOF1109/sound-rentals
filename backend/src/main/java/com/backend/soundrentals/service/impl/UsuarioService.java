@@ -148,7 +148,7 @@ public class UsuarioService implements IUsuarioService {
         String subject = "Bienvenido " + usuarioSalidaDto.getNombre() + "!";
         String type = "user_register_notify";
 
-        emailService.sendHtmlEmail(recipient, subject, type);
+        emailService.sendHtmlEmail(recipient, subject, type, null);
     }
 
 }

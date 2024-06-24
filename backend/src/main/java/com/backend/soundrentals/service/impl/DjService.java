@@ -225,12 +225,17 @@ public class DjService implements IRecursoService {
         }
 
         favoritoRepository.deleteByDjId(id);
-        calificacionRepository.deleteByDjId(id);
+
+        List<Reserva> reservasDelDj = reservaRepository.findReservaByDjId(id);
+
+        for(Reserva r: reservasDelDj){
+            calificacionRepository.deleteByReservaId(r.getId());
+        }
+
+        reservaRepository.deleteByDjId(id);
 
         djAEliminar.getEstilos().clear();
         djAEliminar.getCaracteristicas().clear();
-
-        djRepository.delete(djAEliminar);
 
         LOGGER.info("Dj eliminado: "+ JsonPrinter.toString(djAEliminar));
 
@@ -251,7 +256,7 @@ public class DjService implements IRecursoService {
         String subject = "Bienvenido " + dj.getName() + " " + dj.getLastname() + "!";
         String type = "dj_notify";
 
-        emailService.sendHtmlEmail(recipient, subject, type);
+        emailService.sendHtmlEmail(recipient, subject, type,null);
     }
 
     @PostConstruct

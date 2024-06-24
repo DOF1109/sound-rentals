@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^7.7.0",
     "@mui/x-date-pickers-pro": "^7.7.0",
     "axios": "^1.6.8",
+    "dayjs": "^1.11.11",
     "embla-carousel-react": "^8.0.4",
     "firebase": "^10.12.1",
     "firebase-tools": "^13.10.2",
