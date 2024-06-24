@@ -53,7 +53,7 @@ const Register = () => {
     e.preventDefault();
 
     const eRegexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    const eRegexPass = /^(?=.*\d)(?=.*[!@#$%^&*.])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const eRegexPass = /^(?=.*\d)(?=.*[!@#$%^&*.+°_-=/"'?¿¡(){}~ñÑ])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     if (
       userCredentials.email.length > 5 &&
@@ -73,7 +73,7 @@ const Register = () => {
             title: "SoundRentals",
             text: "Usuario creado exitosamente!",
             //icon: successs - error - warning - info
-            icon: "successs",
+            icon: "success",
             button: "Ingresar",
             //timer: '2000'
           });
