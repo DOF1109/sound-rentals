@@ -15,6 +15,7 @@ import {
   Modal,
   Rating,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import SpeakerIcon from "@mui/icons-material/Speaker";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
@@ -37,6 +38,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import {format} from 'date-fns'
+import { useTheme } from "@mui/material/styles";
 
 const style = {
   position: "absolute",
@@ -81,7 +83,8 @@ const DjDetail = () => {
     key:'selection'
   });
   const [availableDates, setAvailableDates] = useState([]);
-
+  const theme = useTheme();
+  const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
   
 
   const handleCalendarOpen = () => {
@@ -384,7 +387,7 @@ const DjDetail = () => {
               disabledDates={availableDates}
               color="#f50057"
               months={2}
-              direction="horizontal"
+              direction={isXsOrSm?"vertical":"horizontal"}
             />
 
             {/* <DateRangeCalendar/> */}
