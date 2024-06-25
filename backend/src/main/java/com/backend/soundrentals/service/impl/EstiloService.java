@@ -9,6 +9,7 @@ import com.backend.soundrentals.dto.salida.DjSalidaDto;
 import com.backend.soundrentals.entity.Estilo;
 import com.backend.soundrentals.entity.Dj;
 import com.backend.soundrentals.exceptions.ResourceNotFoundException;
+import com.backend.soundrentals.repository.DjRepository;
 import com.backend.soundrentals.repository.EstiloRepository;
 import com.backend.soundrentals.service.IEstiloService;
 import com.backend.soundrentals.utils.JsonPrinter;
@@ -30,6 +31,7 @@ import java.util.List;
 public class EstiloService implements IEstiloService {
 
     private final EstiloRepository estiloRepository;
+    private final DjRepository djRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(Estilo.class);
     private ModelMapper modelMapper;
 
@@ -87,16 +89,18 @@ public class EstiloService implements IEstiloService {
 
     @Override
     public EstiloSalidaDto eliminarEstilo(Long id) throws ResourceNotFoundException {
-        Estilo estiloAEliminar = null;
-        estiloAEliminar = modelMapper.map(buscarEstiloPorId(id),Estilo.class);
-        if (estiloAEliminar != null) {
-            estiloRepository.deleteById(id);
-            LOGGER.warn("Se ha eliminado el estilo con id: {}", id);
-        } else {
-            LOGGER.error("No se ha encontrado el estilo con id {}", id);
-            throw new ResourceNotFoundException("No se ha encontrado el estilo con id " + id);
-        }
-        return modelMapper.map(estiloAEliminar,EstiloSalidaDto.class);
+        // Buscar el estilo a eliminar
+        Estilo estiloAEliminar = estiloRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No se ha encontrado el estilo con id " + id));
+
+        // Eliminar el estilo de todas las entidades Dj en una sola operación
+        djRepository.removeEstiloFromDjs(estiloAEliminar.getId());
+
+        // Eliminar el estilo del repositorio
+        estiloRepository.deleteById(id);
+        LOGGER.warn("Se ha eliminado el estilo con id: {}", id);
+
+        return modelMapper.map(estiloAEliminar, EstiloSalidaDto.class);
     }
 
 

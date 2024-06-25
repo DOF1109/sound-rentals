@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import SpeakerIcon from "@mui/icons-material/Speaker";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
@@ -42,7 +43,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
-import { format } from 'date-fns';
+import {format} from 'date-fns'
 
 const style = {
   position: "absolute",
@@ -88,6 +89,8 @@ const DjDetail = () => {
     key: 'selection'
   });
   const [availableDates, setAvailableDates] = useState([]);
+
+  
 
   const handleCalendarOpen = () => {
     setOpenCalendar(true);
@@ -301,6 +304,9 @@ const DjDetail = () => {
                     >{`* ${estilo.style}`}</Typography>
                   );
                 })}
+                
+                <Typography py={3}>{`CIUDAD: ${dj.ciudad.nombre}`}</Typography>
+                
                 <Typography variant="body2" pt={3} pb={1}>
                   Sobre el DJ
                 </Typography>
@@ -317,6 +323,9 @@ const DjDetail = () => {
                       <ListItemText primary={caracteristica.caracteristica} />
                     </ListItem>
                   ))}
+                  <div>
+                    <ShareRs dj={dj}></ShareRs>
+                  </div>
               </CardContent>
             </Card>
           </Box>
@@ -403,7 +412,7 @@ const DjDetail = () => {
               disabledDates={availableDates}
               color="#f50057"
               months={2}
-              direction="horizontal"
+              direction={isXsOrSm?"vertical":"horizontal"}
             />
 
             {/* <DateRangeCalendar/> */}

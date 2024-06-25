@@ -27,6 +27,7 @@ public class DjSalidaDto {
     private String email;
     private String address;
     private Integer charge;
+    private Float calificacion;
     private String comment;
     private String sample1;
     private String sample2;
