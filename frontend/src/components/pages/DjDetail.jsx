@@ -15,11 +15,6 @@ import {
   Modal,
   Rating,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
 import SpeakerIcon from "@mui/icons-material/Speaker";
@@ -30,20 +25,21 @@ import MusicVideoIcon from "@mui/icons-material/MusicVideo";
 import TuneIcon from "@mui/icons-material/Tune";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
-import CloseIcon from '@mui/icons-material/Close';
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
-import { getDj, updateFavoriteStatus, addCalificacion, deleteFavorito } from "../../api/djsApi.js";
+import { getDj, updateFavoriteStatus,addCalificacion,deleteFavorito} from "../../api/djsApi.js";
 import { getReservas, addReserva } from "../../api/reservaApi.js";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Loader from "../common/Loader.jsx";
 import FavoriteButton from "../common/Favorite.jsx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";  
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import {format} from 'date-fns'
+import { useTheme } from "@mui/material/styles";
+import ShareRs from "../common/ShareRs.jsx";
 
 const style = {
   position: "absolute",
@@ -77,60 +73,47 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
-  const { handleLogout, user, isLogged, userDb, djCalificados, djFavorites, loadDjsCalificados, loadDjsFavorites } = useContext(AuthContext);
+  const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados,loadDjsFavorites  } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [idFavorite, setIdFavorite] = useState(null);
   const [openCalendar, setOpenCalendar] = useState(false);
-  const [openConfirm, setOpenConfirm] = useState(false);
   const [error, setError] = useState(null);
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: 'selection'
+    startDate:new Date(),
+    endDate:new Date(),
+    key:'selection'
   });
   const [availableDates, setAvailableDates] = useState([]);
-
+  const theme = useTheme();
+  const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
   
 
   const handleCalendarOpen = () => {
     setOpenCalendar(true);
   };
-
+  
   const handleCalendarClose = () => {
     setOpenCalendar(false);
   };
 
-  const handleConfirmOpen = () => {
-    setOpenConfirm(true);
-  };
-
-  const handleConfirmClose = () => {
-    setOpenConfirm(false);
-  };
-
-  const handleChangeRangeDate = (ranges) => {
+  const handleChangeRangeDate = (ranges)=>{
     setDateRange(ranges.selection);
   }
-
+  
   const handleReservar = async () => {
-    handleConfirmOpen();
-  };
-
-  const handleConfirmarReserva = async () => {
     try {
       const reserva = {
-        startDate: format(dateRange.startDate, 'yyyy-MM-dd'),
-        endDate: format(dateRange.endDate, 'yyyy-MM-dd'),
+        startDate: format(dateRange.startDate,'yyyy-MM-dd'), 
+        endDate: format(dateRange.endDate,'yyyy-MM-dd'), 
         dj: dj.id,
         usuario: userDb.id,
       };
-
+  
       const response = await addReserva(reserva);
       if (response && response.status === 201) {
         toast.success("¡Reserva realizada con éxito!");
-        handleConfirmClose();
         handleCalendarClose();
-        setDateRange({ startDate: new Date(), endDate: new Date(), key: 'selection' });
+        setDateRange({    startDate:new Date(),endDate:new Date(),key:'selection'})
       } else {
         console.error("Error al realizar la reserva");
         toast.error("Hubo un error al realizar la reserva");
@@ -141,14 +124,7 @@ const DjDetail = () => {
     }
   };
 
-  const getUserNameFromLocalStorage = () => {
-    const userDbString = localStorage.getItem('userDb');
-    if (userDbString) {
-      const userDb = JSON.parse(userDbString);
-      return userDb.nombre;
-    }
-    return 'undefined';
-  };
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -169,20 +145,21 @@ const DjDetail = () => {
     }
   };
 
+
   useEffect(() => {
     if (dj) setDjImages(imagesDj());
 
-    if (userDb !== undefined && djFavorites.length > 0 && dj) {
-      const favoriteCheck = djFavorites.some((f) => f.dj.id == dj.id && f.usuario.id == userDb.id && f.favorite == true);
+    if(userDb!=undefined && djFavorites.length>0 && dj){
+      const favoriteCheck = djFavorites.some((f)=> f.dj.id==dj.id && f.usuario.id==userDb.id && f.favorite==true)
       setIsFavorite(favoriteCheck);
 
-      if (favoriteCheck) {
-        let registroFav = djFavorites.find((f) =>
-          f.dj.id === dj.id && f.usuario.id === userDb.id && f.favorite)
+      if(favoriteCheck){
+        let registroFav = djFavorites.find((f)=>
+        f.dj.id===dj.id && f.usuario.id===userDb.id && f.favorite)
         setIdFavorite(registroFav.id)
       }
-    }
-  }, [userDb, dj, djFavorites]);
+    } 
+  }, [userDb,dj,djFavorites]);
 
   useEffect(() => {
     loadDj();
@@ -192,20 +169,20 @@ const DjDetail = () => {
     const fetchReservas = async () => {
       try {
         let reservas = await getReservas();
-        reservas = reservas.filter((r) => r.dj.id == dj.id);
+        reservas = reservas.filter((r)=>r.dj.id==dj.id);
         if (reservas) {
           const formattedDates = reservas.map((reserva) => {
 
             let startDate = new Date();
             startDate.setFullYear(reserva.startDate.split('-')[0])
-            startDate.setMonth(reserva.startDate.split('-')[1] - 1)
+            startDate.setMonth(reserva.startDate.split('-')[1]-1)
             startDate.setDate(reserva.startDate.split('-')[2])
 
             let endDate = new Date();
             endDate.setFullYear(reserva.endDate.split('-')[0])
-            endDate.setMonth(reserva.endDate.split('-')[1] - 1)
+            endDate.setMonth(reserva.endDate.split('-')[1]-1)
             endDate.setDate(reserva.endDate.split('-')[2])
-
+  
             // Crear un array de fechas desde el inicio hasta el final
             const dates = [];
             for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
@@ -213,18 +190,19 @@ const DjDetail = () => {
             }
             return dates;
           }).flat();
-
+  
           setAvailableDates(formattedDates);
         }
       } catch (error) {
         console.error("Error al obtener las reservas", error);
       }
     };
-
+  
     if (openCalendar) {
       fetchReservas();
     }
   }, [openCalendar]);
+  
 
   const toggleFavorite = async () => {
     const updatedStatus = !isFavorite;
@@ -234,16 +212,16 @@ const DjDetail = () => {
       isFavorite: updatedStatus,
       usuario: userDb.id,
     };
-
+    
     let response = undefined
-    if (updatedStatus) {
+    if(updatedStatus){
       response = await updateFavoriteStatus(value);
     }
-    else {
+    else{
       console.log(idFavorite)
       response = await deleteFavorito(idFavorite);
     }
-
+    
     if (response.status === 201 || response.status === 200) {
       setIsFavorite(updatedStatus);
       loadDjsFavorites();
@@ -251,6 +229,7 @@ const DjDetail = () => {
       console.error("Error al actualizar el estado de favorito");
     }
   };
+  
 
   if (!dj) return <Loader />;
 
@@ -288,9 +267,9 @@ const DjDetail = () => {
               }}
             >
               <CardContent>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <Box sx={{display: "flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
                   <Typography variant="h5">{`${dj.name} ${dj.lastname}`}</Typography>
-                  {userDb && user && user.rol == import.meta.env.VITE_COMMON_ROL && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
+                  {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
                 </Box>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
@@ -357,7 +336,7 @@ const DjDetail = () => {
               </Button>
             </CardActions>
           </Card>
-          {userDb && user && user.rol == import.meta.env.VITE_COMMON_ROL &&
+          {userDb && user && user.rol==import.meta.env.VITE_COMMON_ROL  &&
             <Button
               variant="contained"
               size="large"
@@ -423,84 +402,6 @@ const DjDetail = () => {
             </Box>
           </Box>
         </Modal>
-
-{/* Modal Confirmación */}
-
-<Dialog
-  onClose={handleConfirmClose}
-  aria-labelledby="customized-dialog-title"
-  open={openConfirm}
->
-  <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-    Confirmar Reserva
-  </DialogTitle>
-  <IconButton
-    aria-label="close"
-    onClick={handleConfirmClose}
-    sx={{
-      position: 'absolute',
-      right: 8,
-      top: 8,
-      color: (theme) => theme.palette.grey[500],
-    }}
-  >
-    <CloseIcon />
-  </IconButton>
-  <DialogContent dividers>
-    <Box>
-      <Typography gutterBottom>
-        DJ :
-      </Typography>
-      <Typography gutterBottom display="block" pl={1}>
-        * {`${dj.name} ${dj.lastname}`}
-      </Typography>
-    </Box>
-    <Box>
-      <Typography gutterBottom>
-        Nombre del Usuario :
-      </Typography>
-      <Typography gutterBottom display="block" pl={1}>
-        * {getUserNameFromLocalStorage()}
-      </Typography>
-    </Box>
-    <Box>
-      <Typography gutterBottom>
-        Correo Electrónico :
-      </Typography>
-      <Typography gutterBottom display="block" pl={1}>
-        * {userDb && userDb.email !== undefined ? userDb.email : 'undefined'}
-      </Typography>
-    </Box>
-    <Box>
-      <Typography gutterBottom>
-        Periodo de Reserva :
-      </Typography>
-      <Typography gutterBottom display="block" pl={1}>
-        * Del {`${format(dateRange.startDate, 'dd/MM/yyyy')} hasta ${format(dateRange.endDate, 'dd/MM/yyyy')}`}
-      </Typography>
-    </Box>
-    <Box>
-      <Typography gutterBottom>
-        Precio :
-      </Typography>
-      <Typography gutterBottom display="block" pl={1}>
-        * ${dj.charge}
-      </Typography>
-    </Box>
-  </DialogContent>
-  <DialogActions>
-    <Button 
-      onClick={handleConfirmClose}
-      sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
-    >
-      Cancelar
-    </Button>
-    <Button variant="contained" onClick={handleConfirmarReserva}>Confirmar</Button>
-  </DialogActions>
-</Dialog>
-
-
-
 
       </Grid>
       <ToastContainer
