@@ -39,6 +39,7 @@ import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import {format} from 'date-fns'
 import { useTheme } from "@mui/material/styles";
+import ShareRs from "../common/ShareRs.jsx";
 
 const style = {
   position: "absolute",
@@ -301,6 +302,9 @@ const DjDetail = () => {
                       <ListItemText primary={caracteristica.caracteristica} />
                     </ListItem>
                   ))}
+                  <div>
+                    <ShareRs dj={dj}></ShareRs>
+                  </div>
               </CardContent>
             </Card>
           </Box>
