@@ -24,6 +24,7 @@ import AlbumIcon from "@mui/icons-material/Album";
 import MusicVideoIcon from "@mui/icons-material/MusicVideo";
 import TuneIcon from "@mui/icons-material/Tune";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import CloseIcon from '@mui/icons-material/Close';
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
@@ -75,6 +76,7 @@ const DjDetail = () => {
   const [open, setOpen] = useState(false);
   const { handleLogout, user, isLogged, userDb, djCalificados,djFavorites, loadDjsCalificados,loadDjsFavorites  } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [idFavorite, setIdFavorite] = useState(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [error, setError] = useState(null);
@@ -96,11 +98,23 @@ const DjDetail = () => {
     setOpenCalendar(false);
   };
 
+    const handleConfirmOpen = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false);
+  };
+
   const handleChangeRangeDate = (ranges)=>{
     setDateRange(ranges.selection);
   }
   
   const handleReservar = async () => {
+        handleConfirmOpen();
+  };
+
+  const handleConfirmarReserva = async () => {
     try {
       const reserva = {
         startDate: format(dateRange.startDate,'yyyy-MM-dd'), 
@@ -122,6 +136,16 @@ const DjDetail = () => {
       console.error("Error al realizar la reserva", error);
       toast.error("Hubo un error al realizar la reserva");
     }
+  };
+
+
+    const getUserNameFromLocalStorage = () => {
+    const userDbString = localStorage.getItem('userDb');
+    if (userDbString) {
+      const userDb = JSON.parse(userDbString);
+      return userDb.nombre;
+    }
+    return 'undefined';
   };
 
 
@@ -302,9 +326,6 @@ const DjDetail = () => {
                       <ListItemText primary={caracteristica.caracteristica} />
                     </ListItem>
                   ))}
-                  <div>
-                    <ShareRs dj={dj}></ShareRs>
-                  </div>
               </CardContent>
             </Card>
           </Box>
@@ -402,6 +423,81 @@ const DjDetail = () => {
             </Box>
           </Box>
         </Modal>
+
+        {/* Modal Confirmación */}
+
+<Dialog
+  onClose={handleConfirmClose}
+  aria-labelledby="customized-dialog-title"
+  open={openConfirm}
+>
+  <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+    Confirmar Reserva
+  </DialogTitle>
+  <IconButton
+    aria-label="close"
+    onClick={handleConfirmClose}
+    sx={{
+      position: 'absolute',
+      right: 8,
+      top: 8,
+      color: (theme) => theme.palette.grey[500],
+    }}
+  >
+    <CloseIcon />
+  </IconButton>
+  <DialogContent dividers>
+    <Box>
+      <Typography gutterBottom>
+        DJ :
+      </Typography>
+      <Typography gutterBottom display="block" pl={1}>
+        * {`${dj.name} ${dj.lastname}`}
+      </Typography>
+    </Box>
+    <Box>
+      <Typography gutterBottom>
+        Nombre del Usuario :
+      </Typography>
+      <Typography gutterBottom display="block" pl={1}>
+        * {getUserNameFromLocalStorage()}
+      </Typography>
+    </Box>
+    <Box>
+      <Typography gutterBottom>
+        Correo Electrónico :
+      </Typography>
+      <Typography gutterBottom display="block" pl={1}>
+        * {userDb && userDb.email !== undefined ? userDb.email : 'undefined'}
+      </Typography>
+    </Box>
+    <Box>
+      <Typography gutterBottom>
+        Periodo de Reserva :
+      </Typography>
+      <Typography gutterBottom display="block" pl={1}>
+        * Del {`${format(dateRange.startDate, 'dd/MM/yyyy')} hasta ${format(dateRange.endDate, 'dd/MM/yyyy')}`}
+      </Typography>
+    </Box>
+    <Box>
+      <Typography gutterBottom>
+        Precio :
+      </Typography>
+      <Typography gutterBottom display="block" pl={1}>
+        * ${dj.charge}
+      </Typography>
+    </Box>
+  </DialogContent>
+  <DialogActions>
+    <Button 
+      onClick={handleConfirmClose}
+      sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+    >
+      Cancelar
+    </Button>
+    <Button variant="contained" onClick={handleConfirmarReserva}>Confirmar</Button>
+  </DialogActions>
+</Dialog>
 
       </Grid>
       <ToastContainer
