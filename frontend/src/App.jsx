@@ -21,6 +21,8 @@ import DJFavoritos from "./components/pages/DJFavoritos";
 import ManageCharacteristics from "./components/pages/ManageCharacteristics";
 import Reservations from "./components/pages/Reservations";
 import Policies from './components/pages/Policies';
+import ManageCategories from "./components/pages/ManageCategories";
+import AddCategory from "./components/pages/AddCategory";
 
 function App() {
   return (
@@ -45,9 +47,11 @@ function App() {
               <Route element={<ProtectedAdmin />}>
                 <Route path="/add-product" element={<AddProduct />} />
                 <Route path="/add-characteristic" element={<AddCharacteristic />} />
+                <Route path="/add-category" element={<AddCategory />} />
                 <Route path="/manage-users" element={<ManageUsers />} />
                 <Route path="/manage-djs" element={<ManageDjs />} />
                 <Route path="/manage-characteristics" element={<ManageCharacteristics />} />
+                <Route path="/manage-categories" element={<ManageCategories />} />
               </Route>
 
               {/* RUTAS PARA USUARIOS COMUNES LOGEADOS */}
