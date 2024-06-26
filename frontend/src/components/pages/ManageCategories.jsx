@@ -9,8 +9,11 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { getDjs, deleteDj } from "../../api/djsApi";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import {
+  getCategories,
+  deleteCategory,
+} from "../../api/categoriesApi";
 import Loader from "../common/Loader";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -19,25 +22,23 @@ import Typography from "@mui/material/Typography";
 
 const columns = [
   { id: "id", label: "Id", minWidth: 100 },
-  { id: "name", label: "Nombre", minWidth: 150 },
-  { id: "lastname", label: "Apellido", minWidth: 150 },
-  { id: "email", label: "Email", minWidth: 150 },
+  { id: "style", label: "Estilo", minWidth: 150 },
 ];
 
-const ManageDjs = () => {
+const ManageCategories = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [djs, setDjs] = useState();
+  const [categories, setCategories] = useState();
   const theme = useTheme();
   const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const loadDjs = async () => {
-    const data = await getDjs();
-    if (data) setDjs(data);
+  const loadCategories = async () => {
+    const data = await getCategories();
+    if (data) setCategories(data);
   };
 
   useEffect(() => {
-    loadDjs();
+    loadCategories();
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -49,20 +50,22 @@ const ManageDjs = () => {
     setPage(0);
   };
 
-  const handleDeleteDj = (id) => {
+  const handleDeleteCategories = (id) => {
     swal({
-      title: "¿Seguro que quieres eliminar el DJ?",
+      title: "¿Seguro que quieres eliminar el estilo?",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        const resp = await deleteDj(id);
+        const resp = await deleteCategory(id);
         if (resp.status === 200) {
-          swal("DJ eliminado!", {
+          swal("Estilo eliminado!", {
             icon: "success",
           });
-          setDjs(djs.filter(dj => dj.id !== id));
+          setCategories(
+            categories.filter((category) => category.id !== id)
+          );
         } else {
           swal("Ocurrió un error, vuelva a intentarlo", {
             icon: "error",
@@ -80,13 +83,17 @@ const ManageDjs = () => {
     );
   }
 
-  if (!djs) return <Loader />;
+  if (!categories) return <Loader />;
 
   return (
     <Container sx={{ py: 5 }}>
-      <Button variant="contained" startIcon={<PersonAddIcon />} sx={{ mb: 2 }}>
-        <Link className="clear-link light-text" to="/add-product">
-          AGREGAR DJ
+      <Button
+        variant="contained"
+        startIcon={<AddCircleIcon />}
+        sx={{ mb: 2 }}
+      >
+        <Link className="clear-link light-text" to="/add-category">
+          AGREGAR ESTILO
         </Link>
       </Button>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -109,7 +116,7 @@ const ManageDjs = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {djs
+              {categories
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
@@ -123,12 +130,13 @@ const ManageDjs = () => {
                         );
                       })}
                       <TableCell align="center">
-                        <IconButton 
-                          aria-label="delete" 
+                        <IconButton
+                          aria-label="delete"
                           onClick={() => {
-                            handleDeleteDj(row.id);
-                          }}>
-                            <DeleteForeverIcon />
+                            handleDeleteCategories(row.id);
+                          }}
+                        >
+                          <DeleteForeverIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -140,7 +148,7 @@ const ManageDjs = () => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={djs.length}
+          count={categories.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -151,4 +159,4 @@ const ManageDjs = () => {
   );
 };
 
-export default ManageDjs;
+export default ManageCategories;
