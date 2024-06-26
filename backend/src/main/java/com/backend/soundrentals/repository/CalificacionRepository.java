@@ -13,6 +13,6 @@ public interface CalificacionRepository extends JpaRepository<Calificacion, Long
 
     @Transactional
     @Modifying
-    @Query(value = "DELETE FROM rating WHERE dj_id = :djId", nativeQuery = true)
-    void deleteByDjId(@Param("djId") Long djId);
+    @Query(value = "DELETE FROM rating WHERE reserva_id = :reservaId", nativeQuery = true)
+    void deleteByReservaId(@Param("reservaId") Long djId);
 }

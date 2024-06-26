@@ -34,6 +34,18 @@ export const addCharacteristic = async (data) => {
 };
 
 // --------------- PUT ---------------
+export const updateCharacteristic = async (data) => {
+  try {
+    const response = await axios.put(
+      `${URL_BASE}/caracteristica/actualizar`,
+      data
+    );
+    return response;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+    return error;
+  }
+};
 
 // --------------- DELETE ---------------
 export const deleteCharacteristic = async (id) => {

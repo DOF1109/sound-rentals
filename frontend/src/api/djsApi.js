@@ -87,20 +87,30 @@ export const getDj = async (id) => {
     }
   };
 
-export const getDjSearch = async (id, fechainicio, fechafin) => {
+  export const getDjSearch = async (options) => {
     try {
-      const response = await axios.get(URL_BASE + `/dj/buscador/${id}+${fechainicio}+${fechafin}`);
+      let url = `${URL_BASE}/dj/buscador`;
+      let params = {};
+  
+      if (options.ciudadId) {
+        params.ciudadId = options.ciudadId;
+      }
+  
+      if (options.fechaInicio && options.fechaFin) {
+        params.fechaInicio = options.fechaInicio;
+        params.fechaFin = options.fechaFin;
+      }
+  
+      const response = await axios.get(url, { params });
+  
       if (response.status === 200) {
         return response.data;
       } else {
-        console.error(`Error: ${response.status}`);
-        errorAlert();
-        return null;
+        throw new Error(`Error: ${response.status} - ${response.data.message}`);
       }
     } catch (error) {
-      console.error(`Error: ${error}`);
-      errorAlert();
-      return null;
+      console.error('Error en getDjSearch:', error);
+      throw error;
     }
   };
 

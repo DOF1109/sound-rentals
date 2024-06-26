@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -24,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,17 +38,8 @@ public class EmailService {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("soundrentals24@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        System.out.println("Enviando mail");
-        mailSender.send(message);
-    }
-
-    public void sendHtmlEmail(String to, String subject, String body) throws MessagingException,IOException {
+    @Async
+    public void sendHtmlEmail(String to, String subject, String type, Map<String,String> content) throws MessagingException,IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -53,10 +47,21 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
 
-        String htmlTemplate = readFile("classpath:templates/email/index.html");
-        helper.setText(htmlTemplate, true);
+        String htmlTemplate = switch (type) {
+            case "user_register_notify" -> readFile("classpath:templates/user_register_notify/index.html");
+            case "dj_notify" -> readFile("classpath:templates/dj_notify/index.html");
+            case "user_reservation_notify" -> readFile("classpath:templates/user_reservation_notify/index.html");
+            default -> "";
+        };
 
-        mailSender.send(message);
+        if (type.equals("user_reservation_notify")) {
+            htmlTemplate = replacePlaceholders(htmlTemplate, content);
+        }
+
+        if(!Objects.equals(htmlTemplate, "")){
+            helper.setText(htmlTemplate, true);
+            mailSender.send(message);
+        }
     }
 
     private String readFile(String path) throws IOException {
@@ -65,5 +70,13 @@ public class EmailService {
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
+    }
+
+    private String replacePlaceholders(String template, Map<String, String> values) {
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            String placeholder = "${" + entry.getKey() + "}";
+            template = template.replace(placeholder, entry.getValue());
+        }
+        return template;
     }
 }
