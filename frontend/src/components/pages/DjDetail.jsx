@@ -253,6 +253,9 @@ const DjDetail = () => {
 
   if (!dj) return <Loader />;
 
+  const ShareUrl = "https://sound-rentals.vercel.app/dj-detail/" + `${dj.id}`;
+  const titulo = "Perfil de " + `${dj.name}` + " " + `${dj.lastname}` + " en Sound Rentals";
+
   return (
     <Container sx={{ py: 4 }}>
       <Grid container spacing={3}>
@@ -306,6 +309,7 @@ const DjDetail = () => {
                 <Typography variant="body2" pt={3} pb={1}>
                   Sobre el DJ
                 </Typography>
+                <h1></h1>
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
@@ -330,6 +334,7 @@ const DjDetail = () => {
                     </ListItem>
                   ))}
               </CardContent>
+
             </Card>
           </Box>
         </Grid>

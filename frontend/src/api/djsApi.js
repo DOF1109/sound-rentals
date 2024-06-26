@@ -1,4 +1,5 @@
 import axios from "axios";
+import https from 'https';
 import { URL_BASE, errorAlert } from "./base.js";
 
 // --------------- GET ---------------
@@ -87,9 +88,12 @@ export const getDj = async (id) => {
     }
   };
 
-export const getDjSearch = async (id, fechainicio, fechafin) => {
+export const getDjSearch = async () => {
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
     try {
-      const response = await axios.get(URL_BASE + `/dj/buscador/${id}+${fechainicio}+${fechafin}`);
+      const response = await axios.get("http://192.168.1.81:8082/dj/buscador/2_2024-05-05_2024-06-06", { httpsAgent: agent });
       if (response.status === 200) {
         return response.data;
       } else {

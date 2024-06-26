@@ -4,7 +4,7 @@ import { URL_BASE, errorAlert } from "./base.js";
 // --------------- GET ---------------
 export const getCategories = async () => {
   try {
-    const response = await axios.get(URL_BASE + "/style/listar");
+    const response = await axios.get("https://sound-rentals-production.up.railway.app" + "/style/listar");
     if (response.status === 200) {
       return response.data;
     } else {
