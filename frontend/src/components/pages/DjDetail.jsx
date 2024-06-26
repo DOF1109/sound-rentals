@@ -6,8 +6,13 @@ import {
   CardContent,
   Checkbox,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Grid,
+  IconButton,
   ListItem,
   ListItemButton,
   ListItemIcon,
@@ -326,6 +331,9 @@ const DjDetail = () => {
                       <ListItemText primary={caracteristica.caracteristica} />
                     </ListItem>
                   ))}
+                  <div>
+                    <ShareRs dj={dj}></ShareRs>
+                  </div>
               </CardContent>
             </Card>
           </Box>
