@@ -72,6 +72,7 @@ const DJs = () => {
   return (
     <Container component="section">
       <SearchInput
+      itemsPerPage={itemsPerPage}
       setDjs={setSearchDjs}
       setPageDjs={setPageDjs}
         categories={categories.map((category) => {

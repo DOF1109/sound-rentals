@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover, useMediaQuery } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DateRange } from 'react-date-range';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -8,11 +8,22 @@ import 'react-date-range/dist/theme/default.css';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
+import { getCiudades } from "../../api/ciudadesApi";
 
-const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
-  console.log('ciudades', ciudades);
+const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
+  const [ciudades, setCiudades] = useState();
+  const loadCiudades = async () => {
+    const data = await getCiudades();
+    if (data) setCiudades(data);
+  };
+
+  useEffect(() => {
+    loadCiudades();
+  }, []);
+
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
+  const [ciudadId, setCiudadId] = useState()
   const [startDate, setStartDate] = useState()
   const [endDate, setEndDate] = useState()
   const [dateRange, setDateRange] = useState([
@@ -25,31 +36,18 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateWritten, setDateWritten] = useState(false);
-  const [ciudadId, setCiudadId] = useState(null)
+  
 
-  if (!ciudades || ciudades.length === 0) return null;
+   if (!ciudades || ciudades.length === 0) return null;
 
-  const isMd = useMediaQuery(theme.breakpoints.up("md"));
-
-  const itemsPerPage = isMd ? 9 : 10;
-
-  const formattedCategories = ciudades.map((category) => ({
-    label: category,
+   const formattedCiudades = ciudades.map((ciudad) => ({
+    label: ciudad.nombre,
+    value: ciudad.id,
   }));
 
   const handleCityChange = (event, newValue) => {
-   console.log('newValue',newValue);
-    setSelectedCity(newValue);
-  };
-
-  const getIndiceCiudadSeleccionada = () => {
-    if (selectedCity !== null) {
-      const indiceCiudad = ciudades.findIndex((ciudad) => ciudad === selectedCity.label);
-      const ciudadId = indiceCiudad + 1
-      return ciudadId;
-    } else {
-      return -1; 
-    }
+    setSelectedCity(newValue.label);
+    setCiudadId(newValue.value)
   };
 
   const handleDateSelect = (ranges) => {
@@ -65,7 +63,6 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
     setDateRange([item.selection]);
     setDateWritten(true)
   };
-  console.log('date range:', dateRange);
 
   const handleDatePickerToggle = () => {
     setShowDatePicker(!showDatePicker);
@@ -74,7 +71,6 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
 // Búsqueda por ciudad
 const handleSearchByCiudad = async () => {
   try {
-    const ciudadId = getIndiceCiudadSeleccionada();
     const response = await getDjSearch({ ciudadId });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
@@ -174,7 +170,7 @@ const handleSearch = () => {
       <Autocomplete
         disablePortal
         id="combo-box"
-        options={formattedCategories}
+        options={formattedCiudades}
         value={selectedCity}
         onChange={handleCityChange}
         noOptionsText="No se encontró"
