@@ -90,3 +90,30 @@ body {
   width: 140%;
   background-color: var(--bg-color);
 }
+
+/* Whatsapp styles */
+.whatsapp-button {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  background-color: #25d366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.whatsapp-button:hover {
+  background-color: #1ebd5a;
+}
+
+.whatsapp-icon {
+  width: 24px;
+  height: 24px;
+}
