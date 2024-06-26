@@ -38,7 +38,10 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRange } from 'react-date-range';
 import {format} from 'date-fns'
+<<<<<<< HEAD
 import { useTheme } from "@mui/material/styles";
+=======
+>>>>>>> 62ccd66 (redes sociales)
 import ShareRs from "../common/ShareRs.jsx";
 
 const style = {
