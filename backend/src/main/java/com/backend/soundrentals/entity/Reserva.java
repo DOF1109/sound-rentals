@@ -21,11 +21,11 @@ public class Reserva {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "dj_id", referencedColumnName = "id")
     private Dj dj;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
 }
