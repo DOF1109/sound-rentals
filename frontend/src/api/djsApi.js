@@ -100,6 +100,10 @@ export const getDj = async (id) => {
         params.fechaInicio = options.fechaInicio;
         params.fechaFin = options.fechaFin;
       }
+
+      if (options.styleId) {
+        params.styleId = options.styleId;
+      }
   
       const response = await axios.get(url, { params });
   

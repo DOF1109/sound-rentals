@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Autocomplete, Box, InputAdornment, Typography,TextField, Button,useTheme, IconButton, Popover, useMediaQuery } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, Box, InputAdornment, Typography,TextField, IconButton, Popover,Button,useTheme,FormControl,
+  InputLabel,
+  Select,
+  MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DateRange } from 'react-date-range';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -8,11 +11,24 @@ import 'react-date-range/dist/theme/default.css';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
+import { getCiudades } from "../../api/ciudadesApi";
 
-const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
-  console.log('ciudades', ciudades);
+const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, categories }) => {
+  const [ciudades, setCiudades] = useState();
+  const loadCiudades = async () => {
+    const data = await getCiudades();
+    if (data) setCiudades(data);
+  };
+
+  useEffect(() => {
+    loadCiudades();
+  }, []);
+
   const theme = useTheme();
   const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedCategorie, setSelectedCategorie] = useState(null);
+  const [ciudadId, setCiudadId] = useState()
+  // const [styleId, setStyleId] = useState()
   const [startDate, setStartDate] = useState()
   const [endDate, setEndDate] = useState()
   const [dateRange, setDateRange] = useState([
@@ -25,31 +41,35 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateWritten, setDateWritten] = useState(false);
-  const [ciudadId, setCiudadId] = useState(null)
+  
 
-  if (!ciudades || ciudades.length === 0) return null;
+   if (!ciudades || ciudades.length === 0) return null;
 
-  const isMd = useMediaQuery(theme.breakpoints.up("md"));
-
-  const itemsPerPage = isMd ? 9 : 10;
-
-  const formattedCategories = ciudades.map((category) => ({
-    label: category,
+   const formattedCiudades = ciudades.map((ciudad) => ({
+    label: ciudad.nombre,
+    value: ciudad.id,
   }));
 
-  const handleCityChange = (event, newValue) => {
-   console.log('newValue',newValue);
-    setSelectedCity(newValue);
-  };
+  const formattedCategories = categories.map((categorie) => ({
+    label: categorie.style,
+  }));
 
-  const getIndiceCiudadSeleccionada = () => {
-    if (selectedCity !== null) {
-      const indiceCiudad = ciudades.findIndex((ciudad) => ciudad === selectedCity.label);
-      const ciudadId = indiceCiudad + 1
-      return ciudadId;
+  const handleCategoryChange = ( event, newValue) => {
+    setSelectedCategorie(newValue.props.children);
+  }
+
+  const getIndiceCategoriaSeleccionada = () => {
+    if (selectedCategorie !== null) {
+      const selectedCategorieIndex = categories.find((categorie) => categorie.style === selectedCategorie);
+      return selectedCategorieIndex.id
     } else {
-      return -1; 
+      return null;
     }
+  };
+  
+  const handleCityChange = (event, newValue) => {
+    setSelectedCity(newValue.label);
+    setCiudadId(newValue.value)
   };
 
   const handleDateSelect = (ranges) => {
@@ -65,7 +85,6 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
     setDateRange([item.selection]);
     setDateWritten(true)
   };
-  console.log('date range:', dateRange);
 
   const handleDatePickerToggle = () => {
     setShowDatePicker(!showDatePicker);
@@ -74,12 +93,24 @@ const SearchInput = ({ ciudades, setDjs, setPageDjs }) => {
 // Búsqueda por ciudad
 const handleSearchByCiudad = async () => {
   try {
-    const ciudadId = getIndiceCiudadSeleccionada();
     const response = await getDjSearch({ ciudadId });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
   } catch (error) {
     console.error('Error en la búsqueda por ciudad:', error);
+    // Manejo del error
+  }
+};
+
+// Búsqueda por categoría
+const handleSearchByCategorie = async () => {
+  try {
+    const styleId = getIndiceCategoriaSeleccionada();
+    const response = await getDjSearch({ styleId });
+    setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
+  } catch (error) {
+    console.error('Error en la búsqueda por categoría:', error);
     // Manejo del error
   }
 };
@@ -99,10 +130,26 @@ const handleSearchByDateRange = async () => {
   }
 };
 
+// Búsqueda por ciudad y categoría
+const handleSearchByCiudadAndCategorie = async () => {
+  try {
+    const styleId = getIndiceCategoriaSeleccionada();
+    const response = await getDjSearch({
+      ciudadId,
+      styleId,
+    });
+    setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
+  } catch (error) {
+    console.error('Error en la búsqueda por ciudad y categoría:', error);
+    // Manejo del error
+  }
+};
+
 // Búsqueda por ciudad y fechas
 const handleSearchByCiudadAndDateRange = async () => {
   try {
-    const ciudadId = getIndiceCiudadSeleccionada();
+    
     const response = await getDjSearch({
       ciudadId,
       fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
@@ -116,18 +163,64 @@ const handleSearchByCiudadAndDateRange = async () => {
   }
 };
 
+// Búsqueda por categoría y fechas
+const handleSearchByCategorieAndDateRange = async () => {
+  try {
+    const styleId = getIndiceCategoriaSeleccionada();
+
+    const response = await getDjSearch({
+      styleId,
+      fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
+      fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
+    });
+    setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
+  } catch (error) {
+    console.error('Error en la búsqueda por categoría y fechas:', error);
+    // Manejo del error
+  }
+};
+
+// Búsqueda por ciudad, categoría y fechas
+const handleSearchByCiudadAndCategorieAndDateRange = async () => {
+  try {
+    const styleId = getIndiceCategoriaSeleccionada();
+
+    const response = await getDjSearch({
+      ciudadId,
+      styleId,
+      fechaInicio: dateRange[0].startDate.toISOString().slice(0, 10),
+      fechaFin: dateRange[0].endDate.toISOString().slice(0, 10),
+    });
+    setDjs(response);
+    setPageDjs(response.slice(0, itemsPerPage));
+  } catch (error) {
+    console.error('Error en la búsqueda por ciudad, categoría y fechas:', error);
+    // Manejo del error
+  }
+};
+
 const handleSearch = () => {
-  if (selectedCity !== null && dateRange[0].startDate && dateRange[0].endDate) {
+  if (selectedCity !== null && selectedCategorie !== null && dateRange[0].startDate && dateRange[0].endDate) {
+    handleSearchByCiudadAndCategorieAndDateRange();
+  } else if (selectedCity !== null && selectedCategorie !== null) {
+    handleSearchByCiudadAndCategorie();
+  } else if (selectedCity !== null && dateRange[0].startDate && dateRange[0].endDate) {
     handleSearchByCiudadAndDateRange();
-  } else if (selectedCity) {
+  } else if (selectedCategorie !== null && dateRange[0].startDate && dateRange[0].endDate) {
+    handleSearchByCategorieAndDateRange();
+  } else if (selectedCity !== null) {
     handleSearchByCiudad();
+  } else if (selectedCategorie !== null) {
+    handleSearchByCategorie();
   } else if (dateRange[0].startDate && dateRange[0].endDate) {
     handleSearchByDateRange();
   } else {
-    // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ni ciudad ni fechas
-    console.error('Debes seleccionar una ciudad y/o un rango de fechas para realizar la búsqueda.');
+    // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ningún filtro
+    console.error('Debes seleccionar al menos un filtro para realizar la búsqueda.');
   }
 };
+
 
   const handleDateRangeClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -154,8 +247,8 @@ const handleSearch = () => {
         border: 0,
         maxWidth: {
           xs: '100%',
-          sm: 700,
-          md: 900,
+          sm: 1000,
+          md: 1100,
         },
         mx: 'auto',
         my: {
@@ -174,7 +267,7 @@ const handleSearch = () => {
       <Autocomplete
         disablePortal
         id="combo-box"
-        options={formattedCategories}
+        options={formattedCiudades}
         value={selectedCity}
         onChange={handleCityChange}
         noOptionsText="No se encontró"
@@ -240,10 +333,6 @@ const handleSearch = () => {
             sm: 0,
             md: 0,
           },
-          marginLeft: {
-            sm: '2rem',
-            md: '3rem',
-          },
         }}
       >
         <Box
@@ -258,6 +347,7 @@ const handleSearch = () => {
           sx={{
             display: 'flex',
             alignItems: 'center',
+            mr:'2rem'
           }}
           >
          <IconButton
@@ -272,49 +362,102 @@ const handleSearch = () => {
           >
             <DateRangeIcon />
           </IconButton>
-          {dateWritten === true ? 
+          {dateWritten === true ? (
               <Typography
-              variant="body1"
-              sx={{
-                fontSize: {
-                  xs: '0.8rem',
-                  sm: '0.8rem',
-                },
-                fontWeight: 'bold',
-                margin: '0',
-              }}>
+                variant="body1"
+                sx={{
+                  fontSize: {
+                    xs: '0.8rem',
+                    sm: '0.8rem',
+                  },
+                  fontWeight: 'bold',
+                  margin: '0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  '& > *': {
+                    margin: '0.25rem 0',
+                  },
+                }}
+              >
                 {new Date(dateRange[0].startDate).toLocaleDateString()}
-                -
+                <Box display="flex" alignItems="center">
+                  <HorizontalRuleIcon
+                    sx={{
+                      fontSize: {
+                        xs: '1rem',
+                        sm: '1.2rem',
+                      },
+                    }}
+                  />
+                </Box>
                 {new Date(dateRange[0].endDate).toLocaleDateString()}
-              </Typography>  : 
+              </Typography>
+            ) : (
               <Typography
-              variant="body1"
-              sx={{
-                fontSize: {
-                  xs: '0.8rem',
-                  sm: '0.8rem',
-                },
-                fontWeight: 'bold',
-                margin: '0',
-              }}
-            >
-              
-              __/__/__ <HorizontalRuleIcon sx={{ fontSize: {
-                xs: '1rem',
-                sm: '1.2rem',
-              } }} /> __/__/__
-            </Typography>        
-            }
+                variant="body1"
+                sx={{
+                  fontSize: {
+                    xs: '0.8rem',
+                    sm: '0.8rem',
+                  },
+                  fontWeight: 'bold',
+                  margin: '0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  '& > *': {
+                    margin: '0.25rem 0',
+                  },
+                }}
+              >
+                __/__/__ 
+                <Box display="flex" alignItems="center">
+                  <HorizontalRuleIcon
+                    sx={{
+                      fontSize: {
+                        xs: '1rem',
+                        sm: '1.2rem',
+                      },
+                    }}
+                  />
+                </Box>
+                __/__/__
+              </Typography>
+            )}
           
           </Box>
+          <FormControl
+            sx={{
+              width:'15vw',
+              ml:'1rem'
+            }}
+            variant="outlined" 
+          >
+            <InputLabel>Elige una categoría</InputLabel>
+            <Select
+              label="Categoría"
+              onChange={handleCategoryChange}
+              defaultValue=""
+            >
+              <MenuItem value="">
+                <em>Todos</em>
+              </MenuItem>
+              {categories.map((category, index) => (
+                <MenuItem key={index} value={category.style}>
+                  {category.style}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Box
              sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              marginLeft:'3rem',
               color: theme.palette.text.primary,
               cursor: 'pointer',
-              marginLeft: '2rem',
               border: 'solid',
               borderRadius: '2rem',
               padding: '0.5rem 1rem',
