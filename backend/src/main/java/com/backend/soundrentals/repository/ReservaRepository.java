@@ -21,7 +21,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query("SELECT DISTINCT dj " +
             "FROM Dj dj " +
             "WHERE (:ciudad IS NULL OR dj.ciudad.id = :ciudad) " +
-            "WHERE (:estilo IS NULL OR dj.estilo.id = :estilo) " +
+            "AND (:estilo IS NULL OR dj.estilo.id = :estilo) " +
             "AND NOT EXISTS (" +
             "    SELECT r " +
             "    FROM Reserva r " +
