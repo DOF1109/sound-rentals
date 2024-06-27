@@ -30,6 +30,7 @@ import MusicVideoIcon from "@mui/icons-material/MusicVideo";
 import TuneIcon from "@mui/icons-material/Tune";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import CloseIcon from "@mui/icons-material/Close";
+import StarIcon from '@mui/icons-material/Star';
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import { Link, useParams } from "react-router-dom";
 import ImageMasonry from "../common/ImageMasonry";
@@ -64,17 +65,18 @@ const style = {
   p: 4,
 };
 
+const icons = [
+  <SpeakerIcon />,
+  <LibraryMusicIcon />,
+  <AudiotrackIcon />,
+  <AlbumIcon />,
+  <MusicVideoIcon />,
+  <TuneIcon />,
+  <EqualizerIcon />,
+  <PlaylistAddCheckCircleIcon />,
+];
+
 const getRandomIcon = () => {
-  const icons = [
-    <SpeakerIcon />,
-    <LibraryMusicIcon />,
-    <AudiotrackIcon />,
-    <AlbumIcon />,
-    <MusicVideoIcon />,
-    <TuneIcon />,
-    <EqualizerIcon />,
-    <PlaylistAddCheckCircleIcon />,
-  ];
   const randomIndex = Math.floor(Math.random() * icons.length);
   return icons[randomIndex];
 };
@@ -84,6 +86,7 @@ const DjDetail = () => {
   const [dj, setDj] = useState();
   const [djImages, setDjImages] = useState();
   const [open, setOpen] = useState(false);
+  const [caracteristicaIconos, setCaracteristicaIconos] = useState({});
   const {
     handleLogout,
     user,
@@ -190,7 +193,15 @@ const DjDetail = () => {
   };
 
   useEffect(() => {
-    if (dj) setDjImages(imagesDj());
+    if (dj) {
+      setDjImages(imagesDj());
+      // Generar iconos aleatorios para cada característica y guardarlos en el estado
+      const iconsMap = {};
+      dj.caracteristicas.forEach(caracteristica => {
+        iconsMap[caracteristica.caracteristica] = getRandomIcon();
+      });
+      setCaracteristicaIconos(iconsMap);
+    }
 
     if (userDb != undefined && djFavorites.length > 0 && dj) {
       const favoriteCheck = djFavorites.some(
@@ -356,13 +367,28 @@ const DjDetail = () => {
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
+                <Box sx={{
+                  minWidth: "100%",
+                  display:"flex",
+                  justifyContent:"center",
+                  padding:"15px 0 0 0"
+                }}>
+                  <Box sx={{ mr: 1 }}>({dj.calificacion==null?0:dj.calificacion})</Box>
+                  <Rating
+                    name="text-feedback"
+                    value={dj.calificacion==null?0:dj.calificacion}
+                    readOnly
+                    precision={0.5}
+                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                  />
+                </Box>
                 <Typography pt={3} pb={1}>
                   CARACTERISTICAS:
                 </Typography>
                 {dj &&
                   dj.caracteristicas.map((caracteristica, index) => (
                     <ListItem key={index}>
-                      <ListItemIcon>{getRandomIcon()}</ListItemIcon>
+                      <ListItemIcon>{caracteristicaIconos[caracteristica.caracteristica]}</ListItemIcon>
                       <ListItemText primary={caracteristica.caracteristica} />
                     </ListItem>
                   ))}
