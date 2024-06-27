@@ -245,7 +245,7 @@ const Header = () => {
                   </Button>
                   <Button
                     onClick={handleCloseNavMenu}
-                    sx={{ display: "block", fontWeight: "500" }}
+                    sx={{ display: "block", fontWeight: "500", pr: 3 }}
                   >
                     <Link className="clear-link shiny-hover" to="/reservations">
                       RESERVAS
