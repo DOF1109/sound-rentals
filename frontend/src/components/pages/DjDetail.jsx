@@ -336,7 +336,7 @@ const DjDetail = () => {
                 </Box>
                 <hr />
                 <Typography py={3}>{`PRECIO: $ ${dj.charge}`}</Typography>
-                <Typography>CATEGORIA:</Typography>
+                <Typography>CATEGORIAS:</Typography>
                 {dj.estilos.map((estilo) => {
                   return (
                     <Typography
@@ -347,16 +347,17 @@ const DjDetail = () => {
                   );
                 })}
 
-                <Typography py={3}>{`CIUDAD: ${dj.ciudad.nombre}`}</Typography>
+                <Typography pt={3}>{`CIUDAD:`}</Typography>
+                <Typography pb={3} pl={1}>{`* ${dj.ciudad.nombre}`}</Typography>
 
-                <Typography variant="body2" pt={3} pb={1}>
-                  Sobre el DJ
+                <Typography pb={1}>
+                  SOBRE EL DJ:
                 </Typography>
                 <Typography variant="body2" pl={1}>
                   {dj.comment}
                 </Typography>
-                <Typography variant="body1" pt={3} pb={1}>
-                  Caracteristicas
+                <Typography pt={3} pb={1}>
+                  CARACTERISTICAS:
                 </Typography>
                 {dj &&
                   dj.caracteristicas.map((caracteristica, index) => (
@@ -503,7 +504,7 @@ const DjDetail = () => {
                 * {`${dj.name} ${dj.lastname}`}
               </Typography>
             </Box>
-            <Box>
+            <Box my={3}>
               <Typography gutterBottom>Nombre del Usuario :</Typography>
               <Typography gutterBottom display="block" pl={1}>
                 * {getUserNameFromLocalStorage()}
@@ -518,7 +519,7 @@ const DjDetail = () => {
                   : "undefined"}
               </Typography>
             </Box>
-            <Box>
+            <Box my={3}>
               <Typography gutterBottom>Periodo de Reserva :</Typography>
               <Typography gutterBottom display="block" pl={1}>
                 * Del{" "}

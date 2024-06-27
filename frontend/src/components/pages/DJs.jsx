@@ -78,28 +78,27 @@ const DJs = () => {
           return category.style;
         })}
       />
-            <FormControl fullWidth variant="outlined" margin="normal">
-        <InputLabel>Categoría</InputLabel>
-        <Select
-          label="Categoría"
-          onChange={(e) => handleCategoryChange(e.target.value)}
-          defaultValue=""
-        >
-          <MenuItem value="">
-            <em>Todos</em>
-          </MenuItem>
-          {categories.map((category, index) => (
-            <MenuItem key={index} value={category.style}>
-              {category.style}
+      <Box display="flex" justifyContent="center" width="100%">
+        <FormControl fullWidth variant="outlined" margin="normal" sx={{maxWidth:"900px"}}>
+            <InputLabel>Categoría</InputLabel>
+            <Select
+            label="Categoría"
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            defaultValue=""
+            >
+            <MenuItem value="">
+                <em>Todos</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Grid container spacing={6} pb={1} justifyContent="center">
-        {pageDjs === []? 
-        <p>No hay Djs</p>
-        :
-        pageDjs.map((dj, index) => (
+            {categories.map((category, index) => (
+                <MenuItem key={index} value={category.style}>
+                {category.style}
+                </MenuItem>
+            ))}
+            </Select>
+        </FormControl>
+      </Box>
+      <Grid container spacing={6} pb={1} pt={5} justifyContent="center">
+        {pageDjs.map((dj, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <CardDj
               id={dj.id}
