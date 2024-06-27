@@ -21,6 +21,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query("SELECT DISTINCT dj " +
             "FROM Dj dj " +
             "WHERE (:ciudad IS NULL OR dj.ciudad.id = :ciudad) " +
+            "AND (:estilo IS NULL OR :estilo MEMBER OF dj.estilos) " +
             "AND NOT EXISTS (" +
             "    SELECT r " +
             "    FROM Reserva r " +
@@ -29,8 +30,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             "    AND r.startDate <= :fechaFin" +
             ")")
     List<Dj> findReservaByDjFecha(@Param("ciudad") Long ciudad,
-                                                @Param("fechaInicio") LocalDate fechaInicio,
-                                                @Param("fechaFin") LocalDate fechaFin);
+                                @Param("estilo") Estilo estilo,
+                                @Param("fechaInicio") LocalDate fechaInicio,
+                                @Param("fechaFin") LocalDate fechaFin);
 
     List<Reserva> findReservaByUsuario_Id(Long id);
 
