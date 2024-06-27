@@ -73,29 +73,13 @@ const DJs = () => {
     <Container component="section">
       <SearchInput
       itemsPerPage={itemsPerPage}
+      djs={djs}
       setDjs={setSearchDjs}
+      setPage={setPage}
       setPageDjs={setPageDjs}
-        categories={categories.map((category) => {
-          return category.style;
-        })}
+        categories={categories}
       />
-            <FormControl fullWidth variant="outlined" margin="normal">
-        <InputLabel>Categoría</InputLabel>
-        <Select
-          label="Categoría"
-          onChange={(e) => handleCategoryChange(e.target.value)}
-          defaultValue=""
-        >
-          <MenuItem value="">
-            <em>Todos</em>
-          </MenuItem>
-          {categories.map((category, index) => (
-            <MenuItem key={index} value={category.style}>
-              {category.style}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            
       <Grid container spacing={6} pb={1} justifyContent="center">
         {pageDjs === []? 
         <p>No hay Djs</p>

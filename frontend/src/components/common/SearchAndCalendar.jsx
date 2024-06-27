@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import { DateRange } from 'react-date-range';
 import {
-  Box,
-  Button,
   FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
   InputLabel,
-  OutlinedInput,
-  TextField,
-  Tooltip,
-  Typography,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
@@ -22,23 +15,19 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import SearchInput from "../common/SearchInput2";
 
-function SearchAndCalendar({setDjs, setPageDjs, itemsPerPage}) {
+function SearchAndCalendar({djs, setDjs, setPage, setPageDjs, itemsPerPage, categories}) {
   const [selectedCity, setSelectedCity] = useState(null);
-
-  //estados del calendario
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const selectionRange = {
-    startDate: startDate,
-    endDate: endDate,
-    key: 'selection'
-  }
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   //manejo de los estados del calendario
-  const handleDateSelect = (ranges) => {
-    setStartDate (ranges.selection.startDate);
-    setEndDate (ranges.selection.endDate);
-  }
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    const filteredDjs = category
+      ? djs.filter(dj => dj.estilos.some(estilo => estilo.style === category))
+      : djs;
+    setPageDjs(filteredDjs.slice(0, itemsPerPage));
+    setPage(1);
+  };
 
   //botón reset
   const resetInput = () => {
@@ -55,10 +44,14 @@ function SearchAndCalendar({setDjs, setPageDjs, itemsPerPage}) {
     <SearchInput 
     itemsPerPage={itemsPerPage}
     onCitySelect={handleCitySelect} 
+    djs={djs}
     setDjs={setDjs}
     setPageDjs={setPageDjs}
+    selectedCategory={selectedCategory}
+    categories={categories}
     // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
     />
+
   {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
     <Button
       variant="contained"
