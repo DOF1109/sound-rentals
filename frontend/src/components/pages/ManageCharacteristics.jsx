@@ -113,7 +113,7 @@ const ManageCharacteristics = () => {
 
   const handleDeleteCharacteristics = (id) => {
     swal({
-      title: "¿Seguro que quieres elimnar la característica?",
+      title: "¿Seguro que quieres eliminar la característica?",
       icon: "warning",
       buttons: true,
       dangerMode: true,

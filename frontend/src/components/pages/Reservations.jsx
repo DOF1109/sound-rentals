@@ -1,4 +1,4 @@
-import { Button, Container, IconButton, Rating } from "@mui/material";
+import { Alert, Box, Button, Container, IconButton, Rating } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -104,7 +104,7 @@ const Reservations = () => {
 
   return (
     <Container sx={{ py: 5 }}>
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      {reservations.length>0 && <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -161,7 +161,12 @@ const Reservations = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      </Paper>}
+      {reservations.length==0 &&
+        <Box sx={{marginTop:'2rem'}}>
+          <Alert variant="filled" severity="info" sx={{color:'white'}}>No has realizado reservas.</Alert>
+        </Box>
+      }
     </Container>
   );
 };

@@ -51,10 +51,11 @@ public class DjController {
     @GetMapping("/buscador")
     public ResponseEntity<List<DjSalidaDto>> buscadorPorCiudadFecha(
             @RequestParam(required = false) Long ciudadId,
+            @RequestParam(required = false) Long styleId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin
     ) throws ResourceNotFoundException {
-        List<DjSalidaDto> resultado = djService.buscarDjPorCiudadFecha(ciudadId, fechaInicio, fechaFin);
+        List<DjSalidaDto> resultado = djService.buscarDjPorCiudadFecha(ciudadId,styleId, fechaInicio, fechaFin);
         return new ResponseEntity<>(resultado, HttpStatus.OK);
     }
 

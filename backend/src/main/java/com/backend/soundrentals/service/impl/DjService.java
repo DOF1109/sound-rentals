@@ -237,6 +237,8 @@ public class DjService implements IRecursoService {
         djAEliminar.getEstilos().clear();
         djAEliminar.getCaracteristicas().clear();
 
+        djRepository.deleteById(id);
+
         LOGGER.info("Dj eliminado: "+ JsonPrinter.toString(djAEliminar));
 
         return modelMapper.map(djAEliminar,DjSalidaDto.class);
@@ -244,8 +246,11 @@ public class DjService implements IRecursoService {
     }
 
     @Override
-    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long id, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
-        List<DjSalidaDto> djDisponibles = reservaRepository.findReservaByDjFecha(id,fechaInicio,fechaFin).stream()
+    public List<DjSalidaDto> buscarDjPorCiudadFecha(Long ciudadId,Long styleId, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+
+        Estilo estilo = estiloRepository.findById(styleId).orElse(null);
+
+        List<DjSalidaDto> djDisponibles = reservaRepository.findReservaByDjFecha(ciudadId,estilo,fechaInicio,fechaFin).stream()
                 .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
 
         return djDisponibles;

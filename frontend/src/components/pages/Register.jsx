@@ -12,12 +12,13 @@ import {
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signUp, db } from "../../firebaseConfig";
 // import { AuthContext } from "../../context/AuthContext";
 import { setDoc, doc } from "firebase/firestore";
 import swal from "sweetalert";
 import { postUser } from "../../api/userApi";
+import Logo from "../../assets/images/SoundRentals-logo.webp";
 
 const Register = () => {
   //   const { data } = useContext(AuthContext);
@@ -53,7 +54,7 @@ const Register = () => {
     e.preventDefault();
 
     const eRegexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    const eRegexPass = /^(?=.*\d)(?=.*[!@#$%^&*.])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const eRegexPass = /^(?=.*\d)(?=.*[!@#$%^&*.+])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     if (
       userCredentials.email.length > 5 &&
@@ -73,7 +74,7 @@ const Register = () => {
             title: "SoundRentals",
             text: "Usuario creado exitosamente!",
             //icon: successs - error - warning - info
-            icon: "successs",
+            icon: "success",
             button: "Ingresar",
             //timer: '2000'
           });
@@ -119,6 +120,14 @@ const Register = () => {
         // backgroundColor: theme.palette.secondary.main,
       }}
     >
+      <Box component={Link} to="/" display="flex">
+        <Box
+          component="img"
+          src={Logo}
+          alt="SountRentals"
+          sx={{ maxWidth: { xs: "130px", md: "150px" }, my: 3 }}
+        />
+      </Box>
       <form onSubmit={handleSubmit}>
         <Grid
           container
