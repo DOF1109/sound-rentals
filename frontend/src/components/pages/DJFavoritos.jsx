@@ -52,7 +52,7 @@ const DJFavoritos = () => {
   if (!djs) return <Loader />;
 
   return (
-    <Container component="section">
+    <Container component="section" sx={{pt:5, pb: 1}}>
       {pageDjs.length>0 && <>
         <Grid container spacing={6} pb={1} justifyContent="center">
         {pageDjs.map((dj, index) => (
