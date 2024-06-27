@@ -8,11 +8,13 @@ const WhatsAppButton = ({ phoneNumber, message }) => {
     }
     try {
       window.open(url, "_blank");
-      alert("Mensaje enviado correctamente a través de WhatsApp");
+      swal("WhatsApp enviado correctamente!", {
+        icon: "success",
+      });
     } catch (error) {
-      alert(
-        "Hubo un error al intentar enviar el mensaje. Por favor, inténtelo de nuevo."
-      );
+      swal("Ocurrió un error, vuelva a intentarlo", {
+        icon: "error",
+      });
     }
   };
 
