@@ -48,9 +48,9 @@ function SearchAndCalendar({djs, setDjs, setPage, setPageDjs, itemsPerPage, cate
     setDjs={setDjs}
     setPageDjs={setPageDjs}
     selectedCategory={selectedCategory}
-    categories={categories}
     // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
     />
+
 
   {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', marginBottom: '2rem' }}>
     <Button

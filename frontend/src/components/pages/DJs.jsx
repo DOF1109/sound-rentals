@@ -8,13 +8,13 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Alert
 } from "@mui/material";
 import SearchInput from "../common/SearchAndCalendar";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs, getDjFavoritos } from "../../api/djsApi.js";
-import { getCategories } from "../../api/categoriesApi.js";
 import Loader from "../common/Loader.jsx";
 
 const DJs = () => {
@@ -43,11 +43,6 @@ const DJs = () => {
     }
   };
 
-  const loadCategories = async () => {
-    const data = await getCategories();
-    if (data) setCategories(data);
-  };
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     const filteredDjs = category
@@ -63,7 +58,6 @@ const DJs = () => {
   };
 
   useEffect(() => {
-    loadCategories();
     loadDjs();
   }, [selectedCategory]);
 
@@ -81,21 +75,31 @@ const DJs = () => {
       />
             
       <Grid container spacing={6} pb={1} justifyContent="center">
-        {pageDjs === []? 
-        <p>No hay Djs</p>
-        :
-        pageDjs.map((dj, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4}>
-            <CardDj
-              id={dj.id}
-              image={dj.urlPic}
-              name={dj.name}
-              lastname={dj.lastname}
-              styles={dj.estilos}
-            />
-          </Grid>
-        ))
-        }
+      {pageDjs.length === 0 ? (
+        <Box sx={{ marginTop: '2rem' }}>
+          <Alert variant="filled" severity="info" sx={{ color: 'white' }}>
+            No hay djs con esos filtros
+          </Alert>
+        </Box>
+      ) : (
+        <Grid 
+        sx={{
+          marginTop: '2rem'
+        }}
+        container spacing={2}>
+          {pageDjs.map((dj, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <CardDj
+                id={dj.id}
+                image={dj.urlPic}
+                name={dj.name}
+                lastname={dj.lastname}
+                styles={dj.estilos}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
         
       </Grid>
       <Box display="flex" justifyContent="center" p={3}>

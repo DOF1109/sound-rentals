@@ -12,15 +12,23 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 import { getCiudades } from "../../api/ciudadesApi";
+import { getCategories } from "../../api/categoriesApi.js";
 
-const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, categories }) => {
+const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
   const [ciudades, setCiudades] = useState();
+  const [categories, setCategories] = useState();
+
   const loadCiudades = async () => {
     const data = await getCiudades();
     if (data) setCiudades(data);
   };
+  const loadCategories = async () => {
+    const data = await getCategories();
+    if (data) setCategories(data);
+  };
 
   useEffect(() => {
+    loadCategories();
     loadCiudades();
   }, []);
 
@@ -50,9 +58,6 @@ const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, categories }) => {
     value: ciudad.id,
   }));
 
-  const formattedCategories = categories.map((categorie) => ({
-    label: categorie.style,
-  }));
 
   const handleCategoryChange = ( event, newValue) => {
     setSelectedCategorie(newValue.props.children);
