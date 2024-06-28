@@ -31,6 +31,8 @@ const EmblaCarousel = ({ slides, options }) => {
             <div className="embla__slide" key={index}>
               <CardDj
                 id={dj.id}
+                charge={dj.charge}
+                calificacion={dj.calificacion}
                 image={dj.urlPic}
                 name={dj.name}
                 lastname={dj.lastname}

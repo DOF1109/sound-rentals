@@ -94,7 +94,7 @@ const CardDj = ({ id, image, name, lastname, styles, charge, calificacion}) => {
                 </Typography>
               </Link>
               <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary} sx={{display:'flex', alignItems:"center"}}>
-                <StarIcon/>  {calificacion}
+               {calificacion}
                 </Typography>
               {userDb && user && user.rol == 'commonusr' && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
             </Box>
