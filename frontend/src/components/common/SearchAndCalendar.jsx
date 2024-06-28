@@ -15,7 +15,7 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import SearchInput from "../common/SearchInput2";
 
-function SearchAndCalendar({djs, setDjs, setPage, setPageDjs, itemsPerPage, categories}) {
+function SearchAndCalendar({djs, setDjs, setPage, setPageDjs, itemsPerPage, onSearch}) {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -48,6 +48,7 @@ function SearchAndCalendar({djs, setDjs, setPage, setPageDjs, itemsPerPage, cate
     setDjs={setDjs}
     setPageDjs={setPageDjs}
     selectedCategory={selectedCategory}
+    onSearch={onSearch}
     // ciudadesId={ciudades.map((ciudad) => ciudad.ciudad)}
     />
 

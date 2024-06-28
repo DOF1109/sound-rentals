@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import SearchInput from "../common/SearchAndCalendar";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
@@ -11,6 +11,7 @@ import Loader from "../common/Loader.jsx";
 const OPTIONS = { loop: true };
 
 const Home = () => {
+  const resultsRef = useRef(null);
   const [categories, setCategories] = useState();
   const [topDjs, setTopDjs] = useState();
   const [djs, setDjs] = useState([]);
@@ -42,6 +43,10 @@ const Home = () => {
     }
   };
 
+  const handleSearchAndScroll = () => {
+    resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     loadDjs();
     loadCategories();
@@ -60,6 +65,7 @@ const Home = () => {
           setDjs={setDjs}
           setPage={setPage}
           setPageDjs={setPageDjs}
+          onSearch={handleSearchAndScroll}
           />
           <EmblaCategoryCarousel
             slides={categories.map((category) => {
@@ -96,6 +102,7 @@ const Home = () => {
         component="section"
         py={4}
         sx={{ background: theme.palette.light.main, py: 6 }}
+        ref={resultsRef}
       >
         <Container>
           <Typography
