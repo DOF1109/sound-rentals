@@ -543,7 +543,7 @@ const handleSearch = () => {
       [`@media (max-width: 767px)`]: {
         mt:'0.5rem',
         mb:'1rem',
-        // color:'black'
+        color:'white'
       },
     }}
     >

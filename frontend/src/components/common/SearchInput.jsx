@@ -540,7 +540,7 @@ console.log('selectedCity', selectedCity);
       [`@media (max-width: 767px)`]: {
         mt:'0.5rem',
         mb:'0.5rem',
-        color:'black'
+        color:'white'
       },
     }}
     >
