@@ -13,6 +13,7 @@ import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 import { getCiudades } from "../../api/ciudadesApi";
 import { getCategories } from "../../api/categoriesApi.js";
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
   const [ciudades, setCiudades] = useState();
@@ -64,13 +65,15 @@ const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
   }
 
   const getIndiceCategoriaSeleccionada = () => {
-    if (selectedCategorie !== null) {
+    if (selectedCategorie !== '') {
       const selectedCategorieIndex = categories.find((categorie) => categorie.style === selectedCategorie);
-      return selectedCategorieIndex.id
+      return selectedCategorieIndex?.id || null;
     } else {
       return null;
     }
   };
+
+  console.log('getIndiceCategoriaSeleccionada',getIndiceCategoriaSeleccionada());
   
   const handleCityChange = (event, newValue) => {
     setSelectedCity(newValue.label);
@@ -134,7 +137,6 @@ const handleSearchByDateRange = async () => {
     // Manejo del error
   }
 };
-
 // Búsqueda por ciudad y categoría
 const handleSearchByCiudadAndCategorie = async () => {
   try {
@@ -206,19 +208,19 @@ const handleSearchByCiudadAndCategorieAndDateRange = async () => {
 };
 
 const handleSearch = () => {
-  if (selectedCity !== null && selectedCategorie !== null && dateRange[0].startDate && dateRange[0].endDate) {
+  if (selectedCity !== null && selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndCategorieAndDateRange();
   } else if (selectedCity !== null && selectedCategorie !== null) {
     handleSearchByCiudadAndCategorie();
-  } else if (selectedCity !== null && dateRange[0].startDate && dateRange[0].endDate) {
+  } else if (selectedCity !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndDateRange();
-  } else if (selectedCategorie !== null && dateRange[0].startDate && dateRange[0].endDate) {
+  } else if (selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCategorieAndDateRange();
   } else if (selectedCity !== null) {
     handleSearchByCiudad();
   } else if (selectedCategorie !== null) {
     handleSearchByCategorie();
-  } else if (dateRange[0].startDate && dateRange[0].endDate) {
+  } else if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByDateRange();
   } else {
     // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ningún filtro
@@ -235,10 +237,19 @@ const handleSearch = () => {
     setAnchorEl(null);
   };
 
+  const handleResetearFiltros = () => {
+    setSelectedCategorie(null)
+    setSelectedCity(null)
+    setStartDate()
+    setEndDate()
+  setDateWritten(false)
+  }
+console.log('selectedCity', selectedCity);
   const open = Boolean(anchorEl);
   const id = open ? 'date-range-popover' : undefined;
 
   return (
+    <>
     <Box
       className="shiny-dark"
       sx={{
@@ -443,10 +454,10 @@ const handleSearch = () => {
             <Select
               label="Categoría"
               onChange={handleCategoryChange}
-              defaultValue=""
+              value={selectedCategorie}
             >
-              <MenuItem value="">
-                <em>Todos</em>
+              <MenuItem value=''>
+                Todos
               </MenuItem>
               {categories.map((category, index) => (
                 <MenuItem key={index} value={category.style}>
@@ -502,7 +513,19 @@ const handleSearch = () => {
           />
         </Popover>
       </Box>
+      
     </Box>
+    <Button
+    onClick={handleResetearFiltros}
+    sx={{
+      ml:'2rem',
+      mt:'-4rem'
+    }}
+    >
+    <RotateLeftIcon/>
+    Resetear filtros
+  </Button>
+  </>
   );
 };
 

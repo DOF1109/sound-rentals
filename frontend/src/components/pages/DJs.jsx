@@ -56,6 +56,7 @@ const DJs = () => {
     setPage(value);
     setPageDjs(djs.slice((value - 1) * itemsPerPage, value * itemsPerPage));
   };
+  console.log('pagedjs',pageDjs)
 
   useEffect(() => {
     loadDjs();
