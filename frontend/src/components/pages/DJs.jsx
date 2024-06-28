@@ -11,11 +11,12 @@ import {
   MenuItem,
   Alert
 } from "@mui/material";
-import SearchInput from "../common/SearchAndCalendar";
+import SearchInput from "../common/SearchInput2";
 import CardDj from "../common/CardDj";
 import { useEffect, useState } from "react";
 import { getDjs, getDjFavoritos } from "../../api/djsApi.js";
 import Loader from "../common/Loader.jsx";
+import { getCategories } from "../../api/categoriesApi.js";
 
 const DJs = () => {
   const [categories, setCategories] = useState([]);
@@ -42,6 +43,11 @@ const DJs = () => {
       setPageDjs(filteredDjs.slice(0, itemsPerPage));
     }
   };
+  const loadCategories = async () => {
+    const data = await getCategories();
+    if (data) setCategories(data);
+  };
+
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -56,9 +62,9 @@ const DJs = () => {
     setPage(value);
     setPageDjs(djs.slice((value - 1) * itemsPerPage, value * itemsPerPage));
   };
-  console.log('pagedjs',pageDjs)
 
   useEffect(() => {
+    loadCategories()
     loadDjs();
   }, [selectedCategory]);
 
@@ -72,7 +78,7 @@ const DJs = () => {
       setDjs={setSearchDjs}
       setPage={setPage}
       setPageDjs={setPageDjs}
-        categories={categories}
+      categories={categories}
       />
             
       <Grid container spacing={6} pb={1} justifyContent="center">
@@ -89,7 +95,6 @@ const DJs = () => {
         }}
         container spacing={2}>
           {pageDjs.map((dj, index) => {
-            console.log('Dj:', dj); // Agrega este console.log
             return (
               <Grid item key={index} xs={12} sm={6} md={4}>
                 <CardDj
