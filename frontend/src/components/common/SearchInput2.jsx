@@ -12,32 +12,19 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {getDjSearch} from '../../api/djsApi';
 import { borderRadius } from '@mui/system';
 import { getCiudades } from "../../api/ciudadesApi";
-import { getCategories } from "../../api/categoriesApi.js";
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
-const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, onSearch }) => {
+const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, setPage, categories }) => {
   const [ciudades, setCiudades] = useState();
-  const [categories, setCategories] = useState();
 
   const loadCiudades = async () => {
     const data = await getCiudades();
     if (data) setCiudades(data);
   };
-  const loadCategories = async () => {
-    const data = await getCategories();
-    if (data) setCategories(data);
-  };
 
   useEffect(() => {
-    loadCategories();
     loadCiudades();
-    return () => {
-      setSelectedCategorie(null)
-      setSelectedCity(null)
-      setStartDate()
-      setEndDate()
-      setDateWritten(false)
-    };
+    
   }, []);
 
   const theme = useTheme();
@@ -110,6 +97,7 @@ const handleSearchByCiudad = async () => {
     const response = await getDjSearch({ ciudadId });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por ciudad:', error);
     // Manejo del error
@@ -123,6 +111,7 @@ const handleSearchByCategorie = async () => {
     const response = await getDjSearch({ styleId });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por categoría:', error);
     // Manejo del error
@@ -138,6 +127,7 @@ const handleSearchByDateRange = async () => {
     });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por fechas:', error);
     // Manejo del error
@@ -153,6 +143,7 @@ const handleSearchByCiudadAndCategorie = async () => {
     });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por ciudad y categoría:', error);
     // Manejo del error
@@ -170,6 +161,7 @@ const handleSearchByCiudadAndDateRange = async () => {
     });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por ciudad y fechas:', error);
     // Manejo del error
@@ -188,6 +180,7 @@ const handleSearchByCategorieAndDateRange = async () => {
     });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por categoría y fechas:', error);
     // Manejo del error
@@ -207,6 +200,7 @@ const handleSearchByCiudadAndCategorieAndDateRange = async () => {
     });
     setDjs(response);
     setPageDjs(response.slice(0, itemsPerPage));
+    setPage(1)
   } catch (error) {
     console.error('Error en la búsqueda por ciudad, categoría y fechas:', error);
     // Manejo del error
@@ -216,25 +210,18 @@ const handleSearchByCiudadAndCategorieAndDateRange = async () => {
 const handleSearch = () => {
   if (selectedCity !== null && selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndCategorieAndDateRange();
-    onSearch();
   } else if (selectedCity !== null && selectedCategorie !== null) {
     handleSearchByCiudadAndCategorie();
-    onSearch();
   } else if (selectedCity !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndDateRange();
-    onSearch();
   } else if (selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCategorieAndDateRange();
-    onSearch();
   } else if (selectedCity !== null) {
     handleSearchByCiudad();
-    onSearch();
   } else if (selectedCategorie !== null) {
     handleSearchByCategorie();
-    onSearch();
   } else if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByDateRange();
-    onSearch();
   } else {
     // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ningún filtro
     console.error('Debes seleccionar al menos un filtro para realizar la búsqueda.');
@@ -253,11 +240,15 @@ const handleSearch = () => {
   const handleResetearFiltros = () => {
     setSelectedCategorie(null)
     setSelectedCity(null)
-    setStartDate()
-    setEndDate()
+    setDateRange([
+      {
+        startDate: startDate,
+        endDate: endDate,
+        key: 'selection',
+      },
+    ]);
   setDateWritten(false)
   }
-console.log('selectedCity', selectedCity);
   const open = Boolean(anchorEl);
   const id = open ? 'date-range-popover' : undefined;
 
@@ -369,29 +360,31 @@ console.log('selectedCity', selectedCity);
             display: 'flex',
             alignItems: 'center',
             marginRight: '1rem',
+            flexDirection: { xs: 'column', sm: 'row' },
+            '& > *': {
+              margin: { xs: '0.5rem 0', sm: '0 1rem' },
+            },
           }}
         >
           <Box
-          onClick={handleDateRangeClick}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            mr:'2rem'
-          }}
-          >
-         <IconButton
-            aria-describedby={id}
-            
+            onClick={handleDateRangeClick}
             sx={{
-              color: theme.palette.secondary.main,
-              '&:hover': {
-                color: theme.palette.secondary.dark,
-              },
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            <DateRangeIcon />
-          </IconButton>
-          {dateWritten === true ? (
+            <IconButton
+              aria-describedby={id}
+              sx={{
+                color: theme.palette.secondary.main,
+                '&:hover': {
+                  color: theme.palette.secondary.dark,
+                },
+              }}
+            >
+              <DateRangeIcon />
+            </IconButton>
+            {dateWritten === true ? (
               <Typography
                 variant="body1"
                 sx={{
@@ -440,8 +433,7 @@ console.log('selectedCity', selectedCity);
                   },
                 }}
               >
-                __/__/__ 
-                <Box display="flex" alignItems="center">
+                __/__/__ <Box display="flex" alignItems="center">
                   <HorizontalRuleIcon
                     sx={{
                       fontSize: {
@@ -454,14 +446,12 @@ console.log('selectedCity', selectedCity);
                 __/__/__
               </Typography>
             )}
-          
           </Box>
           <FormControl
             sx={{
-              width:'15vw',
-              ml:'1rem'
+              width: { xs: '100%', sm: '15vw' },
             }}
-            variant="outlined" 
+            variant="outlined"
           >
             <InputLabel>Elige una categoría</InputLabel>
             <Select
@@ -469,9 +459,7 @@ console.log('selectedCity', selectedCity);
               onChange={handleCategoryChange}
               value={selectedCategorie}
             >
-              <MenuItem value=''>
-                Todos
-              </MenuItem>
+              <MenuItem value="">Todos</MenuItem>
               {categories.map((category, index) => (
                 <MenuItem key={index} value={category.style}>
                   {category.style}
@@ -480,11 +468,10 @@ console.log('selectedCity', selectedCity);
             </Select>
           </FormControl>
           <Box
-             sx={{
+            sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginLeft:'3rem',
               color: theme.palette.text.primary,
               cursor: 'pointer',
               border: 'solid',
@@ -495,13 +482,9 @@ console.log('selectedCity', selectedCity);
               },
             }}
             onClick={handleSearch}
-
           >
-            <Typography >
-              Buscar
-            </Typography>
-            <SearchIcon 
-            />
+            <Typography>Buscar</Typography>
+            <SearchIcon />
           </Box>
         </Box>
         <Popover

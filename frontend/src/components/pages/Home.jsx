@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
-import SearchInput from "../common/SearchAndCalendar";
+import SearchInput from "../common/SearchInput";
 import EmblaCategoryCarousel from "../common/EmblaCarousel/EmblaCategoryCarousel";
 import EmblaRecommendedCarousel from "../common/EmblaCarousel/EmblaRecommendedCarousel";
 import theme from "../../styles/themeConfig";
@@ -44,10 +44,14 @@ const Home = () => {
   };
 
   const handleSearchAndScroll = () => {
+    if (resultsRef.current) {
     resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
   };
 
   useEffect(() => {
+      handleSearchAndScroll();
+    
     loadDjs();
     loadCategories();
     loadTopDjs();
@@ -65,6 +69,7 @@ const Home = () => {
           setDjs={setDjs}
           setPage={setPage}
           setPageDjs={setPageDjs}
+          categories={categories}
           onSearch={handleSearchAndScroll}
           />
           <EmblaCategoryCarousel
