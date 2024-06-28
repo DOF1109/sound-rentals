@@ -15,7 +15,7 @@ import { getCiudades } from "../../api/ciudadesApi";
 import { getCategories } from "../../api/categoriesApi.js";
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
-const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
+const SearchInput = ({ setDjs, setPageDjs, itemsPerPage, onSearch }) => {
   const [ciudades, setCiudades] = useState();
   const [categories, setCategories] = useState();
 
@@ -76,11 +76,10 @@ const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
       const selectedCategorieIndex = categories.find((categorie) => categorie.style === selectedCategorie);
       return selectedCategorieIndex?.id || null;
     } else {
-      return null;
+      return '';
     }
   };
 
-  console.log('getIndiceCategoriaSeleccionada',getIndiceCategoriaSeleccionada());
   
   const handleCityChange = (event, newValue) => {
     setSelectedCity(newValue.label);
@@ -217,18 +216,25 @@ const handleSearchByCiudadAndCategorieAndDateRange = async () => {
 const handleSearch = () => {
   if (selectedCity !== null && selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndCategorieAndDateRange();
+    onSearch();
   } else if (selectedCity !== null && selectedCategorie !== null) {
     handleSearchByCiudadAndCategorie();
+    onSearch();
   } else if (selectedCity !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCiudadAndDateRange();
+    onSearch();
   } else if (selectedCategorie !== null && dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByCategorieAndDateRange();
+    onSearch();
   } else if (selectedCity !== null) {
     handleSearchByCiudad();
+    onSearch();
   } else if (selectedCategorie !== null) {
     handleSearchByCategorie();
+    onSearch();
   } else if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
     handleSearchByDateRange();
+    onSearch();
   } else {
     // Mostrar un mensaje de error o realizar alguna acción cuando no se ha seleccionado ningún filtro
     console.error('Debes seleccionar al menos un filtro para realizar la búsqueda.');
