@@ -28,19 +28,22 @@ const ManageUsers = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [users, setUsers] = useState([]);
-  const {usersFb,loadUsersFb} = useContext(AuthContext);
+  const {usersFb,loadUsersFb,userDb} = useContext(AuthContext);
   const theme = useTheme();
   const isXsOrSm = useMediaQuery(theme.breakpoints.down("sm"));
 
 
   const loadUsers = async () => {
-    const data = await getUsers();
-    if (data) setUsers(data);
+    if(userDb){
+      const data = await getUsers();
+      let users = data.filter((u)=>u.email!=userDb.email);
+      if (data) setUsers(users);
+    }
   };
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [userDb]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
