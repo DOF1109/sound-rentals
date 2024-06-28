@@ -355,36 +355,42 @@ const handleSearch = () => {
           },
         }}
       >
-        <Box
+   <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             marginRight: '1rem',
-            flexDirection: { xs: 'column', sm: 'row' },
-            '& > *': {
-              margin: { xs: '0.5rem 0', sm: '0 1rem' },
+            [`@media (max-width: 767px)`]: {
+              display: 'inline-block',
             },
           }}
         >
           <Box
-            onClick={handleDateRangeClick}
-            sx={{
+          onClick={handleDateRangeClick}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            mr:'2rem',
+            [`@media (max-width: 767px)`]: {
               display: 'flex',
-              alignItems: 'center',
+            alignItems: 'center',
+            justifyContent:'center'
+            },
+          }}
+          >
+         <IconButton
+            aria-describedby={id}
+            
+            sx={{
+              color: theme.palette.secondary.main,
+              '&:hover': {
+                color: theme.palette.secondary.dark,
+              },
             }}
           >
-            <IconButton
-              aria-describedby={id}
-              sx={{
-                color: theme.palette.secondary.main,
-                '&:hover': {
-                  color: theme.palette.secondary.dark,
-                },
-              }}
-            >
-              <DateRangeIcon />
-            </IconButton>
-            {dateWritten === true ? (
+            <DateRangeIcon />
+          </IconButton>
+          {dateWritten === true ? (
               <Typography
                 variant="body1"
                 sx={{
@@ -433,7 +439,8 @@ const handleSearch = () => {
                   },
                 }}
               >
-                __/__/__ <Box display="flex" alignItems="center">
+                __/__/__ 
+                <Box display="flex" alignItems="center">
                   <HorizontalRuleIcon
                     sx={{
                       fontSize: {
@@ -446,12 +453,18 @@ const handleSearch = () => {
                 __/__/__
               </Typography>
             )}
+          
           </Box>
           <FormControl
             sx={{
-              width: { xs: '100%', sm: '15vw' },
+              width:'15vw',
+              ml:'1rem',
+              [`@media (max-width: 767px)`]: {
+                width: '80vw',
+                mt:'1rem',
+              },
             }}
-            variant="outlined"
+            variant="outlined" 
           >
             <InputLabel>Elige una categoría</InputLabel>
             <Select
@@ -459,7 +472,9 @@ const handleSearch = () => {
               onChange={handleCategoryChange}
               value={selectedCategorie}
             >
-              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value=''>
+                Todos
+              </MenuItem>
               {categories.map((category, index) => (
                 <MenuItem key={index} value={category.style}>
                   {category.style}
@@ -468,10 +483,11 @@ const handleSearch = () => {
             </Select>
           </FormControl>
           <Box
-            sx={{
+             sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              marginLeft:'3rem',
               color: theme.palette.text.primary,
               cursor: 'pointer',
               border: 'solid',
@@ -480,11 +496,19 @@ const handleSearch = () => {
               '&:hover': {
                 color: theme.palette.secondary.dark,
               },
+              [`@media (max-width: 767px)`]: {
+                mt:'1rem',
+                marginLeft:'1rem',
+              },
             }}
             onClick={handleSearch}
+
           >
-            <Typography>Buscar</Typography>
-            <SearchIcon />
+            <Typography >
+              Buscar
+            </Typography>
+            <SearchIcon 
+            />
           </Box>
         </Box>
         <Popover
@@ -515,7 +539,12 @@ const handleSearch = () => {
     onClick={handleResetearFiltros}
     sx={{
       ml:'2rem',
-      mt:'-4rem'
+      mt:'-4rem',
+      [`@media (max-width: 767px)`]: {
+        mt:'0.5rem',
+        mb:'1rem',
+        // color:'black'
+      },
     }}
     >
     <RotateLeftIcon/>
