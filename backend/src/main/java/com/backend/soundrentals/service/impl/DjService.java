@@ -247,12 +247,15 @@ public class DjService implements IRecursoService {
 
     @Override
     public List<DjSalidaDto> buscarDjPorCiudadFecha(Long ciudadId,Long styleId, LocalDate fechaInicio, LocalDate fechaFin) throws ResourceNotFoundException {
+        Estilo estilo = null;
 
-        Estilo estilo = estiloRepository.findById(styleId).orElse(null);
-
-        List<DjSalidaDto> djDisponibles = reservaRepository.findReservaByDjFecha(ciudadId,estilo,fechaInicio,fechaFin).stream()
+        if (styleId != null) {
+            estilo = estiloRepository.findById(styleId).orElseThrow(() -> new ResourceNotFoundException("Estilo no encontrado"));
+        }
+    
+        List<DjSalidaDto> djDisponibles = reservaRepository.findReservaByDjFecha(ciudadId, estilo, fechaInicio, fechaFin).stream()
                 .map(d -> modelMapper.map(d, DjSalidaDto.class)).toList();
-
+    
         return djDisponibles;
     }
 
