@@ -88,17 +88,22 @@ const DJs = () => {
           marginTop: '2rem'
         }}
         container spacing={2}>
-          {pageDjs.map((dj, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-              <CardDj
-                id={dj.id}
-                image={dj.urlPic}
-                name={dj.name}
-                lastname={dj.lastname}
-                styles={dj.estilos}
-              />
-            </Grid>
-          ))}
+          {pageDjs.map((dj, index) => {
+            console.log('Dj:', dj); // Agrega este console.log
+            return (
+              <Grid item key={index} xs={12} sm={6} md={4}>
+                <CardDj
+                  id={dj.id}
+                  charge={dj.charge}
+                  calificacion={dj.calificacion}
+                  image={dj.urlPic}
+                  name={dj.name}
+                  lastname={dj.lastname}
+                  styles={dj.estilos}
+                />
+              </Grid>
+            );
+          })}
         </Grid>
       )}
         

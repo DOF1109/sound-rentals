@@ -12,8 +12,9 @@ import { updateFavoriteStatus,getDjFavoritos,deleteFavorito } from "../../api/dj
 import FavoriteButton from "./Favorite";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import StarIcon from '@mui/icons-material/Star';
 
-const CardDj = ({ id, image, name, lastname, styles}) => {
+const CardDj = ({ id, image, name, lastname, styles, charge, calificacion}) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [idFavorite, setIdFavorite] = useState(null);
   const { user,userDb, djFavorites,loadDjsFavorites} = useContext(AuthContext);
@@ -92,6 +93,9 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
                   {`${name}  ${lastname}`}
                 </Typography>
               </Link>
+              <Typography gutterBottom variant="h6" color={darkTheme.palette.text.primary} sx={{display:'flex', alignItems:"center"}}>
+                <StarIcon/>  {calificacion}
+                </Typography>
               {userDb && user && user.rol == 'commonusr' && <FavoriteButton isFavorite={isFavorite} onClick={toggleFavorite} />}
             </Box>
             {styles.map((estilo, index) => {
@@ -106,6 +110,13 @@ const CardDj = ({ id, image, name, lastname, styles}) => {
                 </Typography>
               );
             })}
+             <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  component="div"
+                >
+                  Precio: {charge}
+                </Typography>
           </CardContent>
         </Box>
         
