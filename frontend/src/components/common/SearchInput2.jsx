@@ -31,6 +31,13 @@ const SearchInput = ({ setDjs, setPageDjs, itemsPerPage }) => {
   useEffect(() => {
     loadCategories();
     loadCiudades();
+    return () => {
+      setSelectedCategorie(null)
+      setSelectedCity(null)
+      setStartDate()
+      setEndDate()
+      setDateWritten(false)
+    };
   }, []);
 
   const theme = useTheme();
