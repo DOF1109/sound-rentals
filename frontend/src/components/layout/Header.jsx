@@ -226,6 +226,17 @@ const Header = () => {
                       ADMIN. CARACT.
                     </Link>
                   </Button>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ display: "block", fontWeight: "500" }}
+                  >
+                    <Link
+                      className="clear-link shiny-hover"
+                      to="/manage-categories"
+                    >
+                      ADMIN. ESTILOS.
+                    </Link>
+                  </Button>
                 </>
               )}
 
